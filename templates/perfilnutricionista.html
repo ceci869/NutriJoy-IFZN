@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="w-[70%] mx-auto mt-[50px]">
+<div class="flex flex-row items-center w-[100%] justify-between">
+    <div>
+    <h1 class="text-4xl font-semibold mb-6">Camila de Souza</h1>
+    <p>CRN 12345</p>
+    <p>Natal, Rio Grande do Norte | UFRN</p>
+    </div>
+    <div class="w-[150px] h-[150px] rounded-[100px] bg-[#D9D9D9]"></div>
+</div>
+<div class="my-[45px]">
+    <p>Olá, sou a Camila! Atuo na área da nutrição há 10 anos, atendendo em clínicas presenciais e escolas de esporte. Participei de vários projetos de pesquisa na faculdade e atualmente estou iniciano o mestrado. Trabalho com a nutrição para esportista, visando o melhor bem-estar para eles.</p>
+</div>
+<div class="grid grid-cols-[1.5fr_1fr] gap-[10px] w-[100%] mb-[45px]">
+    <div class="h-[100%] flex flex-col justify-between bg-[#D9D9D9] rounded-[20px] p-[26px] w-[100%]">
+        <p>Especialista em</p>
+        <p class="text-[38px] font-medium">Nutrição esportiva</p>
+    </div>
+    <div class="bg-[#D9D9D9] rounded-[20px] p-[22px] w-[100%]">
+        <p class="text-[60px] font-medium text-center">21</p>
+        <p class="text-center">Contribuições</p>
+    </div>
+</div>
+<div>
+    <h3 class="text-[25px] font-semibold mb-[18px]">Comentários de alguns pacientes</h3>
+    <div class="flex flex-row">
+    <div class="flex flex-row bg-[#D9D9D9] rounded-[20px] p-[22px]">
+        <img src="{{url_for('static', filename='img/aspas1.png')}}" alt="Aspas iniciais" class="h-[20%] mr-[6px]">
+        <p class="text-[20px] text-center">Conheci a Dra. Camila aqui no NutriJoy e faço um acompanhamento mais especializado com ela já faz 3 anos. Profissional muito cuidadosa e competente. Se você é esportista, assim como eu, ela é a pessoa certa para te ajudar nessa caminhada.</p>
+        <img src="{{url_for('static', filename='img/aspas2.png')}}" alt="Aspas finais" class="h-[20%] ml-[6px] self-end">
+    </div>
+    <div class="justify-center align-center self-center ml-[5px]">
+    <div class="rounded-[100px] bg-[#8C8C8C] w-[45px] h-[45px] flex justify-center">
+        <img src="{{url_for('static', filename='img/seta.png')}}" alt="Seta">
+    </div>
+    </div>
+    </div>
+</div>
+<button class="btn w-full mt-12 bg-[#8C8C8C] border-[#8C8C8C] text-white hover:bg-[#7A7A7A]">Enviar mensagem</button>
+</section>
+{% endblock %}

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriJoy</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://kit.fontawesome.com/dbda3eb66e.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <header>
+        <!-- navbar -->
+        <div class="navbar bg-base-200 shadow-sm">
+            <div class="flex-1">
+                <a class="btn btn-ghost text-4xl">NutriJoy</a>
+            </div>
+            <div class="flex-none">
+                <ul class="menu menu-horizontal px-1 text-xl flex gap-x-4">
+                    <li><a href="{{ url_for('login') }}" class="border-solid border-2 rounded-lg py-0">Entrar</a></li>
+                    <li><a href="{{ url_for('cadastro') }}" class="border-solid border-2 rounded-lg py-0">Cadastrar</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero -->
+        <div class="hero bg-base-200 min-h-screen">
+            <div class="hero-content flex-col lg:flex-row-reverse gap-x-80 items-start">
+                <img
+                src="https://i.pinimg.com/736x/60/7a/f5/607af54beb16d5415f56453ba0626e7b.jpg"
+                class=" w-xl rounded-lg shadow-2xl"
+                />
+                <div class="">
+                <h1 class="text-5xl font-bold">Sobre o projeto</h1>
+                <p class="text-lg py-6 w-xl">
+                Lorem ipsum dolor sit amet consectetur adipiscing elit Ut et massa mi. Aliquam in hendrerit urna. Pellentesque sit amet sapien fringilla, mattis ligula consectetur, ultrices mauris. Maecenas vitae mattis tellus. Nullam quis imperdiet augue. Vestibulum auctor ornare leo, non suscipit magna interdum eu. Curabitur pellentesque nibh nibh, at maximus ante fermentum sit amet. Pellentesque commodo lacus at sodales sodales. Quisque sagittis orci ut diam condimentum, vel euismod erat placerat. In iaculis arcu eros, eget tempus orci facilisis id. Praesent lorem orci, mattis non efficitur id, ultricies vel nibh. Sed volutpat lacus vitae gravida viverra. Fusce vel tempor elit. Proin tempus, magna id scelerisque vestibulum, nulla ex pharetra sapien, tempor posuere massa neque nec felis. 
+                </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Integrantes -->
+        <section class="flex flex-col gap-y-14 my-10">
+        <h1 class="text-4xl text-center">Integrantes e orientadora</h1>
+            <div class="flex justify-evenly flex-wrap">
+                {% for avatar in lista_colaboradores %}
+                    <div class="avatar flex flex-col">
+                    <div class="w-80 rounded">
+                        <img src="https://i.pinimg.com/736x/7d/9b/4d/7d9b4df59001e294047f3dcee9a2d675.jpg" />
+                    </div>
+                    <p class="text-center text-lg">{{ avatar }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- Tecnologias -->
+        <section class="my-18">
+            <h1 class="text-4xl text-left mx-30">Tecnologias</h1>
+            <div class="flex gap-x-50 mx-30 my-10 items-center">
+                <img src="https://i.pinimg.com/736x/cb/32/69/cb326996a8230da8ef38ed660a53ab01.jpg" alt="Imagem representativa" class="w-150 rounded-md">
+                <p class="w-2xl">
+                Lorem ipsum dolor sit amet consectetur adipiscing elit Ut et massa mi. Aliquam in hendrerit urna. Pellentesque sit amet sapien fringilla, mattis ligula consectetur, ultrices mauris. Maecenas vitae mattis tellus. Nullam quis imperdiet augue. Vestibulum auctor ornare leo, non suscipit magna interdum eu. Curabitur pellentesque nibh nibh, at maximus ante fermentum sit amet. Pellentesque commodo lacus at sodales sodales. Quisque sagittis orci ut diam condimentum, vel euismod erat placerat. In iaculis arcu eros, eget tempus orci facilisis id. Praesent lorem orci, mattis non efficitur id, ultricies vel nibh. Sed volutpat lacus vitae gravida viverra. Fusce vel tempor elit. Proin tempus, magna id scelerisque vestibulum, nulla ex pharetra sapien, tempor posuere massa neque nec felis. 
+                </p>
+            </div>
+            
+        </section>
+    </main>
+
+
+    <footer class="footer sm:footer-horizontal bg-neutral text-neutral-content items-center justify-between py-4 px-8">
+        <h1 class="text-4xl text-white">NutriJoy</h1>
+        <p>Copyright © 2026 - All rights reserved</p>
+
+        <nav class="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
+            <a>
+            <i class="fa-brands fa-instagram fa-xl" style="color: rgb(255, 255, 255);"></i>
+            </a>
+            <a>
+            <i class="fa-brands fa-github fa-xl" style="color: rgb(255, 255, 255);"></i>
+            </a>
+            <a>
+            <i class="fa-brands fa-whatsapp fa-xl" style="color: rgb(255, 255, 255);"></i>
+            </a>
+        </nav>
+    </footer>
+
+</body>
+</html>

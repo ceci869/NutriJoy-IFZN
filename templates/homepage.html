@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+
+    {% block content %}
+
+    <h1 class="text-4xl font-semibold mb-6">
+        Olá, {{ current_user.name }}!
+    </h1>
+
+    <!-- Cardápio semanal -->
+    <div class="border rounded-lg p-5 mb-10">
+
+        <h2 class="text-xl font-medium mb-4">
+            Seu cardápio semanal
+        </h2>
+
+        <div class="grid grid-cols-7 gap-4 mb-6">
+
+            <div class="flex flex-col items-center">
+                <p class="text-sm mb-2">Seg</p>
+
+                <div class="bg-base-200 rounded-lg h-24 w-full flex items-center justify-center">
+                    🍴
+                </div>
+
+                <button class="text-xs mt-2">
+                    Ver refeições
+                </button>
+            </div>
+
+            <div class="flex flex-col items-center">
+                <p class="text-sm mb-2">Ter</p>
+
+                <div class="bg-base-200 rounded-lg h-24 w-full flex items-center justify-center">
+                    🍴
+                </div>
+
+                <button class="text-xs mt-2">
+                    Ver refeições
+                </button>
+            </div>
+
+            <div class="flex flex-col items-center">
+                <p class="text-sm mb-2">Qua</p>
+
+                <div class="bg-base-200 rounded-lg h-24 w-full flex items-center justify-center">
+                    🍴
+                </div>
+
+                <button class="text-xs mt-2">
+                    Ver refeições
+                </button>
+            </div>
+
+            <div class="flex flex-col items-center">
+                <p class="text-sm mb-2">Qui</p>
+
+                <div class="bg-base-200 rounded-lg h-24 w-full flex items-center justify-center">
+                    🍴
+                </div>
+
+                <button class="text-xs mt-2">
+                    Ver refeições
+                </button>
+            </div>
+
+            <div class="flex flex-col items-center">
+                <p class="text-sm mb-2">Sex</p>
+
+                <div class="bg-base-200 rounded-lg h-24 w-full flex items-center justify-center">
+                    🍴
+                </div>
+
+                <button class="text-xs mt-2">
+                    Ver refeições
+                </button>
+            </div>
+
+            <div class="flex flex-col items-center">
+                <p class="text-sm mb-2">Sáb</p>
+
+                <div class="bg-base-200 rounded-lg h-24 w-full flex items-center justify-center">
+                    🍴
+                </div>
+
+                <button class="text-xs mt-2">
+                    Ver refeições
+                </button>
+            </div>
+
+            <div class="flex flex-col items-center">
+                <p class="text-sm mb-2">Dom</p>
+
+                <div class="bg-base-200 rounded-lg h-24 w-full flex items-center justify-center">
+                    🍴
+                </div>
+
+                <button class="text-xs mt-2">
+                    Ver refeições
+                </button>
+            </div>
+
+        </div>
+        <button class="btn btn-wide w-full">
+            <a href="{{ url_for('cardapiosemanal') }}">
+                Ver cardápio completo
+            </a>
+        </button>
+
+    </div>
+
+
+    <!-- Receitas recomendadas -->
+    <h2 class="text-2xl font-medium mb-4">
+        Receitas recomendadas
+    </h2>
+
+    <div class="grid grid-cols-4 gap-6 mb-12">
+
+        <div class="card bg-base-200 h-48"></div>
+
+        <div class="card bg-base-200 h-48"></div>
+
+        <div class="card bg-base-200 h-48"></div>
+
+        <div class="card bg-base-200 h-48"></div>
+
+    </div>
+
+
+    <!-- Nutricionistas -->
+    <h2 class="text-2xl font-medium mb-4">
+        Nutricionistas em destaque
+    </h2>
+
+    <div class="flex gap-4">
+
+        <div class="card border p-4 w-80">
+            <div class="flex items-center gap-4">
+
+                <div class="avatar placeholder">
+                    <div class="bg-base-300 rounded-full w-16"></div>
+                </div>
+
+                <div>
+
+                    <h3 class="font-medium">
+                        Camila de Souza
+                    </h3>
+
+                    <p class="text-sm">
+                        CRN 12345
+                    </p>
+
+                    <button class="btn btn-sm mt-2">
+                        <a href="{{ url_for('perfilnutricionista') }}">Ver perfil</a>
+                    </button>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="card border p-4 w-80">
+            <div class="flex items-center gap-4">
+
+                <div class="avatar placeholder">
+                    <div class="bg-base-300 rounded-full w-16"></div>
+                </div>
+
+                <div>
+
+                    <h3 class="font-medium">
+                        Julian Oliveira
+                    </h3>
+
+                    <p class="text-sm">
+                        CRN 67890
+                    </p>
+
+                    <button class="btn btn-sm mt-2">
+                        Ver perfil
+                    </button>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    {% endblock %}

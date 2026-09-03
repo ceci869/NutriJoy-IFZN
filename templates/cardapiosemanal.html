@@ -1,0 +1,251 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="text-4xl font-bold">
+    Cardápio semanal
+</h1>
+
+<p class="mb-8 text-lg text-gray-600">
+    Monte e acompanhe suas refeições da semana.
+</p>
+
+<!-- Tabela -->
+<div class="overflow-x-auto mb-8">
+
+    <table class="w-full border border-gray-200 rounded-xl overflow-hidden text-sm bg-white">
+
+        <tr class="bg-gray-100">
+            <th class="border p-3"></th>
+            <th class="border p-3">Segunda</th>
+            <th class="border p-3">Terça</th>
+            <th class="border p-3">Quarta</th>
+            <th class="border p-3">Quinta</th>
+            <th class="border p-3">Sexta</th>
+            <th class="border p-3">Sábado</th>
+            <th class="border p-3">Domingo</th>
+        </tr>
+
+        {% set refeicoes = [
+        ("fa-mug-hot", "Café da manhã"),
+        ("fa-apple-whole", "Lanche da manhã"),
+        ("fa-bowl-food", "Almoço"),
+        ("fa-glass-water", "Lanche da tarde"),
+        ("fa-utensils", "Jantar")
+        ] %}
+
+        {% for icone, refeicao in refeicoes %}
+        <tr>
+
+            <td class="border px-4 py-3 bg-gray-50">
+
+                <div class="flex items-center gap-3">
+
+                    <i class="fa-solid {{ icone }}"></i>
+
+                    <span class="font-medium">
+                        {{ refeicao }}
+                    </span>
+
+                </div>
+
+            </td>
+
+            {% for i in range(7) %}
+            <td class="border p-2 text-center">
+
+                <button class="btn btn-circle btn-sm bg-gray-100 border-gray-300 text-gray-500 hover:bg-gray-200">
+
+                    <i class="fa-solid fa-plus"></i>
+
+                </button>
+
+            </td>
+            {% endfor %}
+
+        </tr>
+        {% endfor %}
+
+    </table>
+
+</div>
+
+
+<!-- Estatísticas -->
+<div class="grid md:grid-cols-2 gap-6 mb-8">
+
+    <div class="card bg-gray-100 border border-gray-400 shadow-none">
+
+        <div class="card-body flex-row items-center gap-5">
+
+            <i class="fa-solid fa-wallet text-4xl"></i>
+
+            <div>
+
+                <p class="text-sm">
+                    Gasto médio
+                </p>
+
+                <h2 class="text-3xl">
+                    R$ 95,00
+                </h2>
+
+                <p class="text-sm text-gray-500">
+                    por semana
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="card bg-gray-100 border border-gray-400 shadow-none">
+
+        <div class="card-body flex-row items-center gap-5">
+
+            <i class="fa-solid fa-table-list text-4xl"></i>
+
+            <div>
+
+                <p class="text-sm">
+                    Receitas utilizadas
+                </p>
+
+                <h2 class="text-3xl">
+                    12
+                </h2>
+
+                <p class="text-sm text-gray-500">
+                    receitas diferentes
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Lista de compras e IA -->
+<div class="grid lg:grid-cols-2 gap-6">
+
+    <!-- Lista -->
+    <div class="card bg-gray-100 border border-gray-400 shadow-none">
+
+        <div class="card-body">
+
+            <h2 class="card-title text-base">
+                Lista de compras automática
+            </h2>
+
+            <div class="grid grid-cols-3 gap-y-3 text-sm">
+
+                <label class="flex items-center gap-2">
+                    <input type="checkbox">
+                    Banana
+                </label>
+
+                <label class="flex items-center gap-2">
+                    <input type="checkbox">
+                    Arroz
+                </label>
+
+                <label class="flex items-center gap-2">
+                    <input type="checkbox">
+                    Ovo
+                </label>
+
+                <label class="flex items-center gap-2">
+                    <input type="checkbox">
+                    Aveia
+                </label>
+
+                <label class="flex items-center gap-2">
+                    <input type="checkbox">
+                    Feijão
+                </label>
+
+                <label class="flex items-center gap-2">
+                    <input type="checkbox">
+                    Tomate
+                </label>
+
+                <label class="flex items-center gap-2">
+                    <input type="checkbox">
+                    Leite
+                </label>
+
+                <label class="flex items-center gap-2">
+                    <input type="checkbox">
+                    Frango
+                </label>
+
+                <label class="flex items-center gap-2">
+                    <input type="checkbox">
+                    Alface
+                </label>
+
+            </div>
+
+            <div class="flex justify-center mt-6">
+
+                <button class="btn bg-gray-300 border-0 text-black hover:bg-gray-400">
+
+                    <i class="fa-solid fa-download"></i>
+
+                    Exportar lista
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Sugestão da IA -->
+    <div class="card bg-gray-100 border border-gray-400 shadow-none">
+
+        <div class="card-body">
+
+            <h2 class="card-title text-base">
+
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+
+                Sugestão da IA
+
+            </h2>
+
+            <div class="flex-1 flex items-center">
+
+                <p class="text-sm text-gray-600">
+
+                    A banana e a maçã tiveram queda no preço este mês.
+                    Considere adicioná-las ao cardápio para reduzir custos.
+
+                </p>
+
+            </div>
+
+            <div class="flex justify-center mt-6">
+
+                <button class="btn bg-gray-300 border-0 text-black hover:bg-gray-400">
+
+                    Ver mais sugestões
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriJoy</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://kit.fontawesome.com/dbda3eb66e.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="drawer lg:drawer-open">
+    <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
+    <div class="drawer-content">
+        <!-- Navbar -->
+        <nav class="navbar w-full bg-base-300 flex justify-between">
+            <label for="my-drawer-4" aria-label="open sidebar" class="btn btn-square btn-ghost">
+                <!-- Sidebar toggle icon -->
+                <i class="fa-solid fa-angles-right"></i>
+            </label>
+            <div class="px-4 text-2xl font-bold">NutriJoy</div>
+        </nav>
+
+        <!-- Page content here -->
+        <main class="p-4">
+            {% block content %}
+                <h2>Catálogo de Receitas</h2>
+            {% endblock %}
+        </main>
+    </div>
+
+    <div class="drawer-side is-drawer-close:overflow-visible">
+        <label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
+        <div class="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-14 is-drawer-open:w-64">
+        <!-- Sidebar content here -->
+        <ul class="menu w-full grow">
+            <!-- List item -->
+            <li>
+            <button class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Homepage">
+                <!-- Home icon -->
+                <a href="{{ url_for('homepage') }}">
+                    <i class="fa-solid fa-house"></i>
+                    <span class="is-drawer-close:hidden">Homepage</span>
+                </a>
+            </button>
+            </li>
+
+            <!-- List item -->
+            <li>
+            <button class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Receitas">
+                <!-- Recipes icon -->
+                <a href="{{ url_for('catalogodereceitas') }}">
+                    <i class="fa-solid fa-cookie-bite"></i>
+                    <span class="is-drawer-close:hidden">Receitas</span>
+                </a>
+            </button>
+            </li>
+
+            <!-- List item -->
+            <li>
+            <button class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Cardápio semanal">
+                <!-- Recipes icon -->
+                <a href="{{ url_for('cardapiosemanal') }}">
+                    <i class="fa-solid fa-list"></i>
+                    <span class="is-drawer-close:hidden">Cardápio semanal</span>
+                </a>
+            </button>
+            </li>
+
+            <!-- List item -->
+            <li>
+            <button class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Perfil">
+                <!-- Settings icon -->
+                <a href="{{ url_for('gerenciarperfil') }}">
+                    <i class="fa-regular fa-circle-user"></i>
+                    <span class="is-drawer-close:hidden">Perfil</span>
+                </a>
+            </button>
+            </li>
+
+            <!-- List item -->
+            <li>
+            <form action="{{ url_for('user.logout') }}" method="POST">
+                <button class="is-drawer-close:tooltip is-drawer-close:tooltip-right cursor-pointer" data-tip="Logout">
+                    <!-- Settings icon -->
+                    <i class="fa-solid fa-right-from-bracket rotate-180"></i>
+                    <span class="is-drawer-close:hidden">Logout</span>
+
+                </button>
+            </form>
+            </li>
+        </ul>
+        </div>
+    </div>
+    </div>
+</body>
+</html>

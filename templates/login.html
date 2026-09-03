@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body class="bg-base-100 min-h-screen">
+
+    <div class="navbar bg-[#8C8C8C] px-8">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-white"></div>
+            <h1 class="text-3xl text-white font-light"><a href="{{ url_for('index') }}">NutriJoy</a></h1>
+        </div>
+    </div>
+
+    <div class="flex justify-center py-20 px-4">
+
+        <form action="{{url_for('user.verificalogin')}}" method="post" class="w-full max-w-lg">
+
+            <h1 class="text-4xl font-semibold mb-2">
+                Login
+            </h1>
+
+            <p class="opacity-70 mb-10">
+                Seja bem-vindo de volta! Entre na sua conta.
+            </p>
+
+            <div class="space-y-6">
+
+                <div>
+                    <label class="label">
+                        <span class="label-text">E-mail</span>
+                    </label>
+                    <input type="email" name="email" class="input input-bordered w-full" placeholder="Digite seu e-mail">
+                </div>
+
+                <div>
+                    <label class="label">
+                        <span class="label-text">Senha</span>
+                    </label>
+                    <input type="password" name="password" class="input input-bordered w-full" placeholder="Digite sua senha">
+                </div>
+
+            </div>
+
+            <button class="btn w-full mt-12 bg-[#8C8C8C] border-[#8C8C8C] text-white hover:bg-[#7A7A7A]">
+                Entrar
+            </button>
+
+        </form>
+
+    </div>
+
+</body>
+
+</html>
