@@ -67,6 +67,7 @@ def get_users():
 
 
 @bp_user.route('/<int:id_user>/update', methods=['POST'])
+@login_required
 def update_user(id_user):
     user = User.query.get_or_404(id_user)
 
@@ -80,6 +81,7 @@ def update_user(id_user):
 
 
 @bp_user.route('/<int:id_user>/delete', methods=['POST'])
+@login_required
 def delete_user(id_user):
     user = User.query.get_or_404(id_user)
 

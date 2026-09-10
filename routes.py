@@ -55,6 +55,7 @@ def homepage():
     return render_template('homepage.html')
 
 @app.route('/catalogodereceitas')
+@login_required
 def catalogodereceitas():
     lista_receitas = [
         {'nome':'Sanduíches kawaii',
@@ -81,10 +82,12 @@ def catalogodereceitas():
     return render_template('catalogo_de_receitas.html', lista_receitas=lista_receitas)
 
 @app.route('/cardapiosemanal')
+@login_required
 def cardapiosemanal():
     return render_template('cardapiosemanal.html')
 
 @app.route('/gerenciarperfil', methods=['GET', 'POST'])
+@login_required
 def gerenciarperfil():
     email = request.form.get('email', 'admin@email.com')
     nome = request.form.get('nome', 'Fulano da Silva')
@@ -96,5 +99,6 @@ def gerenciarperfil():
     return render_template('gerenciarperfil.html', email=email, nome=nome, opcao=opcao)
 
 @app.route('/perfilnutricionista')
+@login_required
 def perfilnutricionista():
     return render_template('perfilnutricionista.html')

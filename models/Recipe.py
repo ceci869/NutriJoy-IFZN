@@ -13,8 +13,9 @@ class Recipe(db.Model):
 
     nutritionist = db.relationship('Nutritionist', foreign_keys=nutritionist_id)
 
-    def __init__(self, nutritionist_id, name, medium_price, kcal, total_fat, fiber, protein):
+    def __init__(self, nutritionist_id, restriction_id, name, medium_price, kcal, total_fat, fiber, protein):
         self.nutritionist_id = nutritionist_id
+        self.restriction_id = restriction_id
         self.name = name
         self.medium_price = medium_price
         self.kcal = kcal

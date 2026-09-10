@@ -3,6 +3,8 @@ from utils import db
 # from Recipe import Recipe
 
 class MenuRecipe(db.Model):
+    __tablename__ = 'Menu_Recipe'
+
     id = db.Column(db.Integer, primary_key=True)
     dailyMenu_id = db.Column(db.Integer, db.ForeignKey('DailyMenu.id'))
     recipe_id = db.Column(db.Integer, db.ForeignKey('Recipe.id'))
