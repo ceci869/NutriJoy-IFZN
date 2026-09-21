@@ -70,10 +70,20 @@ def get_users():
 @login_required
 def update_user(id_user):
     user = User.query.get_or_404(id_user)
+    
+    name = request.form['name']
+    email = request.form['email']
+    password = request.form['password']
+    password=hash(password)
 
-    user.name = request.form['name']
-    user.email = request.form['email']
-    user.password = request.form['password']
+    if name:
+        user.name = name
+
+    if email:
+        user.email = email
+
+    if password:
+        user.password = password
 
     db.session.commit()
 

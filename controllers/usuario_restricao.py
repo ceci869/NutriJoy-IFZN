@@ -8,7 +8,7 @@ bp_userRestriction = Blueprint('user_restriction', __name__, template_folder='te
 # =-=-=USERRESTRICTION=-=-=
 @bp_userRestriction.route('/add', methods=['POST'])
 def add_user_restriction():
-    user_restriction = User_Restriction(
+    user_restriction = UserRestriction(
         id_user = request.form['id_user'],
         id_restriction = request.form['id_restriction'],
         name = request.form['name']

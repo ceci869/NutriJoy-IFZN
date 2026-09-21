@@ -89,14 +89,8 @@ def cardapiosemanal():
 @app.route('/gerenciarperfil', methods=['GET', 'POST'])
 @login_required
 def gerenciarperfil():
-    email = request.form.get('email', 'admin@email.com')
-    nome = request.form.get('nome', 'Fulano da Silva')
     opcao = 'Nenhum selecionado'
-    if email == '':
-        email = 'admin@email.com'
-    if nome == '':
-        nome = 'Fulano da Silva'
-    return render_template('gerenciarperfil.html', email=email, nome=nome, opcao=opcao)
+    return render_template('gerenciarperfil.html', opcao=opcao)
 
 @app.route('/perfilnutricionista')
 @login_required
