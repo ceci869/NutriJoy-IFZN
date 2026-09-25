@@ -9,9 +9,8 @@ bp_restriction = Blueprint('restriction', __name__, template_folder='templates')
 @bp_restriction.route('/add', methods=['POST'])
 def add_restriction():
     restriction = Restriction(
-        name = request.form['alergia_intolerancia']
+        name = request.form['name']
     )
-
     db.session.add(restriction)
     db.session.commit()
 

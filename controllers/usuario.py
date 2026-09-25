@@ -98,4 +98,4 @@ def delete_user(id_user):
     db.session.delete(user)
     db.session.commit()
 
-    return 'Usuário excluído com sucesso!'
+    return redirect(url_for('index'))
