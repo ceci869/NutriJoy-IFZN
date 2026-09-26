@@ -9,7 +9,7 @@ bp_nutritionist = Blueprint('nutritionist', __name__, template_folder='templates
 # =-=-=NUTRICIONIST=-=-=
 @bp_nutritionist.route('/add', methods=['POST'])
 def add_nutritionist():
-    file = request.files.get('foto_perfil')
+    file = request.files.get('profile_photo')
     file.filename = request.form['crn']
     
     if file:
@@ -23,7 +23,11 @@ def add_nutritionist():
         crn = request.form['crn'],
         specialization = request.form['especializacao'],
         experience_years = request.form['anos_experiencia'],
-        foto_perfil = caminho_banco
+        profile_photo = caminho_banco,
+        city = request.form['city'],
+        state = request.form['state'],
+        university = request.form['university'],
+        description = request.form['description']
     )
 
     db.session.add(nutritionist)

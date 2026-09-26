@@ -93,10 +93,11 @@ def gerenciarperfil():
     opcao = 'Nenhum selecionado'
     return render_template('gerenciarperfil.html', opcao=opcao)
 
-@app.route('/perfilnutricionista')
+@app.route('/perfilnutricionista/<int:nutritionist_crn>')
 @login_required
-def perfilnutricionista():
-    return render_template('perfilnutricionista.html')
+def perfilnutricionista(nutritionist_crn):
+    nutritionist = Nutritionist.query.get_or_404(nutritionist_crn)
+    return render_template('perfilnutricionista.html', nutritionist=nutritionist)
 
 @app.route('/formularionutricionista')
 def formulario_nutricionista():
