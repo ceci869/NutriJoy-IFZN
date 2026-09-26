@@ -1,22 +1,29 @@
 from flask import render_template, request, redirect
 from models.Nutritionist import Nutritionist
-from utils import db
+from utils import db, app
 from flask import Blueprint
+import os
 
 bp_nutritionist = Blueprint('nutritionist', __name__, template_folder='templates')
 
 # =-=-=NUTRICIONIST=-=-=
 @bp_nutritionist.route('/add', methods=['POST'])
 def add_nutritionist():
+    file = request.files.get('foto_perfil')
+    file.filename = request.form['crn']
+    
+    if file:
+        caminho_completo = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+        file.save(caminho_completo)
+        caminho_banco = caminho_completo
+
     nutritionist = Nutritionist(
-        id_user = request.form['id_user'],
         name = request.form['name'],
         email = request.form['email'],
-        password = request.form['password'],
         crn = request.form['crn'],
-        specialization = request.form['specialization'],
-        contributions = request.form['contributions'],
-        experience = request.form['experience']
+        specialization = request.form['especializacao'],
+        experience_years = request.form['anos_experiencia'],
+        foto_perfil = caminho_banco
     )
 
     db.session.add(nutritionist)
@@ -29,7 +36,7 @@ def add_nutritionist():
 def get_nutritionists():
     nutritionists = Nutritionist.query.all()
 
-    return str(nutritionists)
+    return (nutritionists)
 
 
 @bp_nutritionist.route('/<int:id_nutritionist>/update', methods=['POST'])

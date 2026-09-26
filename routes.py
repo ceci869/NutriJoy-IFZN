@@ -15,7 +15,7 @@ from models.Food_Recipe import FoodRecipe
 from controllers.usuario import bp_user
 from controllers.alimento import bp_food
 from controllers.cardapio_diario import bp_dailyMenu
-from controllers.nutricionista import bp_nutritionist
+from controllers.nutricionista import bp_nutritionist, get_nutritionists
 from controllers.receita import bp_recipe
 from controllers.restricao import bp_restriction
 from controllers.usuario_restricao import bp_userRestriction
@@ -52,7 +52,8 @@ def paginaerro():
 @app.route('/homepage')
 @login_required
 def homepage():
-    return render_template('homepage.html')
+    nutritionists = get_nutritionists()
+    return render_template('homepage.html', nutritionists=nutritionists)
 
 @app.route('/catalogodereceitas')
 @login_required
@@ -96,3 +97,7 @@ def gerenciarperfil():
 @login_required
 def perfilnutricionista():
     return render_template('perfilnutricionista.html')
+
+@app.route('/formularionutricionista')
+def formulario_nutricionista():
+    return render_template('formulario_nutricionista.html')

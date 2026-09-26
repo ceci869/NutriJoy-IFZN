@@ -133,22 +133,23 @@
     </h2>
 
     <div class="flex gap-4">
-
+        {% for nutritionist in nutritionists %}
         <div class="card border p-4 w-80">
             <div class="flex items-center gap-4">
 
                 <div class="avatar placeholder">
-                    <div class="bg-base-300 rounded-full w-16"></div>
+                    <div class="rounded-full w-16"><img src="/{{ nutritionist.foto_perfil.replace('\\', '/') }}" alt="">
+                    </div>
                 </div>
 
                 <div>
 
                     <h3 class="font-medium">
-                        Camila de Souza
+                        {{ nutritionist.name }}
                     </h3>
 
                     <p class="text-sm">
-                        CRN 12345
+                        CRN {{nutritionist.crn}}
                     </p>
 
                     <button class="btn btn-sm mt-2">
@@ -158,34 +159,13 @@
                 </div>
 
             </div>
+        
         </div>
+        {% endfor %}
 
+        
 
-        <div class="card border p-4 w-80">
-            <div class="flex items-center gap-4">
-
-                <div class="avatar placeholder">
-                    <div class="bg-base-300 rounded-full w-16"></div>
-                </div>
-
-                <div>
-
-                    <h3 class="font-medium">
-                        Julian Oliveira
-                    </h3>
-
-                    <p class="text-sm">
-                        CRN 67890
-                    </p>
-
-                    <button class="btn btn-sm mt-2">
-                        Ver perfil
-                    </button>
-
-                </div>
-
-            </div>
-        </div>
+         
 
     </div>
 

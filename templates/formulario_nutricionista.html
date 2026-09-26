@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>document</title>
+</head>
+<body>
+    <form action="{{url_for('nutritionist.add_nutritionist')}}" method="post" enctype="multipart/form-data">
+        <input type="text" name="name" placeholder="Digite seu nome:">
+        <input type="email" name="email" placeholder="Digite seu email:">
+        <input type="text" name="crn" placeholder="Digite seu CRN:">
+        <input type="text" name="especializacao" placeholder="Digite sua especialização:">
+        <input type="number" name="anos_experiencia" placeholder="Quantos anos de experiência?">
+        <label>Adicione uma foto para seu perfil</label>
+        <input type="file" name="foto_perfil">
+        <button type="submit">Enviar</button>
+    </form>
+</body>
+</html>
