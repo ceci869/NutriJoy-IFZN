@@ -1,7 +1,8 @@
 from flask import render_template, request, redirect, url_for
 from flask_login import LoginManager, login_user, login_required, logout_user
 from models.User import User
-from utils import db
+from models.Restriction import Restriction
+from utils import db, app
 from flask import Blueprint
 from app import lm
 import hashlib
@@ -24,12 +25,14 @@ def add_user():
         return render_template('cadastro.html')
     elif request.method == 'POST':
         
-        name = request.form['name'],
-        email = request.form['email'],
+        name = request.form['name']
+        email = request.form['email']
         password = request.form['password']
-        restricao = request.form.getlist('restricao')
-        
-        new_user = User(name=name, email=email, password=hash(password))
+        restrictions = request.form.getlist('restricao') 
+
+
+        new_user = User(name=name, email=email, password=password, restrictions=restrictions)
+        print(new_user.restrictions)    
 
         db.session.add(new_user)
         db.session.commit()

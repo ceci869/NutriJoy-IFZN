@@ -9,16 +9,13 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String(150), nullable=False)
     email = db.Column(db.String(100), nullable=False)
     password = db.Column(db.String(100), nullable=False)
-    restricoes = db.relationship(
-        'Restriction',
-        secondary=UserRestriction,
-        backref=db.backref('users', lazy='dynamic')
-    )
+    restrictions = db.Column(db.JSON, default=list)
 
-    def __init__(self, name, email, password):
+    def __init__(self, name, email, password, restrictions):
         self.name = name
         self.email = email
         self.password = password
+        self.restrictions = restrictions
 
     def __repr__(self):
         return '<Usuário {}>'.format(self.name)

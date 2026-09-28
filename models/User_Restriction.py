@@ -5,8 +5,8 @@ from utils import db
 class UserRestriction(db.Model):
     __tablename__ = 'UserRestriction'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('User.id'))
-    restriction_id = db.Column(db.Integer, db.ForeignKey('Restriction.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('User.id'), nullable=False)
+    restriction_id = db.Column(db.Integer, db.ForeignKey('Restriction.id'), nullable=False)
 
     user = db.relationship('User', foreign_keys=user_id)
     restriction = db.relationship('Restriction', foreign_keys=restriction_id)
