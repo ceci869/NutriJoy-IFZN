@@ -27,6 +27,7 @@ def add_user():
         name = request.form['name'],
         email = request.form['email'],
         password = request.form['password']
+        restricao = request.form.getlist('restricao')
         
         new_user = User(name=name, email=email, password=hash(password))
 
