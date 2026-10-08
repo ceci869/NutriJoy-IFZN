@@ -1,6 +1,17 @@
 {% extends 'base.html' %}
 
+{% block content2 %}
+{% set mensagens = get_flashed_messages() %} 
+{% if mensagens %}     
+<div role="alert" class="alert alert-success">
+    {% for msg in mensagens %}
+        {{ msg }}
+   {% endfor %}
+</div>
+{% endif %}
+{% endblock %}
 {% block content %}
+
 <h1 class="text-4xl font-semibold mb-[60px]">
     {{ current_user.name }}
 </h1>

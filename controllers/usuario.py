@@ -6,6 +6,7 @@ from utils import db, app
 from flask import Blueprint
 from app import lm
 import hashlib
+from flask import flash
 
 @lm.user_loader
 def user_loader(id):
@@ -80,18 +81,24 @@ def update_user(id_user):
     password = request.form['password']
     password=hash(password)
 
-    if name:
-        user.name = name
+    if not name and not email and not password:
+        flash("Não é possível realizar a atualização!")
+        
 
-    if email:
-        user.email = email
+    else:
+        if name:
+            user.name = name
 
-    if password:
-        user.password = password
+        if email:
+            user.email = email
 
-    db.session.commit()
+        if password:
+            user.password = password
 
-    return 'Usuário atualizado com sucesso!'
+        db.session.commit()
+            
+        flash("Usuário atualizado com sucesso!")
+        return redirect("/gerenciarperfil")
 
 
 @bp_user.route('/<int:id_user>/delete', methods=['POST'])

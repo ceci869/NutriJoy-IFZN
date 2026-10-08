@@ -3,6 +3,7 @@ from models.Nutritionist import Nutritionist
 from utils import db, app
 from flask import Blueprint
 import os
+from flask import flash
 
 bp_nutritionist = Blueprint('nutritionist', __name__, template_folder='templates')
 
@@ -33,7 +34,8 @@ def add_nutritionist():
     db.session.add(nutritionist)
     db.session.commit()
 
-    return 'Nutricionista adicionado com sucesso!'
+    flash("Nutricionista adicionado com sucesso!")
+    return redirect("/formularionutricionista")
 
 
 @bp_nutritionist.route('/nutritionists')

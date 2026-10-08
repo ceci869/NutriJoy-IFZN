@@ -4,8 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>document</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
 </head>
 <body>
+{% set mensagens = get_flashed_messages() %} 
+{% if mensagens %}     
+<div role="alert" class="alert alert-success">
+    {% for msg in mensagens %}
+        {{ msg }}
+   {% endfor %}
+</div>
+{% endif %}
     <form action="{{url_for('nutritionist.add_nutritionist')}}" method="post" enctype="multipart/form-data">
         <input type="text" name="name" placeholder="Digite seu nome:">
         <input type="email" name="email" placeholder="Digite seu email:">

@@ -2,6 +2,7 @@ from utils import app
 from flask import render_template, url_for, redirect, request
 from flask_login import login_required
 import json
+from flask import flash, redirect
 
 from models.User import User
 from models.Daily_Menu import DailyMenu
