@@ -19,6 +19,15 @@
         </div>
     </div>
 
+    {% set messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for categoria, msg in messages%}
+            <div class="alert alert-{{categoria}}" role="alert">
+                {{ msg }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
     <div class="flex justify-center py-20 px-4">
 
         <form action="{{url_for('user.add_user')}}" method="post" class="w-full max-w-lg">
@@ -74,8 +83,9 @@
             </button>
 
         </form>
-
     </div>
+
+    <a href="{{ url_for('login') }}" class="flex justify-center underline underline-offset-2">Já possui uma conta? Faça login</a>
 
 </body>
 

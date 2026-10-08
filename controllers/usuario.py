@@ -1,10 +1,11 @@
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, flash
 from flask_login import LoginManager, login_user, login_required, logout_user
 from models.User import User
 from models.Restriction import Restriction
 from utils import db, app
 from flask import Blueprint
 from app import lm
+from time import sleep
 import hashlib
 
 @lm.user_loader
@@ -23,23 +24,24 @@ bp_user = Blueprint('user', __name__, template_folder='templates')
 def add_user():
     if request.method == 'GET':
         return render_template('cadastro.html')
-    elif request.method == 'POST':
-        
-        name = request.form['name']
-        email = request.form['email']
-        password = request.form['password']
-        restrictions = request.form.getlist('restricao') 
+    elif request.method == 'POST':        
+        name = request.form['name'].strip()
+        email = request.form['email'].strip()
+        password = request.form['password'].strip()
+        restrictions = request.form.getlist('restricao')
 
+        if name != '' or email != '' or password != '':
+            new_user = User(name=name, email=email, password=hash(password), restrictions=restrictions)
+            print(new_user.restrictions)    
 
-        new_user = User(name=name, email=email, password=password, restrictions=restrictions)
-        print(new_user.restrictions)    
+            db.session.add(new_user)
+            db.session.commit()
 
-        db.session.add(new_user)
-        db.session.commit()
-
-        login_user(new_user)
-
-        return redirect(url_for('homepage'))
+            flash('Usuário cadastrado com sucesso! Encaminhe-se para a página de login', 'success')
+            return redirect(url_for('user.add_user')) 
+        else:
+            flash('Por favor preencha os campos obrigatórios', 'warning')
+            return redirect(url_for('user.add_user'))
 
 @bp_user.route('/verificalogin', methods=['POST'])
 def verificalogin():
