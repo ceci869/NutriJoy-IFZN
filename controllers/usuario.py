@@ -76,29 +76,28 @@ def get_users():
 def update_user(id_user):
     user = User.query.get_or_404(id_user)
     
-    name = request.form['name']
-    email = request.form['email']
-    password = request.form['password']
-    password=hash(password)
+    name = request.form['name'].strip()
+    email = request.form['email'].strip()
+    password = request.form['password'].strip()
+    restrictions = request.form.getlist('restricao') 
 
-    if not name and not email and not password:
-        flash("Não é possível realizar a atualização!")
-        
-
-    else:
-        if name:
-            user.name = name
-
-        if email:
-            user.email = email
-
-        if password:
-            user.password = password
-
-        db.session.commit()
-            
-        flash("Usuário atualizado com sucesso!")
+    if not name and not email and not password and not restrictions:
+        flash("Não é possível realizar a atualização!", "error")
         return redirect("/gerenciarperfil")
+
+    if name:
+        user.name = name
+
+    if email:
+        user.email = email
+
+    if password:
+        password=hash(password)
+        user.password = password
+
+    db.session.commit()
+    flash("Usuário atualizado com sucesso!", "success")
+    return redirect("/gerenciarperfil")
 
 
 @bp_user.route('/<int:id_user>/delete', methods=['POST'])
@@ -109,4 +108,5 @@ def delete_user(id_user):
     db.session.delete(user)
     db.session.commit()
 
+    flash('Perfil excluído com sucesso', 'success')
     return redirect(url_for('index'))

@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content2 %}
-{% set mensagens = get_flashed_messages() %} 
+{% set mensagens = get_flashed_messages(with_categories=true) %} 
 {% if mensagens %}     
-<div role="alert" class="alert alert-success">
-    {% for msg in mensagens %}
-        {{ msg }}
-   {% endfor %}
+{% for category, msg in mensagens %}
+<div role="alert" class="alert alert-{{category}}">
+{{ msg }}
 </div>
+{% endfor %}
 {% endif %}
 {% endblock %}
 {% block content %}
@@ -46,25 +46,25 @@
                     <ul tabindex="-1" class="w-[100%] dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
                         <li class="w-[100%]">
                             <div>
-                                <input type="checkbox" name="alergia_intolerancia" value="leite">
+                                <input type="checkbox" name="restricao" value="leite">
                                 <p>Leite</p>
                             </div>
                         </li>
                         <li class="w-[100%]">
                             <div>
-                                <input type="checkbox" name="alergia_intolerancia" value="gluten">
+                                <input type="checkbox" name="restricao" value="gluten">
                                 <p>Glúten</p>
                             </div>
                         </li>
                         <li class="w-[100%]">
                             <div>
-                                <input type="checkbox" name="alergia_intolerancia" value="ovo">
+                                <input type="checkbox" name="restricao" value="ovo">
                                 <p>Ovo</p>
                             </div>
                         </li>
                         <li class="w-[100%]">
                             <div>
-                                <input type="checkbox" name="alergia_intolerancia" value="outra">
+                                <input type="checkbox" name="restricao" value="outra">
                                 <p>Outra</p>
                             </div>
                         </li>
