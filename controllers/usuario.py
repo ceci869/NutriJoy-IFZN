@@ -28,18 +28,22 @@ def add_user():
         email = request.form['email'].strip()
         password = request.form['password'].strip()
 
-        restrictions = request.form.getlist('restricoes')
+        restrictions_ids = request.form.getlist('restricoes')
     
 
         if name != '' or email != '' or password != '':
             new_user = User(name=name, email=email, password=hash(password))
-            print(new_user.restrictions)    
+            if restrictions_ids:
+                selected_restrictions = Restriction.query.filter(Restriction.id.in_(restrictions_ids)).all()
+                new_user.restrictions.extend(selected_restrictions)
 
             db.session.add(new_user)
             db.session.commit()
+
             flash('Usuário cadastrado com sucesso!', 'success')
             login_user(new_user)
             return redirect(url_for('homepage')) 
+        
         else:
             flash('Por favor preencha os campos obrigatórios', 'warning')
             return redirect(url_for('user.add_user'))
@@ -66,7 +70,7 @@ def verificalogin():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('login'))
+    return redirect(url_for('user.verificalogin'))
 
 
 @bp_user.route('/users')

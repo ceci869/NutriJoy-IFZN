@@ -39,13 +39,9 @@ def index():
     lista_colaboradores = ['Alba Lopes', 'Cecília Aine', 'Maria Luísa', 'Thaylanne Kérrinna']
     return render_template('index.html', lista_colaboradores=lista_colaboradores)
 
-# @app.route('/cadastro')
-# def cadastro():
-#     restrictions = Restriction.query.all()
-#     return render_template('cadastro.html', restrictions)
-@app.route('/login')
-def login():
-    return render_template('login.html')
+# @app.route('/login')
+# def login():
+#     return render_template('login.html')
     
 @app.route('/paginaerro')
 def paginaerro():

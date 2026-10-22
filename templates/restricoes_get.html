@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Get de Restrições</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 <body>
     {% set messages = get_flashed_messages(with_categories=true) %}
@@ -16,16 +18,36 @@
     {% endif %}
 
     <h1>Restrições cadastradas</h1>
-    {% if len_restrictions != 0 %}
-        <ul>
-        {% for restriction in restrictions %}
-            <li> {{ restriction.name }} </li>
-            <a href="{{ url_for('restriction.update_restriction', id_restriction=restriction.id )}}">Editar</a>
-            <a href="{{ url_for('restriction.delete_restriction', id_restriction=restriction.id )}}">Excluir</a>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>O seu sistema ainda não possui nenhuma restrição cadastrada</p>
-    {% endif %}
+    <br>
+        <div class="overflow-x-auto">
+        <table class="table">
+            <!-- head -->
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+                {% if len_restrictions != 0 %}
+
+                    {% for restriction in restrictions %}
+                    <tr>
+                        <th>{{ restriction.id }}</th>
+                        <td>{{ restriction.name }}</td>
+                        <td class="flex gap-3">
+                            <a href="{{ url_for('restriction.update_restriction', id_restriction=restriction.id )}}" class="btn btn-primary">Editar</a>
+                            <a href="{{ url_for('restriction.delete_restriction', id_restriction=restriction.id )}}" class="btn btn-error">Excluir</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                {% else %}
+                    <p>O seu sistema ainda não possui nenhuma restrição cadastrada</p>
+                {% endif %}
+            </tbody>
+        </table>
+        </div>
 </body>
 </html>
