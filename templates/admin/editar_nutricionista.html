@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar nutricionista | NutriJoy</title>
+</head>
+<body>
+    <h1>Editar nutricionista</h1>
+
+    {% for categoria, mensagem in get_flashed_messages(with_categories=true) %}
+        <p>{{ mensagem }}</p>
+    {% endfor %}
+
+    <form method="POST" enctype="multipart/form-data">
+        <label for="crn">CRN</label>
+        <input type="number" id="crn" value="{{ nutricionista.crn }}" disabled>
+
+        <label for="name">Nome</label>
+        <input type="text" id="name" name="name" value="{{ nutricionista.name }}" required>
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" value="{{ nutricionista.email }}" required>
+
+        <label for="specialization">Especialização</label>
+        <input type="text" id="specialization" name="specialization" value="{{ nutricionista.specialization or '' }}">
+
+        <label for="experience_years">Anos de experiência</label>
+        <input type="number" id="experience_years" name="experience_years" min="0" value="{{ nutricionista.experience_years }}" required>
+
+        <label for="profile_photo">Alterar foto (opcional)</label>
+        <input type="file" id="profile_photo" name="profile_photo" accept="image/*">
+
+        <label for="city">Cidade</label>
+        <input type="text" id="city" name="city" value="{{ nutricionista.city }}" required>
+
+        <label for="state">Estado</label>
+        <input type="text" id="state" name="state" value="{{ nutricionista.state }}" required>
+
+        <label for="university">Universidade</label>
+        <input type="text" id="university" name="university" value="{{ nutricionista.university }}" required>
+
+        <label for="description">Descrição</label>
+        <textarea id="description" name="description" required>{{ nutricionista.description }}</textarea>
+
+        <button type="submit">Salvar alterações</button>
+    </form>
+
+    <a href="{{ url_for('nutritionist.admin_nutricionistas') }}">Voltar</a>
+</body>
+</html>

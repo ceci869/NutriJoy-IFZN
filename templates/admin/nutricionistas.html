@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar nutricionistas | NutriJoy</title>
+</head>
+<body>
+    <h1>Gerenciar nutricionistas</h1>
+
+    <a href="{{ url_for('nutritionist.admin_novo_nutricionista') }}">
+        Cadastrar nutricionista
+    </a>
+
+    {% for categoria, mensagem in get_flashed_messages(with_categories=true) %}
+        <p>{{ mensagem }}</p>
+    {% endfor %}
+
+    <table>
+        <thead>
+            <tr>
+                <th>CRN</th>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Especialização</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for nutricionista in nutricionistas %}
+            <tr>
+                <td>{{ nutricionista.crn }}</td>
+                <td>{{ nutricionista.name }}</td>
+                <td>{{ nutricionista.email }}</td>
+                <td>{{ nutricionista.specialization }}</td>
+                <td>
+                    <a href="{{ url_for('nutritionist.admin_editar_nutricionista', crn=nutricionista.crn) }}">
+                        Editar
+                    </a>
+
+                    <form
+                        action="{{ url_for('nutritionist.admin_excluir_nutricionista', crn=nutricionista.crn) }}"
+                        method="POST"
+                        onsubmit="return confirm('Tem certeza que deseja excluir este nutricionista?')"
+                    >
+                        <button type="submit">Excluir</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5">Nenhum nutricionista cadastrado.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
