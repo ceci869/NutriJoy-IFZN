@@ -1,7 +1,7 @@
 from utils import db
 from flask_login import UserMixin
-from models.User_Restriction import UserRestriction
-from models.Restriction import Restriction
+# from models.User_Restriction import UserRestriction
+# from models.Restriction import Restriction
 
 class User(UserMixin, db.Model):
     __tablename__ = 'User'
@@ -9,13 +9,14 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String(150), nullable=False)
     email = db.Column(db.String(100), nullable=False)
     password = db.Column(db.String(100), nullable=False)
-    restrictions = db.Column(db.JSON, default=list)
+    role = db.Column(db.String(20), nullable=False, default='usuario')
 
-    def __init__(self, name, email, password, restrictions):
+    restrictions = db.relationship('Restriction', secondary='UserRestriction', back_populates='user')
+
+    def __init__(self, name, email, password):
         self.name = name
         self.email = email
         self.password = password
-        self.restrictions = restrictions
 
     def __repr__(self):
         return '<Usuário {}>'.format(self.name)

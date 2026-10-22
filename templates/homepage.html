@@ -2,6 +2,15 @@
 
     {% block content %}
 
+        {% set mensagens = get_flashed_messages(with_categories=true) %} 
+        {% if mensagens %}     
+            {% for categoria, msg in mensagens %}
+                <div class="alert alert-{{categoria}}" role="alert">
+                    {{ msg }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
     <h1 class="text-4xl font-semibold mb-6">
         Olá, {{ current_user.name }}!
     </h1>

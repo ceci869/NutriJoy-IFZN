@@ -5,7 +5,6 @@ from models.Restriction import Restriction
 from utils import db, app
 from flask import Blueprint
 from app import lm
-from time import sleep
 import hashlib
 
 @lm.user_loader
@@ -22,28 +21,32 @@ bp_user = Blueprint('user', __name__, template_folder='templates')
 # =-=-=USER=-=-=
 @bp_user.route('/add', methods=['GET', 'POST'])
 def add_user():
-    if request.method == 'GET':
-        return render_template('cadastro.html')
-    elif request.method == 'POST':        
+    allrestrictions = Restriction.query.all()
+    
+    if request.method == 'POST':        
         name = request.form['name'].strip()
         email = request.form['email'].strip()
         password = request.form['password'].strip()
-        restrictions = request.form.getlist('restricao')
+
+        restrictions = request.form.getlist('restricoes')
+    
 
         if name != '' or email != '' or password != '':
-            new_user = User(name=name, email=email, password=hash(password), restrictions=restrictions)
+            new_user = User(name=name, email=email, password=hash(password))
             print(new_user.restrictions)    
 
             db.session.add(new_user)
             db.session.commit()
-
-            flash('Usuário cadastrado com sucesso! Encaminhe-se para a página de login', 'success')
-            return redirect(url_for('user.add_user')) 
+            flash('Usuário cadastrado com sucesso!', 'success')
+            login_user(new_user)
+            return redirect(url_for('homepage')) 
         else:
             flash('Por favor preencha os campos obrigatórios', 'warning')
             return redirect(url_for('user.add_user'))
 
-@bp_user.route('/verificalogin', methods=['POST'])
+    return render_template('cadastro.html', allrestrictions=allrestrictions)
+
+@bp_user.route('/verificalogin', methods=['POST', 'GET'])
 def verificalogin():
     if request.method == 'GET':
         return render_template('login.html')
@@ -53,16 +56,17 @@ def verificalogin():
         
         user = db.session.query(User).filter_by(email=email, password=hash(password)).first()
         if not user:
-            return 'Nome ou senha incorretos'
-        
-        login_user(user)
-        return redirect(url_for('homepage'))
+            flash('Email ou senha incorretos. Tente novamente', 'error')
+        else:
+            flash('Usuário logado com sucesso!', 'success')        
+            login_user(user)
+            return redirect(url_for('homepage'))
 
 @bp_user.route('/logout', methods=['POST'])
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('homepage'))
+    return redirect(url_for('login'))
 
 
 @bp_user.route('/users')

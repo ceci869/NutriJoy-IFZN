@@ -12,6 +12,15 @@
 
 <body class="bg-base-100 min-h-screen">
 
+    {% set mensagens = get_flashed_messages(with_categories=true) %} 
+    {% if mensagens %}     
+        {% for categoria, msg in mensagens %}
+            <div class="alert alert-{{categoria}}" role="alert">
+                {{ msg }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
     <div class="navbar bg-[#8C8C8C] px-8">
         <div class="flex items-center gap-3">
             <div class="w-8 h-8 rounded-full bg-white"></div>

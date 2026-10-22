@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Restrições</title>
+</head>
+<body>
+
+    <form action="{{ url_for('restriction.add_restriction') }}" method="post">
+        <label for="name">Restrição</label>
+        <input type="text" name="name">
+
+        <button type="submit">Cadastrar restrição</button>
+    </form>
+</body>
+</html>

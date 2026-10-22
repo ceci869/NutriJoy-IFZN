@@ -64,15 +64,13 @@
                 </div>
 
                 <div>
-                    <label class="label">
+                    <label class="label" for="restricoes">
                         <span class="label-text">Restrições alimentares</span>
                     </label> <br>
-                    <select name="restricao" id="restricao" class="select w-full" multiple>
-                        <option disabled selected>Possui alguma restrição?</option>
-                        <option value="Glúten">Glúten</option>
-                        <option value="Lactose">Lactose</option>
-                        <option value="Frutose">Frutose</option>
-                        <option value="Outro">Outro(s)</option>
+                    <select class="select w-full max-w-lg" name="restricoes" id="restricoes" multiple>
+                        {% for restriction in allrestrictions %}
+                            <option class="w-full max-w-lg" value="{{ restriction.id }}"> {{ restriction.name }} </option>
+                        {% endfor %}
                     </select>
                 </div>
 

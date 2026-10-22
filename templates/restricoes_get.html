@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-br"">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get de Restrições</title>
+</head>
+<body>
+    {% set messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for categoria, msg in messages%}
+            <div class="alert alert-{{categoria}}" role="alert">
+                {{ msg }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <h1>Restrições cadastradas</h1>
+    {% if len_restrictions != 0 %}
+        <ul>
+        {% for restriction in restrictions %}
+            <li> {{ restriction.name }} </li>
+            <a href="{{ url_for('restriction.update_restriction', id_restriction=restriction.id )}}">Editar</a>
+            <a href="{{ url_for('restriction.delete_restriction', id_restriction=restriction.id )}}">Excluir</a>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>O seu sistema ainda não possui nenhuma restrição cadastrada</p>
+    {% endif %}
+</body>
+</html>
