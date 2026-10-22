@@ -1,0 +1,30 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastrar usuário | NutriJoy</title>
+</head>
+<body>
+    <h1>Cadastrar usuário</h1>
+
+    {% for categoria, mensagem in get_flashed_messages(with_categories=true) %}
+        <p>{{ mensagem }}</p>
+    {% endfor %}
+
+    <form method="POST">
+        <label for="name">Nome</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="password">Senha</label>
+        <input type="password" id="password" name="password" required>
+
+        <button type="submit">Cadastrar</button>
+    </form>
+
+    <a href="{{ url_for('admin_usuarios') }}">Voltar</a>
+</body>
+</html>
