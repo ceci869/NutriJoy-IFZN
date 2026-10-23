@@ -11,8 +11,8 @@ from models.Food import Food
 from models.Nutritionist import Nutritionist
 from models.Restriction import Restriction
 # from models.User_Restriction import UserRestriction
-from models.Menu_Recipe import MenuRecipe
-from models.Food_Recipe import FoodRecipe
+# from models.Menu_Recipe import MenuRecipe
+# from models.Food_Recipe import FoodRecipe
 from controllers.usuario import bp_user
 from controllers.alimento import bp_food
 from controllers.cardapio_diario import bp_dailyMenu
@@ -20,8 +20,8 @@ from controllers.nutricionista import bp_nutritionist, get_nutritionists
 from controllers.receita import bp_recipe
 from controllers.restricao import bp_restriction
 # from controllers.usuario_restricao import bp_userRestriction
-from controllers.comida_receita import bp_foodRecipe
-from controllers.receita_cardapio import bp_menuRecipe
+# from controllers.comida_receita import bp_foodRecipe
+# from controllers.receita_cardapio import bp_menuRecipe
 
 app.register_blueprint(bp_user, url_prefix='/user')
 app.register_blueprint(bp_food, url_prefix='/food')
@@ -30,8 +30,8 @@ app.register_blueprint(bp_nutritionist, url_prefix='/nutritionist')
 app.register_blueprint(bp_recipe, url_prefix='/recipe')
 app.register_blueprint(bp_restriction, url_prefix='/restriction')
 # app.register_blueprint(bp_userRestriction, url_prefix='/user_restriction')
-app.register_blueprint(bp_menuRecipe, url_prefix='/menu_recipe')
-app.register_blueprint(bp_foodRecipe, url_prefix='/food_recipe')
+# app.register_blueprint(bp_menuRecipe, url_prefix='/menu_recipe')
+# app.register_blueprint(bp_foodRecipe, url_prefix='/food_recipe')
 
 
 @app.route('/')

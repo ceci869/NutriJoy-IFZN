@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br"">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get de Restrições</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body>
+    {% set messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for categoria, msg in messages%}
+            <div class="alert alert-{{categoria}}" role="alert">
+                {{ msg }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <h1>Receitas cadastradas</h1>
+    <br>
+        <div class="overflow-x-auto">
+        <table class="table">
+            <!-- head -->
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Preço médio (R$)</th>
+                <th>Alimentos</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+                {% if len_recipes != 0 %}
+
+                    {% for recipe in recipes %}
+                    <tr>
+                        <th>{{ recipe.id }}</th>
+                        <td>{{ recipe.name }}</td>
+                        <td>{{ recipe.medium_price }}</td>
+                        <td>{{ recipe.foods }}</td>
+                        <td class="flex gap-3">
+                            <a href="{{ url_for('recipe.update_recipe', id_recipe=recipe.id )}}" class="btn btn-primary">Editar</a>
+                            <a href="{{ url_for('food.delete_recipe', id_recipe=recipe.id )}}" class="btn btn-error">Excluir</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                {% else %}
+                    <p>O seu sistema ainda não possui nenhuma receita cadastrada</p>
+                {% endif %}
+            </tbody>
+        </table>
+        </div>
+</body>
+</html>

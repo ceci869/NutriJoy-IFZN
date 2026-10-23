@@ -6,6 +6,7 @@ class Restriction(db.Model):
     name = db.Column(db.String(200))
 
     user = db.relationship('User', secondary='UserRestriction', back_populates='restrictions')
+    recipes = db.relationship('Recipe', secondary='RecipeRestriction', back_populates='restrictions')
 
     def __init__(self, name):
         self.name = name

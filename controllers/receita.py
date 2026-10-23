@@ -9,7 +9,6 @@ bp_recipe = Blueprint('recipe', __name__, template_folder='templates')
 @bp_recipe.route('/add', methods=['POST'])
 def add_recipe():
     recipe = Recipe(
-        id_nutritionist = request.form['id_nutritionist'],
         name = request.form['name'],
         average_value = request.form['average_value'],
         kcal = request.form['kcal'],
@@ -25,11 +24,12 @@ def add_recipe():
     return 'Receita adicionada com sucesso!'
 
 
-@bp_recipe.route('/recipes')
+@bp_recipe.route('/get')
 def get_recipes():
     recipes = Recipe.query.all()
+    len_recipes = len(recipes)
 
-    return str(recipes)
+    return render_template('receitas_get.html', recipes=recipes, len_recipes=len_recipes)
 
 
 @bp_recipe.route('/<int:id_recipe>/update', methods=['POST'])

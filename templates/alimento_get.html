@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-br"">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get de Restrições</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body>
+    {% set messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for categoria, msg in messages%}
+            <div class="alert alert-{{categoria}}" role="alert">
+                {{ msg }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <h1>Alimentos cadastradas</h1>
+    <br>
+        <div class="overflow-x-auto">
+        <table class="table">
+            <!-- head -->
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Safra principal</th>
+                <th>Preço médio (R$)</th>
+                <th>Kcal</th>
+                <th>Gorduras totais</th>
+                <th>Carboidratos</th>
+                <th>Fibras</th>
+                <th>Proteínas</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+                {% if len_foods != 0 %}
+
+                    {% for food in foods %}
+                    <tr>
+                        <th>{{ food.id }}</th>
+                        <td>{{ food.name }}</td>
+                        <td>{{ food.season }}</td>
+                        <td>{{ food.medium_price }}</td>
+                        <td>{{ food.kcal }}</td>
+                        <td>{{ food.total_fat }}</td>
+                        <td>{{ food.carbohydrate }}</td>
+                        <td>{{ food.fiber }}</td>
+                        <td>{{ food.protein }}</td>
+                        <td class="flex gap-3">
+                            <a href="{{ url_for('food.update_food', id_food=food.id )}}" class="btn btn-primary">Editar</a>
+                            <a href="{{ url_for('food.delete_food', id_food=food.id )}}" class="btn btn-error">Excluir</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                {% else %}
+                    <p>O seu sistema ainda não possui nenhum alimento cadastrado</p>
+                {% endif %}
+            </tbody>
+        </table>
+        </div>
+</body>
+</html>

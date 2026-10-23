@@ -3,19 +3,14 @@ from utils import db
 class Recipe(db.Model):
     __tablename__ = 'Recipe'
     id = db.Column(db.Integer, primary_key=True)
-    nutritionist_id = db.Column(db.Integer, db.ForeignKey('Nutritionist.crn'))
     name = db.Column(db.String(50), nullable=False)
     medium_price = db.Column(db.Float, nullable=False)
-    kcal = db.Column(db.Integer, nullable=False)
-    total_fat = db.Column(db.Float, nullable=False)
-    fiber = db.Column(db.Float, nullable=False)
-    protein = db.Column(db.Float, nullable=False)
 
-    nutritionist = db.relationship('Nutritionist', foreign_keys=nutritionist_id)
+    restrictions = db.relationship('Restriction', secondary='RecipeRestriction', back_populates='recipes')
+    food = db.relationship('Food', secondary='FoodRecipe', back_populates='recipes')
+    daily_menu = db.relationship('DailyMenu', secondary='MenuRecipe', back_populates='recipes')
 
-    def __init__(self, nutritionist_id, restriction_id, name, medium_price, kcal, total_fat, fiber, protein):
-        self.nutritionist_id = nutritionist_id
-        self.restriction_id = restriction_id
+    def __init__(self, name, medium_price, kcal, total_fat, fiber, protein):
         self.name = name
         self.medium_price = medium_price
         self.kcal = kcal

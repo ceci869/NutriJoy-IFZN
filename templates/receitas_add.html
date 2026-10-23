@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Restrições</title>
+</head>
+<body>
+
+    <form action="{{ url_for('recipe.add_recipe') }}" method="post">
+        <label for="name">Nome</label>
+        <input type="text" name="name" required>
+        <br>
+        <label for="average_value">Preço médio</label>
+        <input type="number" name="average_value" required>
+        <br>
+        <label for="foods">Alimentos</label>
+        <select name="foods" id="foods" multiple required>
+            {% for food in foods %}
+            <option value="{{ food.id }}">{{ food.name }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Cadastrar receita</button>
+    </form>
+</body>
+</html>

@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect
+from flask import render_template, request, redirect, flash, url_for
 from models.Food import Food
 from utils import db
 from flask import Blueprint
@@ -6,55 +6,84 @@ from flask import Blueprint
 bp_food = Blueprint('food', __name__, template_folder='templates')
 
 # =-=-=FOOD=-=-=
-@bp_food.route('/fadd', methods=['POST'])
+@bp_food.route('/add', methods=['POST', 'GET'])
 def add_food():
-    food = Food(
-        name = request.form['name'],
-        average_value = request.form['average_value'],
-        portion = request.form['portion'],
-        kcal = request.form['kcal'],
-        fats = request.form['fats'],
-        carbohydrates = request.form['carbohydrates'],
-        fibers = request.form['fibers'],
-        proteins = request.form['proteins']
-    )
+    if request.method == 'GET':
+        return render_template('alimento_add.html')
 
-    db.session.add(food)
-    db.session.commit()
+    elif request.method == 'POST':
+        food = Food(
+            name = request.form['name'],
+            medium_price = request.form['average_value'],
+            season = request.form.getlist('season'),
+            kcal = request.form['kcal'],
+            total_fat = request.form['fats'],
+            carbohydrate = request.form['carbohydrates'],
+            fiber = request.form['fibers'],
+            protein = request.form['proteins']
+        )
 
-    return 'Alimento adicionado com sucesso!'
+        db.session.add(food)
+        db.session.commit()
+
+        flash('Alimento adicionado com sucesso!', 'success')
+        return redirect(url_for('food.get_foods'))
 
 
-@bp_food.route('/foods')
+@bp_food.route('/get', methods=['GET'])
 def get_foods():
     foods = Food.query.all()
+    len_foods = len(foods)
 
-    return str(foods)
+    return render_template('alimento_get.html', foods=foods, len_foods=len_foods)
 
 
-@bp_food.route('/<int:id_food>/update', methods=['POST'])
+@bp_food.route('/<int:id_food>/update', methods=['POST', 'GET'])
 def update_food(id_food):
     food = Food.query.get_or_404(id_food)
 
-    food.name = request.form['name']
-    food.average_value = request.form['average_value']
-    food.portion = request.form['portion']
-    food.kcal = request.form['kcal']
-    food.fats = request.form['fats']
-    food.carbohydrates = request.form['carbohydrates']
-    food.fibers = request.form['fibers']
-    food.proteins = request.form['proteins']
+    if request.method == 'GET':
+        return render_template('alimento_update.html', food=food)
 
-    db.session.commit()
+    elif request.method == 'POST':
+        name = request.form['name']
+        medium_price = request.form['average_value']
+        season = request.form.getlist('season')
+        kcal = request.form['kcal']
+        total_fat = request.form['fats']
+        carbohydrate = request.form['carbohydrates']
+        fiber = request.form['fibers']
+        protein = request.form['proteins']
 
-    return 'Alimento atualizado com sucesso!'
+        if name:
+            food.name = name
+        if medium_price:
+            food.medium_price = medium_price
+        if season:
+            food.season = ', '.join(season)
+        if kcal:
+            food.kcal = kcal
+        if total_fat:
+            food.total_fat = total_fat
+        if carbohydrate:
+            food.carbohydrate = carbohydrate
+        if fiber:
+            food.fiber = fiber
+        if protein:
+            food.protein = protein
+
+        db.session.commit()
+
+        flash('Alimento atualizado com sucesso!', 'success')
+        return redirect(url_for('food.get_foods'))
 
 
-@bp_food.route('/<int:id_food>/delete', methods=['POST'])
+@bp_food.route('/<int:id_food>/delete')
 def delete_food(id_food):
     food = Food.query.get_or_404(id_food)
 
     db.session.delete(food)
     db.session.commit()
 
-    return 'Alimento excluído com sucesso!'
+    flash('Alimento excluído com sucesso!', 'success')
+    return redirect(url_for('food.get_foods'))

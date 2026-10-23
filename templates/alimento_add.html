@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Restrições</title>
+</head>
+<body>
+
+    <form action="{{ url_for('food.add_food') }}" method="post">
+        <label for="name">Alimento</label>
+        <input type="text" name="name" required>
+        <br>
+        <label for="average_value">Preço médio</label>
+        <input type="number" name="average_value" required>
+        <br>
+        <label for="season">Estação do ano mais fértil</label>
+        <select name="season" id="season" multiple required>
+            <option value="verão">Verão</option>
+            <option value="primavera">Primavera</option>
+            <option value="outono">Outono</option>
+            <option value="inverno">Inverno</option>
+        </select>
+
+        <br>
+        <label for="kcal">Kcal</label>
+        <input type="number" name="kcal" required>
+        <br>
+        <label for="fats">Gorduras</label>
+        <input type="number" name="fats" required>
+        <br>
+        <label for="carbohydrates">Carboidratos</label>
+        <input type="number" name="carbohydrates" required>
+        <br>
+        <label for="fibers">Fibras</label>
+        <input type="number" name="fibers" required>
+        <br>
+        <label for="proteins">Proteínas</label>
+        <input type="number" name="proteins" required>
+        <br>
+        <button type="submit">Cadastrar alimento</button>
+    </form>
+</body>
+</html>

@@ -12,6 +12,7 @@ class User(UserMixin, db.Model):
     role = db.Column(db.String(20), nullable=False, default='usuario')
 
     restrictions = db.relationship('Restriction', secondary='UserRestriction', back_populates='user')
+    daily_menu = db.relationship('DailyMenu', back_populates='user')
 
     def __init__(self, name, email, password):
         self.name = name
