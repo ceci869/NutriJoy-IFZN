@@ -1,25 +1,328 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>document</title>
+    <title>Cadastro de Nutricionista | NutriJoy</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <form action="{{url_for('nutritionist.add_nutritionist')}}" method="post" enctype="multipart/form-data">
-        <input type="text" name="name" placeholder="Digite seu nome:">
-        <input type="email" name="email" placeholder="Digite seu email:">
-        <input type="text" name="crn" placeholder="Digite seu CRN:">
-        <input type="text" name="city" placeholder="Digite sua cidade:">
-        <input type="text" name="state" placeholder="Digite seu estado:">
-        <input type="text" name="university" placeholder="Digite sua universidade:">
-        <input type="text" name="especializacao" placeholder="Digite sua especialização:">
-        <input type="number" name="anos_experiencia" placeholder="Quantos anos de experiência?">
-        <label>Digite uma descrição do seu trabalho:</label>
-        <textarea name="description"></textarea>
-        <label>Adicione uma foto para seu perfil</label>
-        <input type="file" name="profile_photo">
-        <button type="submit">Enviar</button>
-    </form>
+
+<body class="min-h-screen bg-white">
+
+    <header class="bg-[#FFF8D6] border-b border-[#E5DDBD] px-8 py-6">
+        <img
+            src="{{ url_for('static', filename='img/logo1.png') }}"
+            alt="NutriJoy"
+            class="h-10 w-auto"
+        >
+    </header>
+
+    <main class="max-w-[760px] mx-auto px-6 py-16">
+
+        <form
+            action="{{ url_for('nutritionist.add_nutritionist') }}"
+            method="post"
+            enctype="multipart/form-data"
+            id="formCadastro"
+        >
+
+            <!-- PRIMEIRA ETAPA -->
+            <section id="etapa1" class="flex flex-col gap-7">
+
+                <div class="mb-5">
+                    <h1 class="text-4xl font-semibold mb-3">
+                        Seja um nutricionista parceiro!
+                    </h1>
+
+                    <p class="text-lg text-gray-700">
+                        Preencha seus dados para cadastrar seu perfil na plataforma.
+                    </p>
+                </div>
+
+                <div>
+                    <label for="name" class="block text-xl mb-2">
+                        Nome completo
+                    </label>
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="Digite seu nome completo"
+                        required
+                        class="w-full border border-gray-300 rounded-lg px-5 py-4 focus:outline-none focus:border-[#5FB434]"
+                    >
+                </div>
+
+                <div>
+                    <label for="email" class="block text-xl mb-2">
+                        E-mail
+                    </label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Digite seu e-mail"
+                        required
+                        class="w-full border border-gray-300 rounded-lg px-5 py-4 focus:outline-none focus:border-[#5FB434]"
+                    >
+                </div>
+
+                <div>
+                    <label for="city" class="block text-xl mb-2">
+                        Cidade
+                    </label>
+                    <input
+                        type="text"
+                        id="city"
+                        name="city"
+                        placeholder="Digite sua cidade"
+                        required
+                        class="w-full border border-gray-300 rounded-lg px-5 py-4 focus:outline-none focus:border-[#5FB434]"
+                    >
+                </div>
+
+                <div>
+                    <label for="state" class="block text-xl mb-2">
+                        Estado
+                    </label>
+                    <input
+                        type="text"
+                        id="state"
+                        name="state"
+                        placeholder="Digite seu estado"
+                        required
+                        class="w-full border border-gray-300 rounded-lg px-5 py-4 focus:outline-none focus:border-[#5FB434]"
+                    >
+                </div>
+
+                <div>
+                    <h2 class="text-xl font-normal mb-1">Perfil</h2>
+
+                    <p class="text-sm text-gray-400 mb-10">
+                        Adicione uma foto para o seu perfil
+                    </p>
+
+                    <label
+                        for="profile_photo"
+                        class="flex items-center justify-center w-full max-w-[310px] h-[183px] border border-gray-300 cursor-pointer hover:bg-gray-50 transition-colors overflow-hidden"
+                    >
+                        <div
+                            id="preview-container"
+                            class="flex items-center justify-center w-full h-full"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="76"
+                                height="76"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="#D1D1D1"
+                                stroke-width="1.5"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
+                                <rect x="3" y="3" width="18" height="18" rx="0.5"/>
+                                <circle cx="8.5" cy="8.5" r="1.8"/>
+                                <path d="M21 15l-5-5L5 21"/>
+                                <path d="M12 14l3-3 6 6"/>
+                            </svg>
+                        </div>
+
+                        <input
+                            type="file"
+                            id="profile_photo"
+                            name="profile_photo"
+                            accept="image/*"
+                            required
+                            class="hidden"
+                            onchange="mostrarFoto(event)"
+                        >
+                    </label>
+
+                    <p id="nome-arquivo" class="text-sm text-gray-500 mt-3"></p>
+                </div>
+
+                <button
+                    type="button"
+                    onclick="avancar()"
+                    class="w-full bg-[#5FB434] hover:bg-[#4E982A] text-white font-semibold text-lg py-4 rounded-lg transition-colors mt-4"
+                >
+                    Avançar
+                </button>
+
+            </section>
+
+            <!-- SEGUNDA ETAPA -->
+            <section id="etapa2" class="hidden flex-col gap-7">
+
+                <div class="mb-5">
+                    <h1 class="text-4xl font-semibold mb-3">
+                        Informações profissionais
+                    </h1>
+
+                    <p class="text-lg text-gray-700">
+                        Complete seu cadastro com suas informações profissionais.
+                    </p>
+                </div>
+
+                <div>
+                    <label for="crn" class="block text-xl mb-2">
+                        CRN
+                    </label>
+                    <input
+                        type="text"
+                        id="crn"
+                        name="crn"
+                        placeholder="Digite seu CRN"
+                        required
+                        disabled
+                        class="w-full border border-gray-300 rounded-lg px-5 py-4 focus:outline-none focus:border-[#5FB434]"
+                    >
+                </div>
+
+                <div>
+                    <label for="university" class="block text-xl mb-2">
+                        Universidade
+                    </label>
+                    <input
+                        type="text"
+                        id="university"
+                        name="university"
+                        placeholder="Digite sua universidade"
+                        required
+                        disabled
+                        class="w-full border border-gray-300 rounded-lg px-5 py-4 focus:outline-none focus:border-[#5FB434]"
+                    >
+                </div>
+
+                <div>
+                    <label for="especializacao" class="block text-xl mb-2">
+                        Especialização
+                    </label>
+                    <input
+                        type="text"
+                        id="especializacao"
+                        name="especializacao"
+                        placeholder="Digite sua especialização"
+                        required
+                        disabled
+                        class="w-full border border-gray-300 rounded-lg px-5 py-4 focus:outline-none focus:border-[#5FB434]"
+                    >
+                </div>
+
+                <div>
+                    <label for="anos_experiencia" class="block text-xl mb-2">
+                        Anos de experiência
+                    </label>
+                    <input
+                        type="number"
+                        id="anos_experiencia"
+                        name="anos_experiencia"
+                        min="0"
+                        placeholder="Quantos anos de experiência?"
+                        required
+                        disabled
+                        class="w-full border border-gray-300 rounded-lg px-5 py-4 focus:outline-none focus:border-[#5FB434]"
+                    >
+                </div>
+
+                <div>
+                    <label for="description" class="block text-xl mb-2">
+                        Descrição do seu trabalho
+                    </label>
+                    <textarea
+                        id="description"
+                        name="description"
+                        rows="5"
+                        placeholder="Descreva sua atuação profissional"
+                        required
+                        disabled
+                        class="w-full border border-gray-300 rounded-lg px-5 py-4 text-base resize-y focus:outline-none focus:border-[#5FB434]"
+                    ></textarea>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-4 mt-4">
+                    <button
+                        type="button"
+                        onclick="voltar()"
+                        class="w-full border border-[#5FB434] text-[#4E982A] font-semibold text-lg py-4 rounded-lg hover:bg-gray-50 transition-colors"
+                    >
+                        Voltar
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="w-full bg-[#5FB434] hover:bg-[#4E982A] text-white font-semibold text-lg py-4 rounded-lg transition-colors"
+                    >
+                        Finalizar cadastro
+                    </button>
+                </div>
+
+            </section>
+
+        </form>
+    </main>
+
+    <script>
+        function avancar() {
+            const etapa1 = document.getElementById('etapa1');
+            const campos = etapa1.querySelectorAll('input[required]');
+
+            for (const campo of campos) {
+                if (!campo.checkValidity()) {
+                    campo.reportValidity();
+                    return;
+                }
+            }
+
+            etapa1.classList.add('hidden');
+
+            const etapa2 = document.getElementById('etapa2');
+            etapa2.classList.remove('hidden');
+            etapa2.classList.add('flex');
+
+            document.querySelectorAll('#etapa2 input, #etapa2 textarea')
+                .forEach(campo => campo.disabled = false);
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function voltar() {
+            const etapa2 = document.getElementById('etapa2');
+
+            etapa2.classList.add('hidden');
+            etapa2.classList.remove('flex');
+
+            document.getElementById('etapa1').classList.remove('hidden');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function mostrarFoto(event) {
+            const arquivo = event.target.files[0];
+            const container = document.getElementById('preview-container');
+            const nomeArquivo = document.getElementById('nome-arquivo');
+
+            if (!arquivo) return;
+
+            if (!arquivo.type.startsWith('image/')) {
+                event.target.value = '';
+                nomeArquivo.textContent = 'Selecione um arquivo de imagem válido.';
+                return;
+            }
+
+            const imagem = document.createElement('img');
+            imagem.src = URL.createObjectURL(arquivo);
+            imagem.alt = 'Pré-visualização da foto de perfil';
+            imagem.className = 'w-full h-full object-cover';
+
+            container.replaceChildren(imagem);
+            nomeArquivo.textContent = arquivo.name;
+        }
+    </script>
+
 </body>
+
 </html>
