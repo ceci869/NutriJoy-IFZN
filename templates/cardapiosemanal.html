@@ -2,244 +2,210 @@
 
 {% block content %}
 
-<h1 class="text-4xl font-bold">
-    Cardápio semanal
-</h1>
+<div class="px-4 md:px-8 py-6">
 
-<p class="mb-8 text-lg text-gray-600">
-    Monte e acompanhe suas refeições da semana.
-</p>
+    <h1 class="text-3xl font-bold text-black">
+        Cardápio semanal
+    </h1>
 
-<!-- Tabela -->
-<div class="overflow-x-auto mb-8">
+    <p class="text-sm text-gray-600 mb-8">
+        Monte e acompanhe suas refeições da semana.
+    </p>
 
-    <table class="w-full border border-gray-200 rounded-xl overflow-hidden text-sm bg-white">
+    <!-- Tabela do cardápio -->
+    <div class="overflow-x-auto mb-8 rounded-lg border border-gray-200 bg-white">
 
-        <tr class="bg-gray-100">
-            <th class="border p-3"></th>
-            <th class="border p-3">Segunda</th>
-            <th class="border p-3">Terça</th>
-            <th class="border p-3">Quarta</th>
-            <th class="border p-3">Quinta</th>
-            <th class="border p-3">Sexta</th>
-            <th class="border p-3">Sábado</th>
-            <th class="border p-3">Domingo</th>
-        </tr>
+        <table class="w-full min-w-[700px] text-xs bg-white">
 
-        {% set refeicoes = [
-        ("fa-mug-hot", "Café da manhã"),
-        ("fa-apple-whole", "Lanche da manhã"),
-        ("fa-bowl-food", "Almoço"),
-        ("fa-glass-water", "Lanche da tarde"),
-        ("fa-utensils", "Jantar")
-        ] %}
+            <thead>
+                <tr class="bg-[#E4EEDE] text-gray-700">
+                    <th class="p-3 text-left font-medium"></th>
+                    <th class="p-3 font-medium">Segunda</th>
+                    <th class="p-3 font-medium">Terça</th>
+                    <th class="p-3 font-medium">Quarta</th>
+                    <th class="p-3 font-medium">Quinta</th>
+                    <th class="p-3 font-medium">Sexta</th>
+                    <th class="p-3 font-medium">Sábado</th>
+                    <th class="p-3 font-medium">Domingo</th>
+                </tr>
+            </thead>
 
-        {% for icone, refeicao in refeicoes %}
-        <tr>
+            <tbody>
+                {% set refeicoes = [
+                    ("fa-mug-hot", "Café da manhã"),
+                    ("fa-apple-whole", "Lanche da manhã"),
+                    ("fa-bowl-food", "Almoço"),
+                    ("fa-glass-water", "Lanche da tarde"),
+                    ("fa-utensils", "Jantar")
+                ] %}
 
-            <td class="border px-4 py-3 bg-gray-50">
+                {% for icone, refeicao in refeicoes %}
+                <tr class="border-t border-gray-200">
 
-                <div class="flex items-center gap-3">
+                    <td class="px-3 py-3 bg-white whitespace-nowrap">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid {{ icone }} text-gray-600"></i>
+                            <span class="font-medium text-gray-800">
+                                {{ refeicao }}
+                            </span>
+                        </div>
+                    </td>
 
-                    <i class="fa-solid {{ icone }}"></i>
+                    {% for i in range(7) %}
+                    <td class="p-1.5 text-center border-l border-gray-100">
+                        <button type="button"
+                                class="w-9 h-8 rounded-md bg-gray-100 text-gray-400 hover:bg-[#E4EEDE] hover:text-[#488B26] transition-colors">
+                            <i class="fa-solid fa-circle-plus"></i>
+                        </button>
+                    </td>
+                    {% endfor %}
 
-                    <span class="font-medium">
-                        {{ refeicao }}
-                    </span>
+                </tr>
+                {% endfor %}
+            </tbody>
 
+        </table>
+    </div>
+
+    <!-- Estatísticas -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
+
+        <div class="bg-[#F0583E]/5 rounded-lg border border-gray-100 shadow-sm p-5">
+            <div class="flex items-center gap-5">
+
+                <i class="fa-solid fa-wallet text-2xl text-[#F0583E]"></i>
+
+                <div>
+                    <p class="text-sm text-gray-700">
+                        Gasto médio
+                    </p>
+
+                    <h2 class="text-2xl font-bold text-[#488B26]">
+                        R$ 95,00
+                    </h2>
+
+                    <p class="text-xs text-gray-500">
+                        por semana
+                    </p>
                 </div>
 
-            </td>
+            </div>
+        </div>
 
-            {% for i in range(7) %}
-            <td class="border p-2 text-center">
+        <div class="bg-[#E4EEDE]/50 rounded-lg border border-gray-100 shadow-sm p-5">
+            <div class="flex items-center gap-5">
 
-                <button class="btn btn-circle btn-sm bg-gray-100 border-gray-300 text-gray-500 hover:bg-gray-200">
+                <i class="fa-solid fa-table-list text-2xl text-[#488B26]"></i>
 
-                    <i class="fa-solid fa-plus"></i>
+                <div>
+                    <p class="text-sm text-gray-700">
+                        Receitas utilizadas
+                    </p>
 
-                </button>
+                    <h2 class="text-2xl font-bold text-black">
+                        12
+                    </h2>
 
-            </td>
-            {% endfor %}
-
-        </tr>
-        {% endfor %}
-
-    </table>
-
-</div>
-
-
-<!-- Estatísticas -->
-<div class="grid md:grid-cols-2 gap-6 mb-8">
-
-    <div class="card bg-gray-100 border border-gray-400 shadow-none">
-
-        <div class="card-body flex-row items-center gap-5">
-
-            <i class="fa-solid fa-wallet text-4xl"></i>
-
-            <div>
-
-                <p class="text-sm">
-                    Gasto médio
-                </p>
-
-                <h2 class="text-3xl">
-                    R$ 95,00
-                </h2>
-
-                <p class="text-sm text-gray-500">
-                    por semana
-                </p>
+                    <p class="text-xs text-gray-500">
+                        receitas diferentes
+                    </p>
+                </div>
 
             </div>
-
         </div>
 
     </div>
 
+    <!-- Lista de compras e sugestão da IA -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-    <div class="card bg-gray-100 border border-gray-400 shadow-none">
+        <!-- Lista de compras -->
+        <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-5">
 
-        <div class="card-body flex-row items-center gap-5">
-
-            <i class="fa-solid fa-table-list text-4xl"></i>
-
-            <div>
-
-                <p class="text-sm">
-                    Receitas utilizadas
-                </p>
-
-                <h2 class="text-3xl">
-                    12
-                </h2>
-
-                <p class="text-sm text-gray-500">
-                    receitas diferentes
-                </p>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- Lista de compras e IA -->
-<div class="grid lg:grid-cols-2 gap-6">
-
-    <!-- Lista -->
-    <div class="card bg-gray-100 border border-gray-400 shadow-none">
-
-        <div class="card-body">
-
-            <h2 class="card-title text-base">
+            <h2 class="text-base font-semibold text-black mb-5">
+                <i class="fa-solid fa-cart-shopping text-[#488B26] mr-2"></i>
                 Lista de compras automática
             </h2>
 
-            <div class="grid grid-cols-3 gap-y-3 text-sm">
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-y-4 gap-x-3 text-sm text-gray-700">
 
                 <label class="flex items-center gap-2">
-                    <input type="checkbox">
+                    <input type="checkbox" class="checkbox checkbox-xs accent-[#488B26]">
                     Banana
                 </label>
 
                 <label class="flex items-center gap-2">
-                    <input type="checkbox">
+                    <input type="checkbox" class="checkbox checkbox-xs accent-[#488B26]">
                     Arroz
                 </label>
 
                 <label class="flex items-center gap-2">
-                    <input type="checkbox">
+                    <input type="checkbox" class="checkbox checkbox-xs accent-[#488B26]">
                     Ovo
                 </label>
 
                 <label class="flex items-center gap-2">
-                    <input type="checkbox">
+                    <input type="checkbox" class="checkbox checkbox-xs accent-[#488B26]">
                     Aveia
                 </label>
 
                 <label class="flex items-center gap-2">
-                    <input type="checkbox">
+                    <input type="checkbox" class="checkbox checkbox-xs accent-[#488B26]">
                     Feijão
                 </label>
 
                 <label class="flex items-center gap-2">
-                    <input type="checkbox">
+                    <input type="checkbox" class="checkbox checkbox-xs accent-[#488B26]">
                     Tomate
                 </label>
 
                 <label class="flex items-center gap-2">
-                    <input type="checkbox">
+                    <input type="checkbox" class="checkbox checkbox-xs accent-[#488B26]">
                     Leite
                 </label>
 
                 <label class="flex items-center gap-2">
-                    <input type="checkbox">
+                    <input type="checkbox" class="checkbox checkbox-xs accent-[#488B26]">
                     Frango
                 </label>
 
                 <label class="flex items-center gap-2">
-                    <input type="checkbox">
+                    <input type="checkbox" class="checkbox checkbox-xs accent-[#488B26]">
                     Alface
                 </label>
 
             </div>
 
-            <div class="flex justify-center mt-6">
-
-                <button class="btn bg-gray-300 border-0 text-black hover:bg-gray-400">
-
-                    <i class="fa-solid fa-download"></i>
-
+            <div class="flex justify-end mt-6">
+                <button type="button"
+                        class="px-5 py-2 rounded-md bg-[#488B26] text-white text-xs font-medium hover:bg-[#3D7620] transition-colors">
+                    <i class="fa-solid fa-download mr-1"></i>
                     Exportar lista
-
                 </button>
-
             </div>
 
         </div>
 
-    </div>
+        <!-- Sugestão da IA -->
+        <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-5 flex flex-col">
 
-
-    <!-- Sugestão da IA -->
-    <div class="card bg-gray-100 border border-gray-400 shadow-none">
-
-        <div class="card-body">
-
-            <h2 class="card-title text-base">
-
-                <i class="fa-solid fa-wand-magic-sparkles"></i>
-
+            <h2 class="text-base font-semibold text-black mb-5">
+                <i class="fa-solid fa-wand-magic-sparkles text-[#488B26] mr-2"></i>
                 Sugestão da IA
-
             </h2>
 
-            <div class="flex-1 flex items-center">
-
-                <p class="text-sm text-gray-600">
-
+            <div class="flex-1 flex items-center justify-center py-2">
+                <p class="text-sm text-gray-600 text-center leading-relaxed max-w-md">
                     A banana e a maçã tiveram queda no preço este mês.
                     Considere adicioná-las ao cardápio para reduzir custos.
-
                 </p>
-
             </div>
 
-            <div class="flex justify-center mt-6">
-
-                <button class="btn bg-gray-300 border-0 text-black hover:bg-gray-400">
-
+            <div class="flex justify-end mt-6">
+                <button type="button"
+                        class="px-5 py-2 rounded-md bg-[#F0583E] text-white text-xs font-medium hover:bg-[#D94A32] transition-colors">
                     Ver mais sugestões
-
                 </button>
-
             </div>
 
         </div>
