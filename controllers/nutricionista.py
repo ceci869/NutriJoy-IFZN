@@ -3,6 +3,7 @@ from werkzeug.utils import secure_filename
 from models.Nutritionist import Nutritionist
 from utils import db, app, admin_required
 import os
+from flask import flash
 
 bp_nutritionist = Blueprint(
     'nutritionist',
@@ -44,7 +45,8 @@ def add_nutritionist():
     db.session.add(nutritionist)
     db.session.commit()
 
-    return 'Nutricionista adicionado com sucesso!'
+    flash("Nutricionista adicionado com sucesso!")
+    return redirect("/formularionutricionista")
 
 
 def get_nutritionists():

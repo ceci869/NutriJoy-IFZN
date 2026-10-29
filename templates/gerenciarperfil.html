@@ -1,5 +1,15 @@
 {% extends 'base.html' %}
 
+{% block content2 %}
+    {% set mensagens = get_flashed_messages(with_categories=true) %} 
+    {% if mensagens %}     
+    {% for category, msg in mensagens %}
+    <div role="alert" class="alert alert-{{category}}">
+    {{ msg }}
+    </div>
+    {% endfor %}
+    {% endif %}
+{% endblock %}
 {% block content %}
 <div class="px-4 md:px-8 pt-4 pb-12">
 

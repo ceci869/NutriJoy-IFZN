@@ -23,7 +23,14 @@
             </div>
         </div>
     </header>
-
+    {% set mensagens = get_flashed_messages(with_categories=true) %} 
+    {% if mensagens %}     
+    {% for category, msg in mensagens %}
+    <div role="alert" class="alert alert-{{category}}">
+    {{ msg }}
+    </div>
+    {% endfor %}
+    {% endif %}
     <main>
         <!-- Hero -->
         <div class="hero bg-base-200 min-h-screen">

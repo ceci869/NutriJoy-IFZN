@@ -1,11 +1,12 @@
 from flask import render_template, request, redirect, url_for, flash
-from flask_login import login_user, login_required, logout_user
+from flask_login import login_user, login_required, logout_user, current_user
 from models.User import User
 from models.Restriction import Restriction
 from utils import db
 from flask import Blueprint
 from app import lm
 import hashlib
+from flask import flash
 
 
 @lm.user_loader
@@ -109,10 +110,15 @@ def get_users():
 @login_required
 def update_user(id_user):
     user = User.query.get_or_404(id_user)
+    
+    name = request.form['name'].strip()
+    email = request.form['email'].strip()
+    # password = request.form['password'].strip()
+    restrictions = request.form.getlist('restricao') 
 
-    name = request.form.get('name', '').strip()
-    email = request.form.get('email', '').strip()
-    password = request.form.get('password', '').strip()
+    if not name and not email and not restrictions:
+        flash("Não é possível realizar a atualização!", "error")
+        return redirect("/gerenciarperfil")
 
     if name:
         user.name = name
@@ -120,12 +126,13 @@ def update_user(id_user):
     if email:
         user.email = email
 
-    if password:
-        user.password = hash(password)
+    # if password:
+    #     password=hash(password)
+    #     user.password = password
 
     db.session.commit()
-
-    return 'Usuário atualizado com sucesso!'
+    flash("Usuário atualizado com sucesso!", "success")
+    return redirect("/gerenciarperfil")
 
 
 # =-=-= EXCLUIR USUÁRIO =-=-=
@@ -141,4 +148,5 @@ def delete_user(id_user):
     db.session.delete(user)
     db.session.commit()
 
+    flash('Perfil excluído com sucesso', 'success')
     return redirect(url_for('index'))

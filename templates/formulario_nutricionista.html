@@ -10,6 +10,14 @@
 </head>
 
 <body class="min-h-screen bg-white">
+    {% set mensagens = get_flashed_messages() %} 
+    {% if mensagens %}     
+        <div role="alert" class="alert alert-success">
+            {% for msg in mensagens %}
+                {{ msg }}
+            {% endfor %}
+        </div>
+    {% endif %}
 
     <header class="bg-[#FFF8D6] border-b border-[#E5DDBD] px-8 py-6">
         <img
