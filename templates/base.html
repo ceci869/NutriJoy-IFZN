@@ -7,18 +7,21 @@
     <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://kit.fontawesome.com/dbda3eb66e.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,100..900;1,100..900&family=Hind:wght@300;400;500;600;700&family=Intel+One+Mono:ital,wght@0,300..700;1,300..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Sora:wght@100..800&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="font-[Inter]">
     <div class="drawer lg:drawer-open">
     <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
     <div class="drawer-content">
         <!-- Navbar -->
-        <nav class="navbar w-full bg-base-300 flex justify-between">
+        <nav class="p-4 navbar w-full bg-[#FEFAE6] flex justify-between">
             <label for="my-drawer-4" aria-label="open sidebar" class="btn btn-square btn-ghost">
                 <!-- Sidebar toggle icon -->
                 <i class="fa-solid fa-angles-right"></i>
             </label>
-            <div class="px-4 text-2xl font-bold">NutriJoy</div>
+            <img src="{{ url_for('static', filename='img/logo-nutrijoy.png') }}" alt="Logo do NutriJoy">
         </nav>
         {% block content2 %}
         {% endblock %}
@@ -32,7 +35,7 @@
 
     <div class="drawer-side is-drawer-close:overflow-visible">
         <label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
-        <div class="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-14 is-drawer-open:w-64">
+        <div class="flex min-h-full flex-col items-start bg-[#FEFAE6] is-drawer-close:w-14 is-drawer-open:w-64">
         <!-- Sidebar content here -->
         <ul class="menu w-full grow">
             <!-- List item -->

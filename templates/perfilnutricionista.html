@@ -5,8 +5,8 @@
 <div class="flex flex-row items-center w-[100%] justify-between">
     <div>
     <h1 class="text-4xl font-semibold mb-6">{{ nutritionist.name }}</h1>
-    <p>CRN {{ nutritionist.crn }}</p>
-    <p>{{ nutritionist.city }}, {{ nutritionist.state }} | {{ nutritionist.university }}</p>
+    <p class="opacity-60">CRN {{ nutritionist.crn }}</p>
+    <p class="opacity-60">{{ nutritionist.city }}, {{ nutritionist.state }} | {{ nutritionist.university }}</p>
     </div>
     <div class="avatar placeholder">
         <div class="rounded-full w-50">
@@ -15,20 +15,30 @@
     </div>
 </div>
 <div class="my-[45px]">
-    <p>{{ nutritionist.description }}</p>
+    <p class="opacity-60">{{ nutritionist.description }}</p>
 </div>
 <div class="grid grid-cols-[1.5fr_1fr] gap-[10px] w-[100%] mb-[30px]">
     {% if nutritionist.specialization: %}
-    <div class="h-[100%] flex flex-col justify-between bg-[#D9D9D9] rounded-[20px] p-[26px] w-[100%]">
-        <p>Especialista em</p>
-        <p class="text-[38px] font-medium">{{ nutritionist.specialization }}</p>
+    <div class="shadow-md shadow-[#5D5C5C] rounded-[20px] p-[22px] w-[100%] flex items-start gap-[24px]">
+        <div>
+            <img class="w-[45px] leading-none mt-[-5px]" src="{{ url_for('static', filename='img/especialidade.svg') }}" alt="Ícone de especialidade">
+        </div>
+        <div>
+        <p class="leading-none">Especialista em</p>
+        <p class="text-[38px] font-medium text-[#154625]">{{ nutritionist.specialization }}</p>
+        </div>
     </div>
     {% endif %}
-    <div class="bg-[#D9D9D9] rounded-[20px] p-[22px] w-[100%]">
-        <p class="text-[60px] font-medium text-center">{{ nutritionist.experience_years }}</p>
-        <p class="text-center">Anos de experiência</p>
+    <div class="shadow-md shadow-[#5D5C5C] rounded-[20px] p-[22px] w-[100%] flex items-start gap-[24px]">
+        <div>
+            <img class="w-[45px]" src="{{ url_for('static', filename='img/experiencia.svg') }}" alt="Ícone de anos de experiência">
+        </div>
+        <div>
+        <p class="text-[60px] font-medium text-[#F0583E] leading-none">{{ nutritionist.experience_years }}</p>
+        <p>Anos de experiência</p>
+        </div>
     </div>
 </div>
-<button class="btn w-full bg-[#8C8C8C] border-[#8C8C8C] text-white hover:bg-[#7A7A7A]">Enviar mensagem</button>
+<button class="btn w-full bg-[#5FB434] border-[#8C8C8C] text-white hover:bg-[#34800D]">Enviar mensagem</button>
 </section>
 {% endblock %}

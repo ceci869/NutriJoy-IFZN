@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 
+
 <html lang="en">
+
 
 <head>
     <meta charset="UTF-8">
@@ -8,12 +10,17 @@
     <title>Login</title>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,100..900;1,100..900&family=Hind:wght@300;400;500;600;700&family=Intel+One+Mono:ital,wght@0,300..700;1,300..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Sora:wght@100..800&display=swap" rel="stylesheet">
 </head>
 
-<body class="bg-base-100 min-h-screen">
 
-    {% set mensagens = get_flashed_messages(with_categories=true) %} 
-    {% if mensagens %}     
+<body class="bg-base-100 min-h-screen font-[Hind]">
+
+
+    {% set mensagens = get_flashed_messages(with_categories=true) %}
+    {% if mensagens %}    
         {% for categoria, msg in mensagens %}
             <div class="alert alert-{{categoria}}" role="alert">
                 {{ msg }}
@@ -21,51 +28,62 @@
         {% endfor %}
     {% endif %}
 
-    <div class="navbar bg-[#8C8C8C] px-8">
-        <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-white"></div>
-            <h1 class="text-3xl text-white font-light"><a href="{{ url_for('index') }}">NutriJoy</a></h1>
-        </div>
+
+    <div class="navbar bg-[#FEF6D3] px-8">
+        <img src="{{ url_for('static', filename='img/logo-nutrijoy.png') }}" alt="Logo do NutriJoy">
     </div>
+
 
     <div class="flex justify-center py-20 px-4">
 
+
         <form action="{{url_for('user.verificalogin')}}" method="post" class="w-full max-w-lg">
 
-            <h1 class="text-4xl font-semibold mb-2">
-                Login
+
+            <h1 class="text-[40px] text-black font-semibold mb-2">
+                Bem vindo de volta!
             </h1>
 
-            <p class="opacity-70 mb-10">
-                Seja bem-vindo de volta! Entre na sua conta.
+
+            <p class="text-black text-[26px] mb-10">
+                Faça login para continuar.
             </p>
+
 
             <div class="space-y-6">
 
+
                 <div>
                     <label class="label">
-                        <span class="label-text">E-mail</span>
+                        <span class="label-text text-black text-[18px]">E-mail</span>
                     </label>
                     <input type="email" name="email" class="input input-bordered w-full" placeholder="Digite seu e-mail">
                 </div>
 
+
                 <div>
                     <label class="label">
-                        <span class="label-text">Senha</span>
+                        <span class="label-text text-black text-[18px]">Senha</span>
                     </label>
                     <input type="password" name="password" class="input input-bordered w-full" placeholder="Digite sua senha">
                 </div>
 
+
             </div>
 
-            <button class="btn w-full mt-12 bg-[#8C8C8C] border-[#8C8C8C] text-white hover:bg-[#7A7A7A]">
-                Entrar
+
+            <button class="btn w-full mt-12 text-[18px] bg-[#5FB434] py-[24px] border-[#8C8C8C] text-white hover:bg-[#34800D]">
+                Acessar
             </button>
+
 
         </form>
 
+
     </div>
 
+
 </body>
+
 
 </html>
