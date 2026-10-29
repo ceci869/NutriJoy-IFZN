@@ -5,7 +5,7 @@ class Food(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(70), nullable=False)
     medium_price = db.Column(db.Float, nullable=False)
-    season = db.Column(db.String(9), nullable=False)
+    season = db.Column(db.String(100), nullable=False)
     kcal = db.Column(db.Integer, nullable=False)
     total_fat = db.Column(db.Float, nullable=False)
     carbohydrate = db.Column(db.Float, nullable=False)

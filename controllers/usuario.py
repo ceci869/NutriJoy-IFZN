@@ -31,13 +31,17 @@ def add_user():
         name = request.form.get('name', '').strip()
         email = request.form.get('email', '').strip()
         password = request.form.get('password', '').strip()
+        cep = request.form.get('cep', '').strip()
+        age = request.form.get('age', '').strip()
         restrictions_ids = request.form.getlist('restricoes')
 
         if name and email and password:
             new_user = User(
                 name=name,
                 email=email,
-                password=hash(password)
+                password=hash(password),
+                cep=cep,
+                age=age
             )
 
             if restrictions_ids:
