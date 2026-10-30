@@ -47,17 +47,67 @@
         </div>
 
         <!-- Integrantes -->
-        <section class="flex flex-col gap-y-14 my-10">
+        <section class="flex flex-col mx-8 my-10">
         <h1 class="text-5xl font-semibold mb-[50px] text-center">Integrantes e orientadoras</h1>
-            <div class="flex justify-evenly flex-wrap">
-                {% for avatar in lista_colaboradores %}
-                    <div class="avatar flex flex-col">
-                    <div class="w-80 rounded">
-                        <img src="https://i.pinimg.com/736x/7d/9b/4d/7d9b4df59001e294047f3dcee9a2d675.jpg" />
-                    </div>
-                    <p class="text-center text-lg">{{ avatar }}</p>
-                    </div>
-                {% endfor %}
+            <div class="flex flex-col">
+            <div class="flex gap-[100px] justify-center">
+            <div class="border border-[#00000040] rounded-[20px] py-[22px]">
+            <div class="mx-[38px]">
+            <img class="mt-[5px] mx-auto" src="{{ url_for('static', filename='img/cecilia.png') }}" alt="Foto de Cecília Aine">
+            </div>
+            <p class="text-center text-[24px] mt-[5px] font-semibold">Cecília Aine</p>
+            <div class="bg-[#CBFDBC63] px-[24px] py-[12px] rounded-[15px] mt-[15px] mx-[38px]">
+            <p class="text-[#154625] text-[15px] font-medium text-center">Desenvolvedora</p>
+            </div>
+            </div>
+            <div class="border border-[#00000040] rounded-[20px] py-[22px]">
+            <div class="mx-[38px]">
+            <img class="mt-[5px] mx-auto" src="{{ url_for('static', filename='img/lucas.png') }}" alt="Foto de Lucas Cheng">
+            </div>
+            <p class="text-center text-[24px] mt-[5px] font-semibold">Lucas Cheng</p>
+            <div class="bg-[#FEF1AD59] px-[24px] py-[12px] rounded-[15px] mt-[15px] mx-[38px]">
+            <p class="text-[#8F7800] text-[15px] font-medium text-center">Pesquisador</p>
+            </div>
+            </div>
+            <div class="border border-[#00000040] rounded-[20px] py-[22px]">
+            <div class="mx-[38px]">
+            <img class="mt-[5px] mx-auto" src="{{ url_for('static', filename='img/luisa.png') }}" alt="Foto de Maria Luísa">
+            </div>
+            <p class="text-center text-[24px] mt-[5px] font-semibold">Maria Luísa</p>
+            <div class="bg-[#CBFDBC63] px-[24px] py-[12px] rounded-[15px] mt-[15px] mx-[38px]">
+            <p class="text-[#154625] text-[15px] font-medium text-center">Desenvolvedora</p>
+            </div>
+            </div>
+            <div class="border border-[#00000040] rounded-[20px] py-[22px]">
+            <div class="mx-[38px]">
+            <img class="mt-[5px] mx-auto" src="{{ url_for('static', filename='img/kerrinna.png') }}" alt="Foto de Thaylanne Kérrinna">
+            </div>
+            <p class="text-center text-[24px] mt-[5px] font-semibold">Thaylanne Kérrinna</p>
+            <div class="bg-[#F0583E2B] px-[24px] py-[12px] rounded-[15px] mt-[15px] mx-[38px]">
+            <p class="text-[#7D291A] text-[15px] font-medium text-center">Designer</p>
+            </div>
+            </div>
+            </div>
+            <div class="flex gap-[100px] justify-center mt-[40px]">
+            <div class="border border-[#00000040] rounded-[20px] py-[22px]">
+            <div class="mx-[38px]">
+            <img class="mt-[5px] mx-auto" src="{{ url_for('static', filename='img/cecilia.png') }}" alt="Foto de Alba Sandrya">
+            </div>
+            <p class="text-center text-[24px] mt-[5px] font-semibold">Alba Sandrya</p>
+            <div class="bg-[#8C8C8C57] px-[24px] py-[12px] rounded-[15px] mt-[15px] mx-[38px]">
+            <p class="text-[#000000] text-[15px] font-medium text-center">Orientadora</p>
+            </div>
+            </div>
+            <div class="border border-[#00000040] rounded-[20px] py-[22px]">
+            <div class="mx-[38px]">
+            <img class="mt-[5px] mx-auto" src="{{ url_for('static', filename='img/cecilia.png') }}" alt="Foto de Mayara Maia">
+            </div>
+            <p class="text-center text-[24px] mt-[5px] font-semibold">Mayara Maia</p>
+            <div class="bg-[#8C8C8C57] px-[24px] py-[12px] rounded-[15px] mt-[15px] mx-[38px]">
+            <p class="text-[#000000] text-[15px] font-medium text-center">Orientadora</p>
+            </div>
+            </div>
+            </div>
             </div>
         </section>
 
