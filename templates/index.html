@@ -11,14 +11,14 @@
 <body>
     <header>
         <!-- navbar -->
-        <div class="navbar bg-base-200 shadow-sm">
+        <div class="navbar bg-[#FEF6D3] px-8 py-4">
             <div class="flex-1">
-                <a class="btn btn-ghost text-4xl">NutriJoy</a>
+                <img src="{{ url_for('static', filename='img/logo-nutrijoy.png') }}" alt="Logo do NutriJoy">
             </div>
             <div class="flex-none">
                 <ul class="menu menu-horizontal px-1 text-xl flex gap-x-4">
-                    <li><a href="{{ url_for('user.verificalogin') }}" class="border-solid border-2 rounded-lg py-0">Entrar</a></li>
-                    <li><a href="{{ url_for('user.add_user') }}" class="border-solid border-2 rounded-lg py-0">Cadastrar</a></li>
+                    <li><a href="{{ url_for('user.verificalogin') }}" class="border-solid border-2 rounded-lg py-[3px] bg-white text-[#F0583E] text-[20px] border-[#F0583E66]">Entrar</a></li>
+                    <li><a href="{{ url_for('user.add_user') }}" class="border-solid border-2 rounded-lg py-[3px] bg-[#F0583E] text-white text-[20px]">Cadastrar</a></li>
                 </ul>
             </div>
         </div>
@@ -33,24 +33,22 @@
     {% endif %}
     <main>
         <!-- Hero -->
-        <div class="hero bg-base-200 min-h-screen">
-            <div class="hero-content flex-col lg:flex-row-reverse gap-x-80 items-start">
-                <img
-                src="https://i.pinimg.com/736x/60/7a/f5/607af54beb16d5415f56453ba0626e7b.jpg"
-                class=" w-xl rounded-lg shadow-2xl"
-                />
-                <div class="">
-                <h1 class="text-5xl font-bold">Sobre o projeto</h1>
-                <p class="text-lg py-6 w-xl">
-                Lorem ipsum dolor sit amet consectetur adipiscing elit Ut et massa mi. Aliquam in hendrerit urna. Pellentesque sit amet sapien fringilla, mattis ligula consectetur, ultrices mauris. Maecenas vitae mattis tellus. Nullam quis imperdiet augue. Vestibulum auctor ornare leo, non suscipit magna interdum eu. Curabitur pellentesque nibh nibh, at maximus ante fermentum sit amet. Pellentesque commodo lacus at sodales sodales. Quisque sagittis orci ut diam condimentum, vel euismod erat placerat. In iaculis arcu eros, eget tempus orci facilisis id. Praesent lorem orci, mattis non efficitur id, ultricies vel nibh. Sed volutpat lacus vitae gravida viverra. Fusce vel tempor elit. Proin tempus, magna id scelerisque vestibulum, nulla ex pharetra sapien, tempor posuere massa neque nec felis. 
+        <div class="bg-white px-8 py-18 flex gap-[60px] flex-row justify-between">
+            <div>
+                <h1 class="text-5xl font-semibold mb-[10px]">Sobre o projeto</h1>
+                <p class="text-[24px] pt-6 text-black leading-relaxed">
+                O NutriJoy é uma plataforma pensada para o público juvenil, criada para incentivar uma alimentação mais saudável de forma simples e prática.
                 </p>
-                </div>
+                <p class="text-[24px] text-black leading-relaxed">
+                A plataforma ajuda jovens a terem autonomia na cozinha, encontrando receitas fáceis de preparar, recomendações e opções para montar suas próprias refeições, tornando o cuidado com a alimentação mais acessível no dia a dia.
+                </p>
             </div>
+            <img src="{{ url_for('static', filename='img/crianca-nutricao.png') }}" class="rounded-lg shadow-2xl"/>
         </div>
 
         <!-- Integrantes -->
         <section class="flex flex-col gap-y-14 my-10">
-        <h1 class="text-4xl text-center">Integrantes e orientadora</h1>
+        <h1 class="text-5xl font-semibold mb-[50px] text-center">Integrantes e orientadoras</h1>
             <div class="flex justify-evenly flex-wrap">
                 {% for avatar in lista_colaboradores %}
                     <div class="avatar flex flex-col">
@@ -64,22 +62,41 @@
         </section>
 
         <!-- Tecnologias -->
-        <section class="my-18">
-            <h1 class="text-4xl text-left mx-30">Tecnologias</h1>
-            <div class="flex gap-x-50 mx-30 my-10 items-center">
-                <img src="https://i.pinimg.com/736x/cb/32/69/cb326996a8230da8ef38ed660a53ab01.jpg" alt="Imagem representativa" class="w-150 rounded-md">
-                <p class="w-2xl">
-                Lorem ipsum dolor sit amet consectetur adipiscing elit Ut et massa mi. Aliquam in hendrerit urna. Pellentesque sit amet sapien fringilla, mattis ligula consectetur, ultrices mauris. Maecenas vitae mattis tellus. Nullam quis imperdiet augue. Vestibulum auctor ornare leo, non suscipit magna interdum eu. Curabitur pellentesque nibh nibh, at maximus ante fermentum sit amet. Pellentesque commodo lacus at sodales sodales. Quisque sagittis orci ut diam condimentum, vel euismod erat placerat. In iaculis arcu eros, eget tempus orci facilisis id. Praesent lorem orci, mattis non efficitur id, ultricies vel nibh. Sed volutpat lacus vitae gravida viverra. Fusce vel tempor elit. Proin tempus, magna id scelerisque vestibulum, nulla ex pharetra sapien, tempor posuere massa neque nec felis. 
-                </p>
+        <section class="my-18 mx-8">
+            <h1 class="text-5xl font-semibold mb-[50px]">Tecnologias</h1>
+            <div class="grid grid-cols-4 gap-[100px] mx-[60px]">
+            <div class="shadow-md shadow-[#5D5C5C] rounded-[20px] p-[22px]">
+            <p class="text-center text-[28px] font-medium">HTML 5</p>
+            <div>
+            <img class="mt-[5px] mx-auto" src="{{ url_for('static', filename='img/html.png') }}" alt="Ícone do HTML">
+            </div>
+            </div>
+            <div class="shadow-md shadow-[#5D5C5C] rounded-[20px] p-[22px]">
+            <p class="text-center text-[28px] font-medium">CSS 3</p>
+            <div>
+            <img class="mt-[5px] mx-auto" src="{{ url_for('static', filename='img/css.png') }}" alt="Ícone do CSS">
+            </div>
+            </div>
+            <div class="shadow-md shadow-[#5D5C5C] rounded-[20px] p-[22px]">
+            <p class="text-center text-[28px] font-medium">Python 3</p>
+            <div>
+            <img class="mt-[5px] mx-auto" src="{{ url_for('static', filename='img/python.png') }}" alt="Ícone do Python">
+            </div>
+            </div>
+            <div class="shadow-md shadow-[#5D5C5C] rounded-[20px] p-[22px]">
+            <p class="text-center text-[28px] font-medium">Figma</p>
+            <div>
+            <img class="mt-[5px] mx-auto" src="{{ url_for('static', filename='img/figma.png') }}" alt="Ícone do Figma">
+            </div>
+            </div>
             </div>
             
         </section>
     </main>
 
 
-    <footer class="footer sm:footer-horizontal bg-neutral text-neutral-content items-center justify-between py-4 px-8">
-        <h1 class="text-4xl text-white">NutriJoy</h1>
-        <p>Copyright © 2026 - All rights reserved</p>
+    <footer class="footer sm:footer-horizontal bg-[#488B26] text-neutral-content items-center justify-between px-8 py-6">
+        <img src="{{ url_for('static', filename='img/logo-nutrijoy-2.png') }}" alt="Logo do NutriJoy" class="w-[70%]">
 
         <nav class="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
             <a>
@@ -92,6 +109,8 @@
             <i class="fa-brands fa-whatsapp fa-xl" style="color: rgb(255, 255, 255);"></i>
             </a>
         </nav>
+
+        <p class="text-[18px] text-white">©2026 NutriJoy. All rights reserved.</p>
     </footer>
 
 </body>
