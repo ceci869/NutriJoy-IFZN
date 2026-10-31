@@ -16,101 +16,101 @@
     </h1>
 
     <!-- Cardápio semanal -->
-    <div class="border rounded-lg p-5 mb-10">
+    <div class="rounded-lg p-5 mb-10 shadow-md shadow-[#5D5C5C] mr-[40px]">
 
-        <h2 class="text-xl font-medium mb-4">
+        <h2 class="text-[24px] font-semibold mb-4">
             Seu cardápio semanal
         </h2>
 
         <div class="grid grid-cols-7 gap-4 mb-6">
 
-            <div class="flex flex-col items-center">
-                <p class="text-sm mb-2">Seg</p>
+            <div class="flex flex-col items-center bg-[#F0583E0D] rounded-[10px] px-[5px] py-[10px]">
+                <p class="text-[16px] font-semibold mb-2">Seg</p>
 
                 <div class="bg-base-200 rounded-lg h-24 w-full flex items-center justify-center">
                     🍴
                 </div>
 
-                <button class="text-xs mt-2">
-                    Ver refeições
+                <button class="text-[14px] font-semibold text-[#154625] cursor-pointer mt-2">
+                    Ver refeições >
                 </button>
             </div>
 
-            <div class="flex flex-col items-center">
-                <p class="text-sm mb-2">Ter</p>
+            <div class="flex flex-col items-center bg-[#F0583E0D] rounded-[10px] px-[5px] py-[10px]">
+                <p class="text-[16px] font-semibold mb-2">Ter</p>
 
                 <div class="bg-base-200 rounded-lg h-24 w-full flex items-center justify-center">
                     🍴
                 </div>
 
-                <button class="text-xs mt-2">
-                    Ver refeições
+                <button class="text-[14px] font-semibold text-[#154625] cursor-pointer mt-2">
+                    Ver refeições >
                 </button>
             </div>
 
-            <div class="flex flex-col items-center">
-                <p class="text-sm mb-2">Qua</p>
+            <div class="flex flex-col items-center bg-[#F0583E0D] rounded-[10px] px-[5px] py-[10px]">
+                <p class="text-[16px] font-semibold mb-2">Qua</p>
 
                 <div class="bg-base-200 rounded-lg h-24 w-full flex items-center justify-center">
                     🍴
                 </div>
 
-                <button class="text-xs mt-2">
-                    Ver refeições
+                <button class="text-[14px] font-semibold text-[#154625] cursor-pointer mt-2">
+                    Ver refeições >
                 </button>
             </div>
 
-            <div class="flex flex-col items-center">
-                <p class="text-sm mb-2">Qui</p>
+            <div class="flex flex-col items-center bg-[#F0583E0D] rounded-[10px] px-[5px] py-[10px]">
+                <p class="text-[16px] font-semibold mb-2">Qui</p>
 
                 <div class="bg-base-200 rounded-lg h-24 w-full flex items-center justify-center">
                     🍴
                 </div>
 
-                <button class="text-xs mt-2">
-                    Ver refeições
+                <button class="text-[14px] font-semibold text-[#154625] cursor-pointer mt-2">
+                    Ver refeições >
                 </button>
             </div>
 
-            <div class="flex flex-col items-center">
-                <p class="text-sm mb-2">Sex</p>
+            <div class="flex flex-col items-center bg-[#F0583E0D] rounded-[10px] px-[5px] py-[10px]">
+                <p class="text-[16px] font-semibold mb-2">Sex</p>
 
                 <div class="bg-base-200 rounded-lg h-24 w-full flex items-center justify-center">
                     🍴
                 </div>
 
-                <button class="text-xs mt-2">
-                    Ver refeições
+                <button class="text-[14px] font-semibold text-[#154625] cursor-pointer mt-2">
+                    Ver refeições >
                 </button>
             </div>
 
-            <div class="flex flex-col items-center">
-                <p class="text-sm mb-2">Sáb</p>
+            <div class="flex flex-col items-center bg-[#F0583E0D] rounded-[10px] px-[5px] py-[10px]">
+                <p class="text-[16px] font-semibold mb-2">Sab</p>
 
                 <div class="bg-base-200 rounded-lg h-24 w-full flex items-center justify-center">
                     🍴
                 </div>
 
-                <button class="text-xs mt-2">
-                    Ver refeições
+                <button class="text-[14px] font-semibold text-[#154625] cursor-pointer mt-2">
+                    Ver refeições >
                 </button>
             </div>
 
-            <div class="flex flex-col items-center">
-                <p class="text-sm mb-2">Dom</p>
+            <div class="flex flex-col items-center bg-[#F0583E0D] rounded-[10px] px-[5px] py-[10px]">
+                <p class="text-[16px] font-semibold mb-2">Dom</p>
 
                 <div class="bg-base-200 rounded-lg h-24 w-full flex items-center justify-center">
                     🍴
                 </div>
 
-                <button class="text-xs mt-2">
-                    Ver refeições
+                <button class="text-[14px] font-semibold text-[#154625] cursor-pointer mt-2">
+                    Ver refeições >
                 </button>
             </div>
 
         </div>
-        <button class="btn btn-wide w-full">
-            <a href="{{ url_for('cardapiosemanal') }}">
+        <button class="btn bg-[#5FB434] rounded-[10px] w-full">
+            <a href="{{ url_for('cardapiosemanal') }}" class="text-white">
                 Ver cardápio completo
             </a>
         </button>
@@ -119,11 +119,11 @@
 
 
     <!-- Receitas recomendadas -->
-    <h2 class="text-2xl font-medium mb-4">
+    <h2 class="text-[24px] font-semibold mb-4">
         Receitas recomendadas
     </h2>
 
-    <div class="grid grid-cols-4 gap-6 mb-12">
+    <div class="grid grid-cols-4 gap-6 mb-12 mr-[40px]">
 
         <div class="card bg-base-200 h-48"></div>
 
@@ -137,13 +137,13 @@
 
 
     <!-- Nutricionistas -->
-    <h2 class="text-2xl font-medium mb-4">
+    <h2 class="text-[24px] font-semibold mb-4">
         Nutricionistas em destaque
     </h2>
-
-    <div class="flex gap-4">
+    <div class="flex">
+    <div id="nutri_carrossel" class="flex gap-4 carousel mr-[40px]">
         {% for nutritionist in nutritionists %}
-        <div class="card border p-4 w-80">
+        <div class="carousel-item card shadow-md shadow-[#5D5C5C] mb-[5px] p-4 w-80">
             <div class="flex items-center gap-4">
 
                 <div class="avatar placeholder">
@@ -172,11 +172,11 @@
         
         </div>
         {% endfor %}
-
         
-
-         
-
     </div>
-
+    <div>
+    <button onclick="rolarCarrossel('nutri_carrossel', 1)">></button>
+    <button onclick="rolarCarrossel('nutri_carrossel', -1)"><</button>
+    </div>
+    </div>
     {% endblock %}
