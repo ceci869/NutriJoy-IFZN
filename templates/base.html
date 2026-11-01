@@ -11,6 +11,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,100..900;1,100..900&family=Hind:wght@300;400;500;600;700&family=Intel+One+Mono:ital,wght@0,300..700;1,300..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Sora:wght@100..800&display=swap" rel="stylesheet">
     <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+    {% block styles %}
+    {% endblock %}
 </head>
 <body class="font-[Inter]">
     <div class="drawer lg:drawer-open">
@@ -36,60 +38,60 @@
 
     <div class="drawer-side is-drawer-close:overflow-visible">
         <label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
-        <div class="flex min-h-full flex-col items-start bg-[#FEFAE6] is-drawer-close:w-14 is-drawer-open:w-64">
+        <div class="flex p-4 min-h-full flex-col items-start bg-[#FEFAE6] is-drawer-close:w-14 is-drawer-open:w-64">
         <!-- Sidebar content here -->
-        <ul class="menu w-full grow">
+        <ul class="menu w-full grow gap-[5px]">
             <!-- List item -->
             <li>
-            <button class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Homepage">
+            <button id="item1" class="is-drawer-close:tooltip is-drawer-close:tooltip-right py-[12px] hover:bg-[#FEF1AD]" data-tip="Homepage">
                 <!-- Home icon -->
-                <a href="{{ url_for('homepage') }}">
-                    <i class="fa-solid fa-house"></i>
-                    <span class="is-drawer-close:hidden">Homepage</span>
+                <a href="{{ url_for('homepage') }}" class="flex justify-baseline items-center">
+                    <img src="{{ url_for('static', filename='img/home.svg') }}" alt="ìcone de casa" class="w-[30px]">
+                    <span class="is-drawer-close:hidden ml-[10px] font-semibold text-[16px]">Página inicial</span>
                 </a>
             </button>
             </li>
 
             <!-- List item -->
             <li>
-            <button class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Receitas">
+            <button id="item2" class="is-drawer-close:tooltip is-drawer-close:tooltip-right py-[12px] hover:bg-[#FEF1AD]" data-tip="Receitas">
                 <!-- Recipes icon -->
-                <a href="{{ url_for('catalogodereceitas') }}">
-                    <i class="fa-solid fa-cookie-bite"></i>
-                    <span class="is-drawer-close:hidden">Receitas</span>
+                <a href="{{ url_for('catalogodereceitas') }}" class="flex justify-baseline items-center">
+                    <img src="{{ url_for('static', filename='img/cookie.svg') }}" alt="ìcone de cookie" class="w-[30px]">
+                    <span class="is-drawer-close:hidden ml-[10px] font-semibold text-[16px]">Receitas</span>
                 </a>
             </button>
             </li>
 
             <!-- List item -->
             <li>
-            <button class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Cardápio semanal">
+            <button id="item3" class="is-drawer-close:tooltip is-drawer-close:tooltip-right py-[14px] hover:bg-[#FEF1AD]" data-tip="Cardápio semanal">
                 <!-- Recipes icon -->
-                <a href="{{ url_for('cardapiosemanal') }}">
-                    <i class="fa-solid fa-list"></i>
-                    <span class="is-drawer-close:hidden">Cardápio semanal</span>
+                <a href="{{ url_for('cardapiosemanal') }}" class="flex justify-baseline items-center">
+                    <img src="{{ url_for('static', filename='img/lista.svg') }}" alt="ìcone de lista" class="w-[30px]">
+                    <span class="is-drawer-close:hidden ml-[10px] font-semibold text-[16px]">Cardápio semanal</span>
                 </a>
             </button>
             </li>
 
             <!-- List item -->
             <li>
-            <button class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Perfil">
+            <button id="item4" class="is-drawer-close:tooltip is-drawer-close:tooltip-right py-[12px] hover:bg-[#FEF1AD]" data-tip="Perfil">
                 <!-- Settings icon -->
-                <a href="{{ url_for('gerenciarperfil') }}">
-                    <i class="fa-regular fa-circle-user"></i>
-                    <span class="is-drawer-close:hidden">Perfil</span>
+                <a href="{{ url_for('gerenciarperfil') }}" class="flex justify-baseline items-center">
+                    <img src="{{ url_for('static', filename='img/perfil.svg') }}" alt="ìcone de perfil" class="w-[30px]">
+                    <span class="is-drawer-close:hidden ml-[10px] font-semibold text-[16px]">Perfil</span>
                 </a>
             </button>
             </li>
 
             <!-- List item -->
-            <li>
-            <form action="{{ url_for('user.logout') }}" method="POST">
-                <button class="is-drawer-close:tooltip is-drawer-close:tooltip-right cursor-pointer" data-tip="Logout">
-                    <!-- Settings icon -->
-                    <i class="fa-solid fa-right-from-bracket rotate-180"></i>
-                    <span class="is-drawer-close:hidden">Logout</span>
+            <li class="hover:bg-[#FEF1AD] rounded-[6px] py-[6px]">
+            <form action="{{ url_for('user.logout') }}" method="POST" class="hover:bg-[#FEF1AD]">
+                <button id="item5" class="is-drawer-close:tooltip is-drawer-close:tooltip-right cursor-pointer flex justify-baseline items-center hover:bg-[#FEF1AD]" data-tip="Logout">
+        
+                    <img src="{{ url_for('static', filename='img/sair.svg') }}" alt="ìcone de sair" class="w-[30px]">
+                    <span class="is-drawer-close:hidden ml-[10px] font-semibold text-[16px]">Sair</span>
 
                 </button>
             </form>
