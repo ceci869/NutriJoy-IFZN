@@ -16,7 +16,7 @@
     </h1>
 
     <!-- Cardápio semanal -->
-    <div class="rounded-lg p-5 mb-10 shadow-md shadow-[#5D5C5C] mr-[40px]">
+    <div class="rounded-lg p-5 mb-10 shadow-md shadow-[#5D5C5C] mr-[60px]">
 
         <h2 class="text-[24px] font-semibold mb-4">
             Seu cardápio semanal
@@ -123,7 +123,7 @@
         Receitas recomendadas
     </h2>
 
-    <div class="grid grid-cols-4 gap-6 mb-12 mr-[40px]">
+    <div class="grid grid-cols-4 gap-6 mb-12 mr-[60px]">
 
         <div class="card bg-base-200 h-48"></div>
 
@@ -140,20 +140,20 @@
     <h2 class="text-[24px] font-semibold mb-4">
         Nutricionistas em destaque
     </h2>
-    <div class="flex">
-    <div id="nutri_carrossel" class="flex gap-4 carousel mr-[40px]">
+    <div class="flex items-center">
+    <div id="nutri_carrossel" class="flex gap-4 carousel">
         {% for nutritionist in nutritionists %}
-        <div class="carousel-item card shadow-md shadow-[#5D5C5C] mb-[5px] p-4 w-80">
-            <div class="flex items-center gap-4">
+        <div class="flex justify-center carousel-item card shadow-md shadow-[#5D5C5C] mb-[5px] p-4 w-80">
+            <div class="flex gap-4 h-full items-stretch">
 
                 <div class="avatar placeholder">
-                    <div class="rounded-full w-16">
-                        <img src="/{{ nutritionist.profile_photo.replace('\\', '/') }}" alt="">
+                    <div class="rounded-full w-22">
+                        <img src="/{{ nutritionist.profile_photo.replace('\\', '/') }}" alt="Imagem de perfil">
                     </div>
                 </div>
 
-                <div>
-
+                <div class="flex flex-col justify-between self-stretch">
+                    <div>
                     <h3 class="font-medium">
                         {{ nutritionist.name }}
                     </h3>
@@ -161,8 +161,8 @@
                     <p class="text-sm">
                         CRN {{nutritionist.crn}}
                     </p>
-
-                    <button class="btn btn-sm mt-2">
+                    </div>
+                    <button class="btn btn-sm mt-2 w-fit">
                         <a href="{{ url_for('perfilnutricionista', nutritionist_crn=nutritionist.crn) }}">Ver perfil</a>
                     </button>
 
@@ -174,9 +174,9 @@
         {% endfor %}
         
     </div>
-    <div>
-    <button onclick="rolarCarrossel('nutri_carrossel', 1)">></button>
-    <button onclick="rolarCarrossel('nutri_carrossel', -1)"><</button>
+    <div class="ml-[15px]">
+    <button onclick="rolarCarrossel('nutri_carrossel', 1)" class="mb-[2px] w-[45px] h-[45px] bg-[#FDF8E2] rounded-full font-bold text-[18px]">></button>
+    <button onclick="rolarCarrossel('nutri_carrossel', -1)" class="w-[45px] h-[45px] bg-[#FDF8E2] rounded-full font-bold text-[18px]"><</button>
     </div>
     </div>
     {% endblock %}
