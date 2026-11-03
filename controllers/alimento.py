@@ -12,16 +12,18 @@ def add_food():
         return render_template('alimento_add.html')
 
     elif request.method == 'POST':
-        food = Food(
-            name = request.form['name'],
-            medium_price = request.form['average_value'],
-            season = request.form.getlist('season'),
-            kcal = request.form['kcal'],
-            total_fat = request.form['fats'],
-            carbohydrate = request.form['carbohydrates'],
-            fiber = request.form['fibers'],
-            protein = request.form['proteins']
-        )
+
+        name = request.form['name'],
+        medium_price = request.form['average_value'],
+        season = request.form.getlist('season'),
+        kcal = request.form['kcal'],
+        total_fat = request.form['fats'],
+        carbohydrate = request.form['carbohydrates'],
+        fiber = request.form['fibers'],
+        protein = request.form['proteins']
+
+
+        food = Food(name, medium_price, str(season), kcal, total_fat, carbohydrate, fiber, protein)
 
         db.session.add(food)
         db.session.commit()

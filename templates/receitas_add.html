@@ -16,10 +16,17 @@
         <br>
         <label for="foods">Alimentos</label>
         <select name="foods" id="foods" multiple required>
-            {% for food in foods %}
+            {% for food in allfoods %}
             <option value="{{ food.id }}">{{ food.name }}</option>
             {% endfor %}
         </select>
+        <label for="restrictions">Alérgicos</label>
+        <select name="restrictions" id="restrictions" multiple required>
+            {% for restriction in allrestrictions %}
+            <option value="{{ restriction.id }}">{{ restriction.name }}</option>
+            {% endfor %}
+        </select>
+
         <button type="submit">Cadastrar receita</button>
     </form>
 </body>

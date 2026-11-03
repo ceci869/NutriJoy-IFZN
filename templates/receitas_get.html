@@ -28,6 +28,7 @@
                 <th>Nome</th>
                 <th>Preço médio (R$)</th>
                 <th>Alimentos</th>
+                <th>Alérgicos</th>
                 <th></th>
             </tr>
             </thead>
@@ -39,10 +40,11 @@
                         <th>{{ recipe.id }}</th>
                         <td>{{ recipe.name }}</td>
                         <td>{{ recipe.medium_price }}</td>
-                        <td>{{ recipe.foods }}</td>
+                        <td>{{ recipe.food }}</td>
+                        <td>{{ recipe.restrictions }}</td>
                         <td class="flex gap-3">
                             <a href="{{ url_for('recipe.update_recipe', id_recipe=recipe.id )}}" class="btn btn-primary">Editar</a>
-                            <a href="{{ url_for('food.delete_recipe', id_recipe=recipe.id )}}" class="btn btn-error">Excluir</a>
+                            <a href="{{ url_for('recipe.delete_recipe', id_recipe=recipe.id )}}" class="btn btn-error">Excluir</a>
                         </td>
                     </tr>
                     {% endfor %}
