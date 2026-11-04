@@ -123,17 +123,24 @@
         Receitas recomendadas
     </h2>
 
-    <div class="grid grid-cols-4 gap-6 mb-12 mr-[60px]">
-
-        <div class="card bg-base-200 h-48"></div>
-
-        <div class="card bg-base-200 h-48"></div>
-
-        <div class="card bg-base-200 h-48"></div>
-
-        <div class="card bg-base-200 h-48"></div>
-
-    </div>
+    {% if recipes %}
+        <div class="grid grid-cols-4 gap-6 mb-12 mr-[60px]">
+            {% for recipe in recipes %}
+                {% if recipe['recommended'] %}
+                    <div class="card bg-base-200 h-48">
+                        {% if recipe['recipe_image'] %}
+                        <img src="{{ recipe['recipe_image'] }}" alt="{{ recipe['recipe_name'] }}">
+                        {% else %}
+                        <img src="https://i.pinimg.com/736x/13/fa/66/13fa66ecb5991c5d2de0a7dc63df0842.jpg" alt="Sem imagem">
+                        {% endif %}
+                        <h4>{{ recipe['recipe_name'] }}</h4>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Não é possível carregar essas receitas no momento</p>
+    {% endif %}
 
 
     <!-- Nutricionistas -->

@@ -16,7 +16,7 @@ user_restriction = db.Table(
     db.Column('restriction_id', db.Integer, db.ForeignKey('Restriction.id'), primary_key=True)
 )
 
-
+# Admin
 def admin_required(func):
     @wraps(func)
     @login_required
@@ -27,3 +27,33 @@ def admin_required(func):
         return func(*args, **kwargs)
 
     return wrapper
+
+# Lista de ingredientes não veganos
+NON_VEGAN_INGREDIENTS = [
+    # Meat, Poultry & Game
+    'meat', 'beef', 'pork', 'chicken', 'turkey', 'duck', 'lamb', 'bacon', 
+    'ham', 'sausage', 'pepperoni', 'salami', 'prosciutto', 'veal', 'mutton',
+
+    # Seafood
+    'fish', 'salmon', 'tuna', 'shrimp', 'prawns', 'crab', 'lobster', 
+    'clam', 'mussel', 'oyster', 'squid', 'octopus', 'anchovy', 'anchovies', 
+    'fish sauce', 'oyster sauce', 'caviar',
+
+    # Dairy Products
+    'milk', 'whole milk', 'skim milk', 'butter', 'ghee', 'cheese', 'parmesan', 
+    'cheddar', 'mozzarella', 'cream', 'heavy cream', 'sour cream', 'whey', 
+    'casein', 'caseinate', 'condensed milk', 'evaporated milk', 'yogurt', 'curd',
+    'whey protein', 'vanilla yogurt'
+
+    # Eggs & Derivatives
+    'egg', 'eggs', 'egg white', 'egg yolk', 'mayonnaise', 'albumen', 'albumin',
+
+    # Bee Products
+    'honey', 'beeswax', 'royal jelly', 'propolis',
+
+    # Animal Fats & Gelatin
+    'gelatin', 'gelatine', 'lard', 'tallow', 'suet', 'collagen', 'rennet', 
+
+    # Hidden / Additives
+    'carmine', 'cochineal', 'isinglass', 'l-cysteine', 'bone char'
+]

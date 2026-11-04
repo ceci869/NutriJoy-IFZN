@@ -5,6 +5,7 @@ class DailyMenu(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('User.id'))
     day = db.Column(db.String(7), nullable=False)
+    types = db.Column(db.String(150), nullable=False)
 
     user = db.relationship('User', foreign_keys=user_id)
 

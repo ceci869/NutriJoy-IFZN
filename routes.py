@@ -1,30 +1,24 @@
 import os
-from utils import app, admin_required, db
+from utils import app, admin_required, db, NON_VEGAN_INGREDIENTS
 from flask import render_template, url_for, redirect, request, flash
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
 from time import sleep
 import json
-from flask import flash, redirect
+from fatsecret_service import obter_receitas, obter_detalhes_receitas
 
 from models.User import User
 from models.Daily_Menu import DailyMenu
-from models.Recipe import Recipe
-from models.Food import Food
 from models.Nutritionist import Nutritionist
 from models.Restriction import Restriction
 from controllers.usuario import bp_user, hash as hash_password
-from controllers.alimento import bp_food
 from controllers.cardapio_diario import bp_dailyMenu
 from controllers.nutricionista import bp_nutritionist, get_nutritionists
-from controllers.receita import bp_recipe
 from controllers.restricao import bp_restriction
 
 app.register_blueprint(bp_user, url_prefix='/user')
-app.register_blueprint(bp_food, url_prefix='/food')
 app.register_blueprint(bp_dailyMenu, url_prefix='/dailyMenu')
 app.register_blueprint(bp_nutritionist, url_prefix='/nutritionist')
-app.register_blueprint(bp_recipe, url_prefix='/recipe')
 app.register_blueprint(bp_restriction, url_prefix='/restriction')
 
 
@@ -48,29 +42,87 @@ def paginaerro():
 @login_required
 def homepage():
     nutritionists = get_nutritionists()
-    return render_template('homepage.html', nutritionists=nutritionists)
+
+    recipes = obter_receitas()
+
+    for recipe in recipes:
+        recipe['recommended'] = True
+
+        r = recipe.get('recipe_id') 
+
+        details = obter_detalhes_receitas(r)
+        if not details:
+            return []
+
+        if isinstance(details, dict):
+            details = [details]
+
+        for detail in details:
+            detail2 = int(detail['rating'])
+            if detail2 < 2:
+                recipe['recommended'] = False
+                break
+
+        if not recipe['recommended']:
+            break
+
+    return render_template('homepage.html', nutritionists=nutritionists, recipes=recipes)
 
 
 @app.route('/catalogodereceitas')
 @login_required
 def catalogodereceitas():
-    lista_receitas = [
-        {'nome': 'Sanduíches kawaii',
-         'foto': url_for('static', filename='img/receita1.jpg')},
-        {'nome': 'Pizza kawaii',
-         'foto': url_for('static', filename='img/receita2.jpg')},
-        {'nome': 'Curry kawaii',
-         'foto': url_for('static', filename='img/receita3.jpg')},
-        {'nome': 'Sushi kawaii',
-         'foto': url_for('static', filename='img/receita4.jpg')},
-        {'nome': 'Pudim kawaii',
-         'foto': url_for('static', filename='img/receita5.jpg')}
-    ]
+    recipes = obter_receitas()
 
-    return render_template(
-        'catalogo_de_receitas.html',
-        lista_receitas=lista_receitas
-    )
+    #Recomendadas
+    for recipe in recipes:
+            recipe['recommended'] = True
+    
+            r = recipe.get('recipe_id') 
+    
+            details = obter_detalhes_receitas(r)
+            if not details:
+                return []
+    
+            if isinstance(details, dict):
+                details = [details]
+    
+            for detail in details:
+                detail2 = int(detail['rating'])
+                if detail2 < 2:
+                    recipe['recommended'] = False
+                    break
+    
+            if not recipe['recommended']:
+                break
+
+    #Veganas
+    for recipe in recipes:
+        
+        recipe['vegan'] = True
+        
+        
+        ingredients = recipe.get('recipe_ingredients', [])
+        
+       
+        if isinstance(ingredients, dict):
+            ingredients = ingredients.get('ingredient', [])
+        if isinstance(ingredients, dict):
+            ingredients = [ingredients]
+
+        for item in ingredients:
+            ingredient_name = item.get('food_name', '') if isinstance(item, dict) else str(item)
+            name_lower = ingredient_name.lower()
+
+            for non_vegan in NON_VEGAN_INGREDIENTS:
+                if non_vegan in name_lower:
+                    recipe['vegan'] = False
+                    break 
+            
+            if not recipe['vegan']:
+                break
+
+    return render_template('catalogo_de_receitas.html', recipes=recipes)
 
 
 @app.route('/cardapiosemanal')
