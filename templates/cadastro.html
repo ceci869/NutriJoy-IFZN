@@ -25,7 +25,7 @@
         {% endfor %}
     {% endif %}
 
-    <div class="flex justify-center py-20 px-4">
+    <div class="flex justify-center pt-20 px-4">
 
         <form action="{{url_for('user.add_user')}}" method="post" class="w-full max-w-lg">
 
@@ -119,14 +119,14 @@
 
             </div>
 
-            <button class="btn w-full mt-12 text-[18px] bg-[#5FB434] py-[24px] border-[#8C8C8C] text-white hover:bg-[#34800D]">
+            <button class="mb-[15px] btn w-full mt-12 text-[18px] bg-[#5FB434] py-[24px] border-[#8C8C8C] text-white hover:bg-[#34800D]">
                 Criar conta
             </button>
 
         </form>
     </div>
 
-    <a href="{{ url_for('user.verificalogin') }}" class="flex justify-center underline underline-offset-2">Já possui uma conta? Faça login</a>
+    <a href="{{ url_for('user.verificalogin') }}" class="mb-[70px] flex justify-center underline underline-offset-2">Já possui uma conta? Faça login</a>
 
 </body>
 

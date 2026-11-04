@@ -11,7 +11,7 @@
 <body>
     <header>
         <!-- navbar -->
-        <div class="navbar bg-[#FEF6D3] px-8 py-4">
+        <div class="navbar bg-[#FEF6D3] px-12 py-4">
             <div class="flex-1">
                 <img src="{{ url_for('static', filename='img/logo-nutrijoy.png') }}" alt="Logo do NutriJoy">
             </div>
@@ -33,7 +33,7 @@
     {% endif %}
     <main>
         <!-- Hero -->
-        <div class="bg-white px-8 py-18 flex gap-[60px] flex-row justify-between">
+        <div class="bg-white mx-12 my-18 flex gap-[60px] flex-row justify-between">
             <div>
                 <h1 class="text-5xl font-semibold mb-[10px]">Sobre o projeto</h1>
                 <p class="text-[24px] pt-6 text-black leading-relaxed">
@@ -47,7 +47,7 @@
         </div>
 
         <!-- Integrantes -->
-        <section class="flex flex-col mx-8 my-10">
+        <section class="flex flex-col mx-12 my-10">
         <h1 class="text-5xl font-semibold mb-[50px] text-center">Integrantes e orientadoras</h1>
             <div class="flex flex-col">
             <div class="flex gap-[100px] justify-center">
@@ -112,7 +112,7 @@
         </section>
 
         <!-- Tecnologias -->
-        <section class="my-18 mx-8">
+        <section class="my-18 mx-12">
             <h1 class="text-5xl font-semibold mb-[50px]">Tecnologias</h1>
             <div class="grid grid-cols-4 gap-[100px] mx-[60px]">
             <div class="shadow-md shadow-[#5D5C5C] rounded-[20px] p-[22px]">
@@ -142,10 +142,11 @@
             </div>
             
         </section>
+
     </main>
 
 
-    <footer class="footer sm:footer-horizontal bg-[#488B26] text-neutral-content items-center justify-between px-8 py-6">
+    <footer class="footer sm:footer-horizontal bg-[#488B26] text-neutral-content items-center justify-between px-12 py-6">
         <img src="{{ url_for('static', filename='img/logo-nutrijoy-2.png') }}" alt="Logo do NutriJoy" class="w-[70%]">
 
         <nav class="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
