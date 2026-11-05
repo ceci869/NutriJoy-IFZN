@@ -43,7 +43,7 @@ NON_VEGAN_INGREDIENTS = [
     'milk', 'whole milk', 'skim milk', 'butter', 'ghee', 'cheese', 'parmesan', 
     'cheddar', 'mozzarella', 'cream', 'heavy cream', 'sour cream', 'whey', 
     'casein', 'caseinate', 'condensed milk', 'evaporated milk', 'yogurt', 'curd',
-    'whey protein', 'vanilla yogurt'
+    'whey protein', 'vanilla yogurt', 'chocolate',
 
     # Eggs & Derivatives
     'egg', 'eggs', 'egg white', 'egg yolk', 'mayonnaise', 'albumen', 'albumin',
@@ -53,6 +53,27 @@ NON_VEGAN_INGREDIENTS = [
 
     # Animal Fats & Gelatin
     'gelatin', 'gelatine', 'lard', 'tallow', 'suet', 'collagen', 'rennet', 
+
+    # Hidden / Additives
+    'carmine', 'cochineal', 'isinglass', 'l-cysteine', 'bone char'
+]
+
+NON_VEGETARIAN_INGREDIENTS = [
+    # Meat, Poultry & Game
+    'meat', 'beef', 'pork', 'chicken', 'turkey', 'duck', 'lamb', 'bacon', 
+    'ham', 'sausage', 'pepperoni', 'salami', 'prosciutto', 'veal', 'mutton',
+    'venison', 'bison', 'pancetta', 'chorizo', 'pastrami', 'tripe',
+
+    # Seafood
+    'fish', 'salmon', 'tuna', 'shrimp', 'prawns', 'crab', 'lobster', 
+    'clam', 'mussel', 'oyster', 'squid', 'octopus', 'anchovy', 'anchovies', 
+    'fish sauce', 'oyster sauce', 'caviar', 'squid ink', 'calamari', 'scallop',
+    'worcestershire sauce',
+
+    # Animal Fats & Broths
+    'gelatin', 'gelatine', 'lard', 'tallow', 'suet', 'collagen', 'rennet', 
+    'animal fat', 'chicken broth', 'beef broth', 'bone broth', 'chicken stock',
+    'beef stock', 'pork fat', 'duck fat',
 
     # Hidden / Additives
     'carmine', 'cochineal', 'isinglass', 'l-cysteine', 'bone char'

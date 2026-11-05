@@ -35,7 +35,7 @@ def obter_access_token():
 
 # Get de Receitas (Catálogo)
 
-def obter_receitas(number=20, standard_term='banana'):
+def obter_receitas(number=40, standard_term=''):
     token = obter_access_token()
 
     headers = {
@@ -46,7 +46,6 @@ def obter_receitas(number=20, standard_term='banana'):
         'method': 'recipes.search.v3',
         'search_expression': standard_term,
         'max_results': number,
-        'recipe_types': 'snack',
         'format': 'json',
         'region': 'BR',
         'language': 'pt'

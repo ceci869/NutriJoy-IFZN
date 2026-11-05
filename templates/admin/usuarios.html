@@ -9,7 +9,7 @@
 <body>
     <h1>Gerenciar usuários</h1>
 
-    <a href="{{ url_for('admin_novo_usuario') }}">Cadastrar usuário</a>
+    <a href="{{ url_for('admin.admin_novo_usuario') }}">Cadastrar usuário</a>
 
     {% for categoria, mensagem in get_flashed_messages(with_categories=true) %}
         <p>{{ mensagem }}</p>
@@ -32,11 +32,11 @@
                 <td>{{ usuario.email }}</td>
                 <td>{{ usuario.role }}</td>
                 <td>
-                    <a href="{{ url_for('admin_editar_usuario', id=usuario.id) }}">
+                    <a href="{{ url_for('admin.admin_editar_usuario', id=usuario.id) }}">
                         Editar
                     </a>
 
-                    <form action="{{ url_for('admin_excluir_usuario', id=usuario.id) }}"
+                    <form action="{{ url_for('admin.admin_excluir_usuario', id=usuario.id) }}"
                           method="POST"
                           onsubmit="return confirm('Tem certeza que deseja excluir este usuário?')">
                         <button type="submit">Excluir</button>
