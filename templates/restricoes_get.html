@@ -17,9 +17,9 @@
         {% endfor %}
     {% endif %}
 
-    <h1>Restrições cadastradas</h1>
+    <h1 class="text-3xl font-semibold m-4">Restrições cadastradas</h1>
     <br>
-        <div class="overflow-x-auto">
+        <div class="overflow-x-auto m-4">
         <table class="table">
             <!-- head -->
             <thead>
@@ -36,7 +36,7 @@
                     <tr>
                         <th>{{ restriction.id }}</th>
                         <td>{{ restriction.name }}</td>
-                        <td class="flex gap-3">
+                        <td class="flex gap-3 justify-end">
                             <a href="{{ url_for('restriction.update_restriction', id_restriction=restriction.id )}}" class="btn btn-primary">Editar</a>
                             <a href="{{ url_for('restriction.delete_restriction', id_restriction=restriction.id )}}" class="btn btn-error">Excluir</a>
                         </td>
