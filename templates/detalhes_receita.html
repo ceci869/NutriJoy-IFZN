@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="flex flex-col gap-10 p-8">
+
+    <!-- Informações principais -->
+    <div class="bg-white border border-[#E8E3DB] rounded-2xl shadow-lg p-8 flex flex-col md:flex-row gap-8">
+
+        {% if recipe_image %}
+        <div class="w-full md:w-[240px] h-[225px] flex-shrink-0">
+            <img src="{{ recipe_image }}" alt="{{ recipe['recipe_name'] }}"
+                class="w-full h-full object-cover rounded-xl">
+        </div>
+        {% endif %}
+
+        <div class="flex flex-col flex-grow">
+
+            <h1 class="text-[28px] font-bold text-[#252D3B] mb-2">
+                {{ recipe['recipe_name'] }}
+            </h1>
+
+            <div class="flex flex-wrap gap-3 mb-6 text-[#777777]">
+
+                {% if recipe.get('preparation_time_min') %}
+                <span class="bg-[#F5F2EB] rounded-md px-2 py-1 text-sm">
+                    <i class="fa-regular fa-clock"></i>
+                    {{ recipe['preparation_time_min'] }} min
+                </span>
+                {% endif %}
+
+                {% if recipe.get('number_of_servings') %}
+                <span class="bg-[#F5F2EB] rounded-md px-2 py-1 text-sm">
+                    <i class="fa-solid fa-bowl-food"></i>
+                    {{ recipe['number_of_servings'] }}
+                    {% if recipe['number_of_servings']|int == 1 %}
+                    porção
+                    {% else %}
+                    porções
+                    {% endif %}
+                </span>
+                {% endif %}
+
+            </div>
+
+            {% if recipe.get('recipe_description') %}
+            <p class="text-[#596579] text-[16px] leading-6 text-justify">
+                {{ recipe['recipe_description'] }}
+            </p>
+            {% endif %}
+
+        </div>
+    </div>
+
+
+    <!-- Ingredientes e modo de preparo -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+
+        <!-- Ingredientes -->
+        <div class="bg-white border border-[#E8E3DB] rounded-2xl shadow-lg p-7 min-h-[400px]">
+
+            <h2 class="text-[23px] font-semibold text-[#252D3B] mb-7">
+                <i class="fa-solid fa-cart-shopping text-[#F0583E] mr-2"></i>
+                Ingredientes
+            </h2>
+
+            <div class="flex flex-col gap-5">
+
+                {% for ingredient in ingredients %}
+                <div class="flex items-start gap-4 text-[#596579] text-[16px]">
+
+                    {% if ingredient.get('ingredient_description') %}
+                    <span>{{ ingredient['ingredient_description'] }}</span>
+                    {% elif ingredient.get('food_name') %}
+                    <span>{{ ingredient['food_name'] }}</span>
+                    {% endif %}
+
+                </div>
+                {% else %}
+                <p class="text-[#999999]">
+                    Ingredientes não disponíveis.
+                </p>
+                {% endfor %}
+
+            </div>
+        </div>
+
+
+        <!-- Modo de preparo -->
+        <div class="bg-white border border-[#E8E3DB] rounded-2xl shadow-lg p-7 min-h-[400px]">
+
+            <h2 class="text-[23px] font-semibold text-[#252D3B] mb-7">
+                <i class="fa-solid fa-cloud text-[#488B26] mr-2"></i>
+                Modo de preparo
+            </h2>
+
+            <div class="flex flex-col gap-5">
+
+                {% for direction in directions %}
+                <div class="flex items-start gap-3">
+
+                    <span
+                        class="flex-shrink-0 w-8 h-8 rounded-full bg-[#FEF1AD] text-[#252D3B] font-semibold flex items-center justify-center">
+                        {{ direction.get('direction_number', loop.index) }}
+                    </span>
+
+                    <p class="text-[#596579] text-[16px] leading-5 text-justify">
+                        {{ direction.get('direction_description', '') }}
+                    </p>
+
+                </div>
+                {% else %}
+                <p class="text-[#999999]">
+                    Modo de preparo não disponível.
+                </p>
+                {% endfor %}
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,115 +1,319 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="flex flex-row justify-end items-center gap-4 mr-4 mb-6">
-        <label class="input w-3xs h-[40px]">
-            <i class="fa-solid fa-magnifying-glass"></i>
-                <g
-                stroke-linejoin="round"
-                stroke-linecap="round"
-                stroke-width="2.5"
-                fill="none"
-                stroke="currentColor"
-                >
-                <circle cx="11" cy="11" r="8"></circle>
-                <path d="m21 21-4.3-4.3"></path>
-                </g>
-            </svg>
-            <input type="search" required placeholder="Pesquisar" />
-        </label>
-        
-        <button><i class="fa-solid fa-filter"></i></button>
+
+<!-- Pesquisa e filtro -->
+<div class="flex justify-end items-center gap-4 mr-4 mb-6">
+
+    <div class="flex items-center gap-2">
+        <i class="fa-solid fa-magnifying-glass text-[30px] text-black"></i>
+
+        <input type="search"
+               id="pesquisarReceita"
+               placeholder="Pesquisar"
+               class="w-[160px] h-[36px] px-3 bg-[#FDF8E2] border border-[#E5DDBD] rounded-xl text-[14px] outline-none focus:border-[#488B26]">
     </div>
 
-<!-- Seções de receitas -->
-    <div class="flex flex-col gap-y-10">
-    <!-- As mais amadas -->
-    <h2>As mais amadas</h2>
-    {% if recipes %}
-        <div class="flex items-center ml-4">
-        <div id="receitas_carrossel" class="flex gap-[40px] carousel">
-            {% for recipe in recipes %}
-                {% if recipe['recommended'] %}
-                    <div class="flex flex-col carousel-item card border border-[#0000001A] mb-[5px] p-4 w-50">
-                        {% if recipe['recipe_image'] %}
-                        <div class="w-[100%] h-[120px] flex-shrink-0">
-                        <img src="{{ recipe['recipe_image'] }}" alt="{{ recipe['recipe_name'] }}" class="rounded-[5px] w-full h-full">
-                        </div>
-                        {% else %}
-                        <div class="w-[100%] h-[120px] flex-shrink-0">
-                        <img src="https://i.pinimg.com/736x/13/fa/66/13fa66ecb5991c5d2de0a7dc63df0842.jpg" alt="Sem imagem" class="rounded-[5px] w-full h-full">
-                        </div>
-                        {% endif %}
-                        <div class="flex flex-col gap-4 mt-3 flex-grow">
-                        <h4 class="text-black font-medium text-[18px] leading-snug">{{ recipe['recipe_name'] }}</h4>
-                            <div class="flex gap-[2px] items-center mt-auto">
-                                <img src="{{ url_for('static', filename='img/relogio.svg') }}" alt="Ícone de relógio">
-                                {% if recipe['prep_time_min'] != '' %}
-                                <p class="text-[#AEAEAE] text-[16px]">{{ recipe['prep_time_min'] }} min</p>
-                                {% else %}
-                                <p class="text-[#AEAEAE] text-[16px]">Tempo indisponível</p>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                {% endif %}
-            {% endfor %}
-        </div>
-        <div class="ml-[15px]">
-        <button onclick="rolarCarrossel('receitas_carrossel', 1)" class="mb-[2px] w-[45px] h-[45px] bg-[#FDF8E2] rounded-full font-bold text-[18px]">></button>
-        <button onclick="rolarCarrossel('receitas_carrossel', -1)" class="w-[45px] h-[45px] bg-[#FDF8E2] rounded-full font-bold text-[18px]"><</button>
-        </div>
-        </div>
-    {% else %}
-        <p>Não é possível carregar essas receitas no momento</p>
-    {% endif %}
+    <div class="relative">
+        <button type="button" id="botaoFiltrar"
+                class="flex items-center gap-3 text-black text-[16px]">
+            <i class="fa-solid fa-bars-staggered text-[27px]"></i>
+            <span>Filtrar</span>
+        </button>
 
-    <!-- Veganas -->
-     <h2>Veganas e vegetarianas</h2>
-    {% if recipes %}
+        <div id="opcoesFiltro"
+             class="hidden absolute right-0 top-full mt-2 bg-white border border-[#E5DDBD] rounded-xl shadow-lg z-50 w-[190px] overflow-hidden">
+
+            <button type="button" data-filtro="todas"
+                    class="opcao-filtro w-full text-left px-4 py-3 hover:bg-[#FDF8E2] text-[14px]">
+                Todas as receitas
+            </button>
+
+            <button type="button" data-filtro="recommended"
+                    class="opcao-filtro w-full text-left px-4 py-3 hover:bg-[#FDF8E2] text-[14px]">
+                Mais amadas
+            </button>
+
+            <button type="button" data-filtro="vegetarian"
+                    class="opcao-filtro w-full text-left px-4 py-3 hover:bg-[#FDF8E2] text-[14px]">
+                Vegetarianas
+            </button>
+
+            <button type="button" data-filtro="vegan"
+                    class="opcao-filtro w-full text-left px-4 py-3 hover:bg-[#FDF8E2] text-[14px]">
+                Veganas
+            </button>
+
+        </div>
+    </div>
+
+</div>
+
+
+<!-- Seções de receitas -->
+<div class="flex flex-col gap-y-10">
+
+    <!-- As mais amadas -->
+    <div id="secaoAmadas">
+
+        <div class="flex items-center justify-between ml-4 mr-4 mb-4">
+
+            <div class="flex items-center gap-2">
+                <i class="fa-regular fa-heart text-[28px]"></i>
+                <h2 class="font-bold text-[24px] text-black">As mais amadas</h2>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <button onclick="rolarCarrossel('receitas_carrossel', -1)"
+                    class="w-[40px] h-[40px] bg-[#FDF8E2] rounded-full flex items-center justify-center text-[18px] hover:bg-[#FEF1AD] transition">
+                    <i class="fa-solid fa-angle-left"></i>
+                </button>
+
+                <button onclick="rolarCarrossel('receitas_carrossel', 1)"
+                    class="w-[40px] h-[40px] bg-[#FDF8E2] rounded-full flex items-center justify-center text-[18px] hover:bg-[#FEF1AD] transition">
+                    <i class="fa-solid fa-angle-right"></i>
+                </button>
+            </div>
+
+        </div>
+
+        {% if recipes %}
         <div class="flex items-center ml-4">
-        <div id="receitas_carrossel_veg" class="flex gap-[40px] carousel">
-            {% for recipe in recipes %}
-                {% if recipe['vegetarian'] %}
-                    <div class="flex flex-col carousel-item card border border-[#0000001A] mb-[5px] p-4 w-50">
+            <div id="receitas_carrossel" class="flex gap-[24px] carousel">
+
+                {% for recipe in recipes %}
+                    {% if recipe['recommended'] %}
+
+                    <a href="{{ url_for('detalhes_receita', recipe_id=recipe['recipe_id']) }}"
+                       data-nome="{{ recipe['recipe_name']|lower }}"
+                       data-recommended="true"
+                       data-vegetarian="{{ recipe['vegetarian']|default(false)|lower }}"
+                       data-vegan="{{ recipe['vegan']|default(false)|lower }}"
+                       class="receita-card flex flex-col carousel-item bg-white rounded-xl border border-[#0000001A] shadow-sm hover:shadow-md transition overflow-hidden mb-[5px] w-[170px] min-h-[220px] text-left">
+
                         {% if recipe['recipe_image'] %}
-                        <div class="w-[100%] h-[120px] flex-shrink-0">
-                        <img src="{{ recipe['recipe_image'] }}" alt="{{ recipe['recipe_name'] }}" class="rounded-[5px] w-full h-full">
+                        <div class="w-full h-[115px] flex-shrink-0">
+                            <img src="{{ recipe['recipe_image'] }}"
+                                 alt="{{ recipe['recipe_name'] }}"
+                                 class="w-full h-full object-cover">
                         </div>
                         {% else %}
-                        <div class="w-[100%] h-[120px] flex-shrink-0">
-                        <img src="https://i.pinimg.com/736x/13/fa/66/13fa66ecb5991c5d2de0a7dc63df0842.jpg" alt="Sem imagem" class="rounded-[5px] w-full h-full">
+                        <div class="w-full h-[115px] flex-shrink-0">
+                            <img src="https://i.pinimg.com/736x/13/fa/66/13fa66ecb5991c5d2de0a7dc63df0842.jpg"
+                                 alt="Sem imagem"
+                                 class="w-full h-full object-cover">
                         </div>
                         {% endif %}
-                        <div class="flex flex-col gap-4 mt-3 flex-grow">
-                        <h4 class="text-black font-medium text-[18px] leading-snug">{{ recipe['recipe_name'] }}</h4>
-                            <div class="flex gap-[2px] items-center mt-auto">
-                                <img src="{{ url_for('static', filename='img/relogio.svg') }}" alt="Ícone de relógio">
+
+                        <div class="flex flex-col gap-2 p-3 flex-grow">
+
+                            <h4 class="text-black font-medium text-[15px] leading-snug">
+                                {{ recipe['recipe_name'] }}
+                            </h4>
+
+                            <div class="flex gap-[5px] items-center mt-auto">
+                                <img src="{{ url_for('static', filename='img/relogio.svg') }}"
+                                     alt="Ícone de relógio">
+
                                 {% if recipe['prep_time_min'] != '' %}
-                                <p class="text-[#AEAEAE] text-[16px]">{{ recipe['prep_time_min'] }} min</p>
+                                <p class="text-[#AEAEAE] text-[13px]">
+                                    {{ recipe['prep_time_min'] }} min
+                                </p>
                                 {% else %}
-                                <p class="text-[#AEAEAE] text-[16px]">Tempo indisponível</p>
+                                <p class="text-[#AEAEAE] text-[13px]">
+                                    Tempo indisponível
+                                </p>
                                 {% endif %}
                             </div>
+
                         </div>
-                    </div>
-                {% endif %}
-            {% endfor %}
+                    </a>
+
+                    {% endif %}
+                {% endfor %}
+
+            </div>
         </div>
-        <div class="ml-[15px]">
-        <button onclick="rolarCarrossel('receitas_carrossel_veg', 1)" class="mb-[2px] w-[45px] h-[45px] bg-[#FDF8E2] rounded-full font-bold text-[18px]">></button>
-        <button onclick="rolarCarrossel('receitas_carrossel_veg', -1)" class="w-[45px] h-[45px] bg-[#FDF8E2] rounded-full font-bold text-[18px]"><</button>
+        {% else %}
+        <p class="ml-4">Não é possível carregar essas receitas no momento</p>
+        {% endif %}
+
+    </div>
+
+
+    <!-- Veganas e vegetarianas -->
+    <div id="secaoVeganas">
+
+        <div class="flex items-center justify-between ml-4 mr-4 mb-4">
+
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-leaf text-[24px]"></i>
+                <h2 class="font-bold text-[24px] text-black">Veganas e vegetarianas</h2>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <button onclick="rolarCarrossel('receitas_carrossel_veg', -1)"
+                    class="w-[40px] h-[40px] bg-[#FDF8E2] rounded-full flex items-center justify-center text-[18px] hover:bg-[#FEF1AD] transition">
+                    <i class="fa-solid fa-angle-left"></i>
+                </button>
+
+                <button onclick="rolarCarrossel('receitas_carrossel_veg', 1)"
+                    class="w-[40px] h-[40px] bg-[#FDF8E2] rounded-full flex items-center justify-center text-[18px] hover:bg-[#FEF1AD] transition">
+                    <i class="fa-solid fa-angle-right"></i>
+                </button>
+            </div>
+
         </div>
+
+        {% if recipes %}
+        <div class="flex items-center ml-4">
+            <div id="receitas_carrossel_veg" class="flex gap-[24px] carousel">
+
+                {% for recipe in recipes %}
+                    {% if recipe['vegetarian'] %}
+
+                    <a href="{{ url_for('detalhes_receita', recipe_id=recipe['recipe_id']) }}"
+                       data-nome="{{ recipe['recipe_name']|lower }}"
+                       data-recommended="{{ recipe['recommended']|lower }}"
+                       data-vegetarian="true"
+                       data-vegan="{{ recipe['vegan']|lower }}"
+                       class="receita-card flex flex-col carousel-item bg-white rounded-xl border border-[#0000001A] shadow-sm hover:shadow-md transition overflow-hidden mb-[5px] w-[170px] min-h-[220px] text-left">
+
+                        {% if recipe['recipe_image'] %}
+                        <div class="w-full h-[115px] flex-shrink-0">
+                            <img src="{{ recipe['recipe_image'] }}"
+                                 alt="{{ recipe['recipe_name'] }}"
+                                 class="w-full h-full object-cover">
+                        </div>
+                        {% else %}
+                        <div class="w-full h-[115px] flex-shrink-0">
+                            <img src="https://i.pinimg.com/736x/13/fa/66/13fa66ecb5991c5d2de0a7dc63df0842.jpg"
+                                 alt="Sem imagem"
+                                 class="w-full h-full object-cover">
+                        </div>
+                        {% endif %}
+
+                        <div class="flex flex-col gap-2 p-3 flex-grow">
+
+                            <h4 class="text-black font-medium text-[15px] leading-snug">
+                                {{ recipe['recipe_name'] }}
+                            </h4>
+
+                            <div class="flex gap-[5px] items-center mt-auto">
+                                <img src="{{ url_for('static', filename='img/relogio.svg') }}"
+                                     alt="Ícone de relógio">
+
+                                {% if recipe['prep_time_min'] != '' %}
+                                <p class="text-[#AEAEAE] text-[13px]">
+                                    {{ recipe['prep_time_min'] }} min
+                                </p>
+                                {% else %}
+                                <p class="text-[#AEAEAE] text-[13px]">
+                                    Tempo indisponível
+                                </p>
+                                {% endif %}
+                            </div>
+
+                        </div>
+                    </a>
+
+                    {% endif %}
+                {% endfor %}
+
+            </div>
         </div>
-    {% else %}
-        <p>Não é possível carregar essas receitas no momento</p>
-    {% endif %}
+        {% else %}
+        <p class="ml-4">Não é possível carregar essas receitas no momento</p>
+        {% endif %}
+
+    </div>
+
+    <p id="nenhumaReceita" class="hidden text-center text-[#AEAEAE]">
+        Nenhuma receita encontrada.
+    </p>
+
+</div>
+
+
+<!-- Funcionamento da pesquisa e dos filtros -->
+<script>
+    const campoPesquisa = document.getElementById('pesquisarReceita');
+    const botaoFiltrar = document.getElementById('botaoFiltrar');
+    const opcoesFiltro = document.getElementById('opcoesFiltro');
+
+    let filtroAtual = 'todas';
+
+    botaoFiltrar.addEventListener('click', () => {
+        opcoesFiltro.classList.toggle('hidden');
+    });
+
+    function aplicarFiltros() {
+        const pesquisa = campoPesquisa.value.toLowerCase().trim();
+        const receitas = document.querySelectorAll('.receita-card');
+
+        receitas.forEach(receita => {
+            const nome = receita.dataset.nome;
+            const recomendada = receita.dataset.recommended === 'true';
+            const vegetariana = receita.dataset.vegetarian === 'true';
+            const vegana = receita.dataset.vegan === 'true';
+
+            const correspondePesquisa = nome.includes(pesquisa);
+
+            let correspondeFiltro = true;
+
+            if (filtroAtual === 'recommended') {
+                correspondeFiltro = recomendada;
+            }
+            else if (filtroAtual === 'vegetarian') {
+                correspondeFiltro = vegetariana;
+            }
+            else if (filtroAtual === 'vegan') {
+                correspondeFiltro = vegana;
+            }
+
+            receita.classList.toggle(
+                'hidden',
+                !(correspondePesquisa && correspondeFiltro)
+            );
+        });
+
+        document.querySelectorAll('#secaoAmadas, #secaoVeganas').forEach(secao => {
+            const cardsVisiveis = secao.querySelectorAll('.receita-card:not(.hidden)');
+            secao.classList.toggle('hidden', cardsVisiveis.length === 0);
+        });
+
+        const visiveis = document.querySelectorAll('.receita-card:not(.hidden)');
+
+        document.getElementById('nenhumaReceita').classList.toggle(
+            'hidden',
+            visiveis.length > 0
+        );
+    }
+
+    campoPesquisa.addEventListener('input', aplicarFiltros);
+
+    document.querySelectorAll('.opcao-filtro').forEach(opcao => {
+        opcao.addEventListener('click', () => {
+            filtroAtual = opcao.dataset.filtro;
+            opcoesFiltro.classList.add('hidden');
+            aplicarFiltros();
+        });
+    });
+
+    document.addEventListener('click', (evento) => {
+        if (!botaoFiltrar.contains(evento.target) &&
+            !opcoesFiltro.contains(evento.target)) {
+            opcoesFiltro.classList.add('hidden');
+        }
+    });
+</script>
+
 {% endblock %}
 
 {% block styles %}
-    <style>
-        #item2{
-            background-color: #FEF1AD;
-        }
-    </style>
-    {% endblock %}
+<style>
+    #item2 {
+        background-color: #FEF1AD;
+    }
+</style>
+{% endblock %}

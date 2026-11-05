@@ -169,3 +169,52 @@ def perfilnutricionista(nutritionist_crn):
 @app.route('/formularionutricionista')
 def formulario_nutricionista():
     return render_template('formulario_nutricionista.html')
+
+
+@app.route('/receita/<int:recipe_id>')
+@login_required
+def detalhes_receita(recipe_id):
+    recipe = obter_detalhes_receitas(recipe_id)
+
+    if not recipe:
+        return redirect(url_for('catalogodereceitas'))
+
+    # Caso a resposta ainda esteja dentro da chave recipe
+    if 'recipe' in recipe:
+        recipe = recipe['recipe']
+
+    # Imagem
+    images = recipe.get('recipe_images', {})
+    if isinstance(images, dict):
+        images = images.get('recipe_image', [])
+
+    if isinstance(images, str):
+        images = [images]
+
+    recipe_image = images[0] if images else None
+
+    # Ingredientes
+    ingredients = recipe.get('ingredients', {})
+
+    if isinstance(ingredients, dict):
+        ingredients = ingredients.get('ingredient', [])
+
+    if isinstance(ingredients, dict):
+        ingredients = [ingredients]
+
+    # Modo de preparo
+    directions = recipe.get('directions', {})
+
+    if isinstance(directions, dict):
+        directions = directions.get('direction', [])
+
+    if isinstance(directions, dict):
+        directions = [directions]
+
+    return render_template(
+        'detalhes_receita.html',
+        recipe=recipe,
+        recipe_image=recipe_image,
+        ingredients=ingredients,
+        directions=directions
+    )

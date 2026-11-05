@@ -73,10 +73,14 @@ def obter_receitas(number=40, standard_term=''):
         print(f'Não foi possível realizar a autenticação FatSecret: {e}')
         return None     
 
-# Detalhes gerais
+# Detalhes de uma receita
 def obter_detalhes_receitas(recipe_id):
 
     token = obter_access_token()
+
+    if not token:
+        print('Não foi possível obter o token da FatSecret.')
+        return None
 
     headers = {
         'Authorization': f'Bearer {token}'
@@ -86,25 +90,42 @@ def obter_detalhes_receitas(recipe_id):
         'method': 'recipe.get.v2',
         'recipe_id': recipe_id,
         'format': 'json',
-        'region': 'BR'
+        'region': 'BR',
+        'language': 'pt'
     }
 
     try:
-        response = requests.get(API_BASE_URL, headers=headers, params=params)
+        response = requests.get(
+            API_BASE_URL,
+            headers=headers,
+            params=params
+        )
+
         response.raise_for_status()
         data = response.json()
 
-        print('Resposta FatSecret', data)
+        print('\n========== RESPOSTA DA FATSECRET ==========')
+        print(data)
+        print('============================================\n')
 
-        recipe = data.get('recipe', {})
+        recipe = data.get('recipe')
+
         if not recipe:
-            return []
+            print('A API não retornou os dados da receita.')
+            return None
 
-        if isinstance(recipe, dict):
-            recipe = [recipe]
+        if isinstance(recipe, list):
+            recipe = recipe[0] if recipe else None
+
+        if not isinstance(recipe, dict):
+            print('Formato inesperado dos dados da receita.')
+            return None
+
+        print('INGREDIENTES:', recipe.get('recipe_ingredients'))
+        print('MODO DE PREPARO:', recipe.get('recipe_directions'))
 
         return recipe
 
     except requests.exceptions.RequestException as e:
-        print(f'Erro ao conectar com a API FatSecret: {e}')
+        print(f'Erro ao buscar detalhes da receita: {e}')
         return None

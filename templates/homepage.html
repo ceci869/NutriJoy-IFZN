@@ -1,218 +1,198 @@
 {% extends "base.html" %}
 
-    {% block content %}
+{% block content %}
 
-        {% set mensagens = get_flashed_messages(with_categories=true) %} 
-        {% if mensagens %}     
-            {% for categoria, msg in mensagens %}
-                <div class="alert alert-{{categoria}}" role="alert">
-                    {{ msg }}
-                </div>
-            {% endfor %}
-        {% endif %}
-
-    <h1 class="text-4xl font-semibold mb-6 mt-4 ml-4">
-        Olá, {{ current_user.name }}!
-    </h1>
-
-    <!-- Cardápio semanal -->
-    <div class="rounded-lg p-5 mb-10 shadow-md shadow-[#5D5C5C] mr-[60px] ml-4">
-
-        <h2 class="text-[24px] font-semibold mb-4">
-            Seu cardápio semanal
-        </h2>
-
-        <div class="grid grid-cols-7 gap-4 mb-6">
-
-            <div class="flex flex-col items-center bg-[#F0583E0D] rounded-[10px] px-[5px] py-[10px]">
-                <p class="text-[16px] font-semibold mb-2">Seg</p>
-
-                <div class="bg-base-200 rounded-lg h-24 w-full flex items-center justify-center">
-                    🍴
-                </div>
-
-                <button class="text-[14px] font-semibold text-[#154625] cursor-pointer mt-2">
-                    Ver refeições >
-                </button>
-            </div>
-
-            <div class="flex flex-col items-center bg-[#F0583E0D] rounded-[10px] px-[5px] py-[10px]">
-                <p class="text-[16px] font-semibold mb-2">Ter</p>
-
-                <div class="bg-base-200 rounded-lg h-24 w-full flex items-center justify-center">
-                    🍴
-                </div>
-
-                <button class="text-[14px] font-semibold text-[#154625] cursor-pointer mt-2">
-                    Ver refeições >
-                </button>
-            </div>
-
-            <div class="flex flex-col items-center bg-[#F0583E0D] rounded-[10px] px-[5px] py-[10px]">
-                <p class="text-[16px] font-semibold mb-2">Qua</p>
-
-                <div class="bg-base-200 rounded-lg h-24 w-full flex items-center justify-center">
-                    🍴
-                </div>
-
-                <button class="text-[14px] font-semibold text-[#154625] cursor-pointer mt-2">
-                    Ver refeições >
-                </button>
-            </div>
-
-            <div class="flex flex-col items-center bg-[#F0583E0D] rounded-[10px] px-[5px] py-[10px]">
-                <p class="text-[16px] font-semibold mb-2">Qui</p>
-
-                <div class="bg-base-200 rounded-lg h-24 w-full flex items-center justify-center">
-                    🍴
-                </div>
-
-                <button class="text-[14px] font-semibold text-[#154625] cursor-pointer mt-2">
-                    Ver refeições >
-                </button>
-            </div>
-
-            <div class="flex flex-col items-center bg-[#F0583E0D] rounded-[10px] px-[5px] py-[10px]">
-                <p class="text-[16px] font-semibold mb-2">Sex</p>
-
-                <div class="bg-base-200 rounded-lg h-24 w-full flex items-center justify-center">
-                    🍴
-                </div>
-
-                <button class="text-[14px] font-semibold text-[#154625] cursor-pointer mt-2">
-                    Ver refeições >
-                </button>
-            </div>
-
-            <div class="flex flex-col items-center bg-[#F0583E0D] rounded-[10px] px-[5px] py-[10px]">
-                <p class="text-[16px] font-semibold mb-2">Sab</p>
-
-                <div class="bg-base-200 rounded-lg h-24 w-full flex items-center justify-center">
-                    🍴
-                </div>
-
-                <button class="text-[14px] font-semibold text-[#154625] cursor-pointer mt-2">
-                    Ver refeições >
-                </button>
-            </div>
-
-            <div class="flex flex-col items-center bg-[#F0583E0D] rounded-[10px] px-[5px] py-[10px]">
-                <p class="text-[16px] font-semibold mb-2">Dom</p>
-
-                <div class="bg-base-200 rounded-lg h-24 w-full flex items-center justify-center">
-                    🍴
-                </div>
-
-                <button class="text-[14px] font-semibold text-[#154625] cursor-pointer mt-2">
-                    Ver refeições >
-                </button>
-            </div>
-
+{% set mensagens = get_flashed_messages(with_categories=true) %}
+{% if mensagens %}
+    {% for categoria, msg in mensagens %}
+        <div class="alert alert-{{categoria}}" role="alert">
+            {{ msg }}
         </div>
-        <button class="btn bg-[#5FB434] rounded-[10px] w-full">
-            <a href="{{ url_for('cardapiosemanal') }}" class="text-white">
-                Ver cardápio completo
-            </a>
-        </button>
+    {% endfor %}
+{% endif %}
+
+<h1 class="text-4xl font-semibold mb-6 mt-4 ml-4">
+    Olá, {{ current_user.name }}!
+</h1>
+
+<!-- Cardápio semanal -->
+<div class="rounded-lg p-5 mb-10 shadow-md shadow-[#5D5C5C] mr-[60px] ml-4">
+
+    <h2 class="text-[24px] font-semibold mb-4">
+        Seu cardápio semanal
+    </h2>
+
+    <div class="grid grid-cols-7 gap-4 mb-6">
+
+        {% for dia in ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom'] %}
+        <div class="flex flex-col items-center bg-[#F0583E0D] rounded-[10px] px-[5px] py-[10px]">
+            <p class="text-[16px] font-semibold mb-2">{{ dia }}</p>
+
+            <div class="bg-base-200 rounded-lg h-24 w-full flex items-center justify-center">
+                🍴
+            </div>
+
+            <button class="text-[14px] font-semibold text-[#154625] cursor-pointer mt-2">
+                Ver refeições >
+            </button>
+        </div>
+        {% endfor %}
 
     </div>
 
+    <button class="btn bg-[#5FB434] rounded-[10px] w-full">
+        <a href="{{ url_for('cardapiosemanal') }}" class="text-white">
+            Ver cardápio completo
+        </a>
+    </button>
 
-    <!-- Receitas recomendadas -->
-    <h2 class="text-[24px] font-semibold mb-4 ml-4">
-        Receitas recomendadas
-    </h2>
+</div>
 
-    {% if recipes %}
-        <div class="flex items-center ml-4">
-        <div id="receitas_carrossel" class="flex gap-4 carousel">
-            {% for recipe in recipes %}
-                {% if recipe['recommended'] %}
-                    <div class="flex flex-col carousel-item card border border-[#0000001A] mb-[5px] p-4 w-50">
-                        {% if recipe['recipe_image'] %}
-                        <div class="w-[100%] h-[120px] flex-shrink-0">
-                            <img src="{{ recipe['recipe_image'] }}" alt="{{ recipe['recipe_name'] }}" class="rounded-[5px] w-full h-full">
-                        </div>
-                        {% else %}
-                        <div class="w-[100%] h-[120px] flex-shrink-0">
-                            <img src="https://i.pinimg.com/736x/13/fa/66/13fa66ecb5991c5d2de0a7dc63df0842.jpg" alt="Sem imagem" class="rounded-[5px] w-full h-full">
-                        </div>
-                        {% endif %}
-                        <div class="flex flex-col gap-4 mt-3 flex-grow">
-                        <h4 class="text-black font-medium text-[18px] leading-snug">{{ recipe['recipe_name'] }}</h4>
-                            <div class="flex gap-[2px] items-center mt-auto">
-                                <img src="{{ url_for('static', filename='img/relogio.svg') }}" alt="Ícone de relógio">
-                                {% if recipe['prep_time_min'] != '' %}
-                                <p class="text-[#AEAEAE] text-[16px]">{{ recipe['prep_time_min'] }} min</p>
-                                {% else %}
-                                <p class="text-[#AEAEAE] text-[16px]">Tempo indisponível</p>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
+<!-- Receitas recomendadas -->
+<h2 class="text-[24px] font-semibold mb-4 ml-4">
+    Receitas recomendadas
+</h2>
+
+{% if recipes %}
+<div class="flex items-center ml-4">
+
+    <div id="receitas_carrossel" class="flex gap-[24px] carousel">
+
+        {% for recipe in recipes %}
+            {% if recipe['recommended'] %}
+
+            <a href="{{ url_for('detalhes_receita', recipe_id=recipe['recipe_id']) }}"
+               class="flex flex-col carousel-item bg-white card border border-[#0000001A] rounded-xl shadow-sm hover:shadow-md transition overflow-hidden mb-[5px] w-[170px] min-h-[220px] text-left">
+
+                {% if recipe['recipe_image'] %}
+                <div class="w-full h-[115px] flex-shrink-0">
+                    <img src="{{ recipe['recipe_image'] }}"
+                         alt="{{ recipe['recipe_name'] }}"
+                         class="w-full h-full object-cover">
+                </div>
+                {% else %}
+                <div class="w-full h-[115px] flex-shrink-0">
+                    <img src="https://i.pinimg.com/736x/13/fa/66/13fa66ecb5991c5d2de0a7dc63df0842.jpg"
+                         alt="Sem imagem"
+                         class="w-full h-full object-cover">
+                </div>
                 {% endif %}
-            {% endfor %}
-        </div>
-            <div class="ml-[15px]">
-                <button onclick="rolarCarrossel('receitas_carrossel', 1)" class="mb-[2px] w-[45px] h-[45px] bg-[#FDF8E2] rounded-full font-bold text-[18px]">></button>
-                <button onclick="rolarCarrossel('receitas_carrossel', -1)" class="w-[45px] h-[45px] bg-[#FDF8E2] rounded-full font-bold text-[18px]"><</button>
-            </div>
-        </div>
-    {% else %}
-        <p>Não é possível carregar essas receitas no momento</p>
-    {% endif %}
+
+                <div class="flex flex-col gap-2 p-3 flex-grow">
+                    <h4 class="text-black font-medium text-[15px] leading-snug">
+                        {{ recipe['recipe_name'] }}
+                    </h4>
+
+                    <div class="flex gap-[5px] items-center mt-auto">
+                        <img src="{{ url_for('static', filename='img/relogio.svg') }}"
+                             alt="Ícone de relógio">
+
+                        {% if recipe['prep_time_min'] != '' %}
+                        <p class="text-[#AEAEAE] text-[13px]">
+                            {{ recipe['prep_time_min'] }} min
+                        </p>
+                        {% else %}
+                        <p class="text-[#AEAEAE] text-[13px]">
+                            Tempo indisponível
+                        </p>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </a>
+            {% endif %}
+        {% endfor %}
+
+    </div>
+
+    <div class="ml-[15px] flex gap-2">
+        <button onclick="rolarCarrossel('receitas_carrossel', -1)"
+            class="w-[40px] h-[40px] bg-[#FDF8E2] rounded-full flex items-center justify-center text-[18px] hover:bg-[#FEF1AD] transition">
+            <i class="fa-solid fa-angle-left"></i>
+        </button>
+
+        <button onclick="rolarCarrossel('receitas_carrossel', 1)"
+            class="w-[40px] h-[40px] bg-[#FDF8E2] rounded-full flex items-center justify-center text-[18px] hover:bg-[#FEF1AD] transition">
+            <i class="fa-solid fa-angle-right"></i>
+        </button>
+    </div>
+
+</div>
+{% else %}
+<p>Não é possível carregar essas receitas no momento</p>
+{% endif %}
 
 
-    <!-- Nutricionistas -->
-    <h2 class="text-[24px] font-semibold mb-4 mt-10 ml-4">
-        Nutricionistas em destaque
-    </h2>
-    <div class="flex items-center ml-4">
-    <div id="nutri_carrossel" class="flex gap-4 carousel w-full flex-1">
+<!-- Nutricionistas -->
+<h2 class="text-[24px] font-semibold mb-4 mt-10 ml-4">
+    Nutricionistas em destaque
+</h2>
+
+<div class="flex items-center ml-4">
+
+    <div id="nutri_carrossel" class="flex gap-[24px] carousel w-full flex-1">
+
         {% for nutritionist in nutritionists %}
-        <div class="flex flex-col carousel-item card shadow-md shadow-[#5D5C5C] mb-[5px] p-4 w-80">
-            <div class="flex gap-4 h-full flex-grow">
+
+        <div class="flex flex-col carousel-item bg-white card border border-[#0000001A] rounded-xl shadow-sm hover:shadow-md transition mb-[5px] p-3 w-[300px] min-h-[130px]">
+
+            <div class="flex gap-4 h-full flex-grow items-center">
 
                 <div class="avatar placeholder">
-                    <div class="rounded-full w-22">
-                        <img src="/{{ nutritionist.profile_photo.replace('\\', '/') }}" alt="Imagem de perfil">
+                    <div class="rounded-full w-[88px] h-[88px]">
+                        <img src="/{{ nutritionist.profile_photo.replace('\\', '/') }}"
+                             alt="Imagem de perfil"
+                             class="object-cover">
                     </div>
                 </div>
 
                 <div class="flex flex-col justify-between self-stretch">
-                    <div>
-                    <h3 class="font-medium">
-                        {{ nutritionist.name }}
-                    </h3>
 
-                    <p class="text-sm">
-                        CRN {{ nutritionist.crn }}
-                    </p>
+                    <div>
+                        <h3 class="font-medium text-[16px]">
+                            {{ nutritionist.name }}
+                        </h3>
+
+                        <p class="text-sm text-[#AEAEAE]">
+                            CRN {{ nutritionist.crn }}
+                        </p>
                     </div>
-                    <button class="btn btn-sm mt-2 w-fit">
-                        <a href="{{ url_for('perfilnutricionista', nutritionist_crn=nutritionist.crn) }}">Ver perfil</a>
-                    </button>
+
+                    <a href="{{ url_for('perfilnutricionista', nutritionist_crn=nutritionist.crn) }}"
+                       class="text-[14px] font-semibold text-[#154625] hover:underline mt-2 w-fit">
+                        Ver perfil
+                    </a>
 
                 </div>
 
             </div>
-        
+
         </div>
+
         {% endfor %}
-        
-    </div>
-    <div class="ml-[15px] flex flex-col">
-            <button onclick="rolarCarrossel('nutri_carrossel', 1)" class="mb-[2px] w-[45px] h-[45px] bg-[#FDF8E2] rounded-full font-bold text-[18px]">></button>
-            <button onclick="rolarCarrossel('nutri_carrossel', -1)" class="w-[45px] h-[45px] bg-[#FDF8E2] rounded-full font-bold text-[18px]"><</button>
-    </div>
+
     </div>
 
-    
-    {% endblock %}
-    {% block styles %}
-    <style>
-        #item1{
-            background-color: #FEF1AD;
-        }
-    </style>
-    {% endblock %}
+    <div class="ml-[15px] flex gap-2">
+        <button onclick="rolarCarrossel('nutri_carrossel', -1)"
+            class="w-[40px] h-[40px] bg-[#FDF8E2] rounded-full flex items-center justify-center text-[18px] hover:bg-[#FEF1AD] transition">
+            <i class="fa-solid fa-angle-left"></i>
+        </button>
+
+        <button onclick="rolarCarrossel('nutri_carrossel', 1)"
+            class="w-[40px] h-[40px] bg-[#FDF8E2] rounded-full flex items-center justify-center text-[18px] hover:bg-[#FEF1AD] transition">
+            <i class="fa-solid fa-angle-right"></i>
+        </button>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block styles %}
+<style>
+    #item1 {
+        background-color: #FEF1AD;
+    }
+</style>
+{% endblock %}
