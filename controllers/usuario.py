@@ -168,6 +168,7 @@ def admin_usuarios():
 @bp_admin.route('/usuarios/novo', methods=['GET', 'POST'])
 @login_required
 def admin_novo_usuario():
+    allrestrictions = Restriction.query.all()
     if current_user.role != "admin":
         flash("Acesso não permitido", "error")
         return redirect('/homepage')
@@ -175,29 +176,41 @@ def admin_novo_usuario():
         name = request.form.get('name', '').strip()
         email = request.form.get('email', '').strip()
         password = request.form.get('password', '').strip()
+        cep = request.form.get('cep', '').strip()
+        age = request.form.get('age', '').strip()
+        restrictions_ids = request.form.getlist('restricoes')
 
         if not name or not email or not password:
             flash('Preencha todos os campos.', 'warning')
-            return redirect(url_for('admin_novo_usuario'))
+            return redirect(url_for('admin.admin_novo_usuario'), allrestrictions=allrestrictions)
 
         if User.query.filter_by(email=email).first():
             flash('Esse email já está cadastrado.', 'warning')
-            return redirect(url_for('admin_novo_usuario'))
+            return redirect(url_for('admin.admin_novo_usuario', allrestrictions=allrestrictions))
 
         usuario = User(
             name=name,
             email=email,
-            password=hash(password)
+            password=hash(password),
+            cep=cep,
+            age=age,
         )
         usuario.role = 'usuario'
+
+        if restrictions_ids:
+            selected_restrictions = Restriction.query.filter(
+                Restriction.id.in_(restrictions_ids)
+            ).all()
+        
+            usuario.restrictions.extend(selected_restrictions)
 
         db.session.add(usuario)
         db.session.commit()
 
         flash('Usuário cadastrado com sucesso!', 'success')
-        return redirect(url_for('admin_usuarios'))
+        return redirect(url_for('admin.admin_usuarios'))
 
-    return render_template('admin/novo_usuario.html')
+    return render_template('admin/novo_usuario.html', allrestrictions=allrestrictions)
 
 
 @bp_admin.route('/usuarios/<int:id>/editar', methods=['GET', 'POST'])

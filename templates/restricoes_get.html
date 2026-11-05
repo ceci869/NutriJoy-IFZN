@@ -7,7 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body>
+<body class="bg-[#FEFAE6] m-0 p-0">
     {% set messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
         {% for categoria, msg in messages%}
@@ -17,9 +17,9 @@
         {% endfor %}
     {% endif %}
 
-    <h1 class="text-3xl font-semibold m-4">Restrições cadastradas</h1>
+    <h1 class="text-3xl font-semibold p-4">Restrições cadastradas</h1>
     <br>
-        <div class="overflow-x-auto m-4">
+        <div class="overflow-x-auto p-4">
         <table class="table">
             <!-- head -->
             <thead>
@@ -37,8 +37,8 @@
                         <th>{{ restriction.id }}</th>
                         <td>{{ restriction.name }}</td>
                         <td class="flex gap-3 justify-end">
-                            <a href="{{ url_for('restriction.update_restriction', id_restriction=restriction.id )}}" class="btn btn-primary">Editar</a>
-                            <a href="{{ url_for('restriction.delete_restriction', id_restriction=restriction.id )}}" class="btn btn-error">Excluir</a>
+                            <a href="{{ url_for('restriction.update_restriction', id_restriction=restriction.id )}}" class="btn btn-primary shadow-none text-white bg-[#5FB434] border-[#5FB434]">Editar</a>
+                            <a href="{{ url_for('restriction.delete_restriction', id_restriction=restriction.id )}}" class="btn btn-error shadow-none">Excluir</a>
                         </td>
                     </tr>
                     {% endfor %}
@@ -49,5 +49,8 @@
             </tbody>
         </table>
         </div>
+    <div class="w-[100%] flex justify-center">
+    <button type="submit" class="btn my-[15px] bg-[#5FB434] text-white px-[180px]"><a href="{{ url_for('restriction.add_restriction') }}">Cadastrar restrição</a></button>
+    </div>
 </body>
 </html>
