@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div>
+    {% for recipe in recipes %}
+        <p>{{ recipe['recipe_name'] }}</p>
+
+        <form action="{{ url_for('salvar_receita_cardapio') }}" method="post">
+
+            <input type="hidden" name="day" value="{{ day }}">
+            <input type="hidden" name="meal_type" value="{{ meal_type }}">
+            <input type="hidden" name="recipe_id" value="{{ recipe['recipe_id'] }}">
+            <input type="hidden" name="recipe_name" value="{{ recipe['recipe_name'] }}">
+
+            <button type="submit" class="btn btn-primary">
+                Adicionar
+            </button>
+
+        </form>
+    {% endfor %}
+    </div>
+    <br>
+    <div>
+        {% if current_page > 0 %}
+            <a href="{{ url_for('escolhareceitas', page=current_page - 1, busca=termo_busca) }}">Anterior</a>
+        {% endif %}
+
+        <span> Página {{current_page + 1}} </span>
+
+        {% if recipes|length > 0 %}
+            <a href="{{ url_for('escolhareceitas', page=current_page + 1, busca=termo_busca) }}">Próximo</a>
+        {% endif %}
+    </div>
+
+
+{% endblock %}
+
+{% block styles %}
+    <style>
+        #item3{
+            background-color: #FEF1AD;
+        }
+    </style>
+    {% endblock %}

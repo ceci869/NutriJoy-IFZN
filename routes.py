@@ -5,7 +5,7 @@ from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
 from time import sleep
 import json
-from fatsecret_service import obter_receitas, obter_detalhes_receitas
+from fatsecret_service import obter_receitas, obter_todas_receitas, obter_detalhes_receitas
 
 from models.User import User
 from models.Daily_Menu import DailyMenu
@@ -146,8 +146,78 @@ def catalogodereceitas():
 @app.route('/cardapiosemanal')
 @login_required
 def cardapiosemanal():
-    return render_template('cardapiosemanal.html')
+    user_id = current_user.id
+    saved_recipes = DailyMenu.query.filter_by(user_id=user_id).all()
 
+    print(f"\n[DEBUG RENDER] Total de receitas encontradas para o user {user_id}: {len(saved_recipes)}")
+
+
+    menu_dict = {}
+    for item in saved_recipes:
+        if item.day not in menu_dict:
+            menu_dict[item.day] = {}
+        if item.types not in menu_dict[item.day]:
+            menu_dict[item.day][item.types] = []
+
+        menu_dict[item.day][item.types].append(item)
+
+    print(f"[DEBUG RENDER] Dicionário gerado: {menu_dict}\n")
+
+    return render_template('cardapiosemanal.html', menu_dict=menu_dict, saved_recipes=saved_recipes)
+
+@app.route('/escolhareceitas')
+@login_required
+def escolhareceitas():
+    day = request.args.get('day')
+    meal_type = request.args.get('meal_type')
+
+    page_number = int(request.args.get('page', 0))
+
+    termo = request.args.get('busca', '')
+
+    recipes = obter_todas_receitas(page_number, termo)
+
+    return render_template('escolha_receitas.html', recipes=recipes, current_page=page_number, termo_busca=termo, day=day, meal_type=meal_type)
+
+@app.route('/salvarreceitacardapio', methods=['POST'])
+@login_required
+def salvar_receita_cardapio():
+    user_id = current_user.id
+    day = request.form.get('day')
+    meal_type = request.form.get('meal_type')
+    recipe_id = request.form.get('recipe_id')
+    recipe_name = request.form.get('recipe_name')
+
+    print(f"\n[DEBUG SAVING] Tentando salvar -> Dia: '{day}' | Refeicao: '{meal_type}' | Receita: '{recipe_name}'")
+
+    try:
+        new_item = DailyMenu(
+            day=day,
+            types=meal_type,
+            user_id=user_id,
+            recipe_id=recipe_id,
+            recipe_name=recipe_name
+        )
+        print("[DEBUG SAVING] Salvo com sucesso no banco de dados!")
+
+        db.session.add(new_item)
+        db.session.commit()
+    except Exception as e:
+        print(f"[DEBUG SAVING] ERRO AO SALVAR NO BANCO: {e}")
+        db.session.rollback()
+
+    return redirect(url_for('cardapiosemanal'))
+
+@app.route('/removerreceita/<int:item_id>', methods=['POST'])
+@login_required
+def remover_do_cardapio(item_id):
+    dailymenu_recipe = DailyMenu.query.get_or_404(item_id)
+
+    db.session.delete(dailymenu_recipe)
+    db.session.commit()
+
+    flash('Receita removida', 'success')
+    return redirect(url_for('cardapiosemanal'))
 
 @app.route('/gerenciarperfil', methods=['GET', 'POST'])
 @login_required

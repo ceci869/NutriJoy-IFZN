@@ -51,14 +51,32 @@
                         </div>
                     </td>
 
-                    {% for i in range(7) %}
-                    <td class="p-1.5 text-center border-l border-gray-100">
-                        <button type="button"
-                                class="w-9 h-8 rounded-md bg-gray-100 text-gray-400 hover:bg-[#E4EEDE] hover:text-[#488B26] transition-colors">
+                {% set days = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'] %}
+
+                    {% for day in days %}
+                    <td class="p-1.5 text-center border-l border-gray-100 align-top">
+                        
+                        {% if menu_dict and day in menu_dict and refeicao in menu_dict[day] %}
+                            {% for item in menu_dict[day][refeicao] %}
+                                <div class="bg-[#E4EEDE] text-[#488B26] p-1.5 rounded text-xs mb-2 flex justify-between items-center text-left">
+                                    <span class="truncate pr-1" title="{{ item.recipe_name }}">{{ item.recipe_name }}</span>
+                    
+                                    <form action="{{ url_for('remover_do_cardapio', item_id=item.id) }}" method="POST" class="inline">
+                                        <button type="submit" class="text-red-500 hover:text-red-700">
+                                            <i class="fa-solid fa-xmark"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
+                        <a href="{{ url_for('escolhareceitas', day=day, meal_type=refeicao) }}"
+                        class="inline-block w-9 h-8 rounded-md bg-gray-100 text-gray-400 hover:bg-[#E4EEDE] hover:text-[#488B26] transition-colors leading-8 text-center mt-1">
                             <i class="fa-solid fa-circle-plus"></i>
-                        </button>
+                        </a>
+                        
                     </td>
-                    {% endfor %}
+                    {% endfor %}    
 
                 </tr>
                 {% endfor %}
@@ -103,7 +121,7 @@
                     </p>
 
                     <h2 class="text-2xl font-bold text-black">
-                        12
+                        {{ saved_recipes|length }}
                     </h2>
 
                     <p class="text-xs text-gray-500">

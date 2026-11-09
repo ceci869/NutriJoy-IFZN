@@ -127,10 +127,6 @@ def update_user(id_user):
     if email:
         user.email = email
 
-    # if password:
-    #     password=hash(password)
-    #     user.password = password
-
     db.session.commit()
     flash("Usuário atualizado com sucesso!", "success")
     return redirect("/gerenciarperfil")

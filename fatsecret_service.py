@@ -73,6 +73,44 @@ def obter_receitas(number=40, standard_term=''):
         print(f'Não foi possível realizar a autenticação FatSecret: {e}')
         return None     
 
+def obter_todas_receitas(page_number, standard_term=''):
+    token = obter_access_token()
+
+    headers = {
+        'Authorization': f'Bearer {token}'
+    }
+
+    params = {
+        'method': 'recipes.search.v3',
+        'search_expression': standard_term,
+        'page_number': page_number,
+        'format': 'json',
+        'region': 'BR',
+        'language': 'pt'
+    }
+
+    try:
+        response = requests.get(API_BASE_URL, headers=headers, params=params)
+        response.raise_for_status()
+        data = response.json()
+
+        print('Resposta FatSecret', data)
+
+        recipes = data.get('recipes', {})
+        if not recipes or 'recipe' not in recipes:
+            return []
+
+        recipes_in_recipes = recipes['recipe']
+
+        if isinstance(recipes_in_recipes, dict):
+            recipes_in_recipes = [recipes_in_recipes]
+
+        return recipes_in_recipes
+
+    except requests.exceptions.RequestException as e:
+        print(f'Não foi possível realizar a autenticação FatSecret: {e}')
+        return None
+
 # Detalhes de uma receita
 def obter_detalhes_receitas(recipe_id):
 
