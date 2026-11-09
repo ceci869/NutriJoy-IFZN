@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block content2 %}
+{% block content %}
     {% set mensagens = get_flashed_messages(with_categories=true) %} 
     {% if mensagens %}     
     {% for category, msg in mensagens %}
@@ -9,8 +9,7 @@
     </div>
     {% endfor %}
     {% endif %}
-{% endblock %}
-{% block content %}
+
 <div class="px-4 md:px-8 pt-4 pb-12">
 
     <h1 class="text-3xl font-semibold text-black">

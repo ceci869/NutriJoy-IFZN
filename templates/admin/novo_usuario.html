@@ -1,19 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
 
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Cadastrar usuário | NutriJoy</title>
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-</head>
-<body class="bg-[#FEFAE6] h-[100vh]">
+    {% set mensagens = get_flashed_messages(with_categories=true) %} 
+        {% if mensagens %}     
+            {% for categoria, msg in mensagens %}
+                <div class="alert alert-{{categoria}}" role="alert">
+                    {{ msg }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    <a href="{{ url_for('admin.admin_usuarios') }}" class="p-4">
+        <label class="btn btn-square btn-ghost bg-[#FEFAE6]">
+                <!-- Sidebar toggle icon -->
+                <i class="fa-solid fa-angles-left"></i>
+        </label>
+    </a>
     <h1 class="text-3xl font-semibold p-4">Cadastrar usuário</h1>
-
-    {% for categoria, mensagem in get_flashed_messages(with_categories=true) %}
-        <p>{{ mensagem }}</p>
-    {% endfor %}
-
     <form method="post" action="{{ url_for('admin.admin_novo_usuario') }}" class="w-full max-w-lg mx-auto flex flex-col">
         <label for="name" class="text-black text-[18px] mb-[5px] mt-[50px]">Nome</label>
         <input type="text" id="name" name="name" required class="input input-bordered w-full">
@@ -32,7 +34,7 @@
 
         <div>
                     <label class="label" for="restricoes">
-                        <span class="label-text text-black text-[18px]">Restrições alimentares</span>
+                        <span class="label-text text-black text-[18px] mt-[20px]">Restrições alimentares</span>
                     </label> <br>
                     <div class="dropdown dropdown-bottom w-full">
                     <div tabindex="0" role="button"
@@ -76,5 +78,11 @@
         <button type="submit" class="btn mt-[15px] bg-[#5FB434] text-white">Cadastrar</button>
     </form>
 
-</body>
-</html>
+{% endblock %}
+{% block styles %}
+    <style>
+        #item5{
+            background-color: #FEF1AD;
+        }
+    </style>
+{% endblock %}

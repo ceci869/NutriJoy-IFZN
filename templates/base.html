@@ -26,8 +26,6 @@
             </label>
             <img src="{{ url_for('static', filename='img/logo-nutrijoy.png') }}" alt="Logo do NutriJoy">
         </nav>
-        {% block content2 %}
-        {% endblock %}
         <!-- Page content here -->
         <main class="p-4">
             {% block content %}
@@ -87,7 +85,7 @@
 
             {% if current_user.role == 'admin' %}
             <li>
-            <button id="item4" class="is-drawer-close:tooltip is-drawer-close:tooltip-right py-[12px] hover:bg-[#FEF1AD]" data-tip="Perfil">
+            <button id="item5" class="is-drawer-close:tooltip is-drawer-close:tooltip-right py-[12px] hover:bg-[#FEF1AD]" data-tip="Perfil">
                 <!-- Settings icon -->
                 <a href="{{ url_for('admin.admin_usuarios') }}" class="flex justify-baseline items-center">
                     <img src="{{ url_for('static', filename='img/perfil.svg') }}" alt="ìcone de perfil" class="w-[30px]">
@@ -96,7 +94,7 @@
             </button>
             </li>
             <li>
-            <button id="item4" class="is-drawer-close:tooltip is-drawer-close:tooltip-right py-[12px] hover:bg-[#FEF1AD]" data-tip="Perfil">
+            <button id="item6" class="is-drawer-close:tooltip is-drawer-close:tooltip-right py-[12px] hover:bg-[#FEF1AD]" data-tip="Perfil">
                 <!-- Settings icon -->
                 <a href="{{ url_for('admin.admin_nutricionistas') }}" class="flex justify-baseline items-center">
                     <img src="{{ url_for('static', filename='img/perfil.svg') }}" alt="ìcone de perfil" class="w-[30px]">
@@ -105,7 +103,7 @@
             </button>
             </li>
             <li>
-            <button id="item4" class="is-drawer-close:tooltip is-drawer-close:tooltip-right py-[12px] hover:bg-[#FEF1AD]" data-tip="Perfil">
+            <button id="item7" class="is-drawer-close:tooltip is-drawer-close:tooltip-right py-[12px] hover:bg-[#FEF1AD]" data-tip="Perfil">
                 <!-- Settings icon -->
                 <a href="{{ url_for('restriction.get_restrictions') }}" class="flex justify-baseline items-center">
                     <img src="{{ url_for('static', filename='img/perfil.svg') }}" alt="ìcone de perfil" class="w-[30px]">
@@ -118,7 +116,7 @@
             <!-- List item -->
             <li class="hover:bg-[#FEF1AD] rounded-[6px] py-[6px]">
             <form action="{{ url_for('user.logout') }}" method="POST" class="hover:bg-[#FEF1AD]">
-                <button id="item5" class="is-drawer-close:tooltip is-drawer-close:tooltip-right cursor-pointer flex justify-baseline items-center hover:bg-[#FEF1AD]" data-tip="Logout">
+                <button id="item8" class="is-drawer-close:tooltip is-drawer-close:tooltip-right cursor-pointer flex justify-baseline items-center hover:bg-[#FEF1AD]" data-tip="Logout">
         
                     <img src="{{ url_for('static', filename='img/sair.svg') }}" alt="ìcone de sair" class="w-[30px]">
                     <span class="is-drawer-close:hidden ml-[10px] font-semibold text-[16px]">Sair</span>

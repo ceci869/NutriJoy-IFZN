@@ -1,19 +1,14 @@
-
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerenciar usuários | NutriJoy</title>
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-</head>
-<body class="bg-[#FEFAE6] m-0 p-0">
+{% extends 'base.html' %}
+{% block content %}
+    {% set mensagens = get_flashed_messages(with_categories=true) %} 
+        {% if mensagens %}     
+            {% for categoria, msg in mensagens %}
+                <div class="alert alert-{{categoria}}" role="alert">
+                    {{ msg }}
+                </div>
+            {% endfor %}
+        {% endif %}
     <h1 class="text-3xl font-semibold p-4">Gerenciar usuários</h1>
-
-    {% for categoria, mensagem in get_flashed_messages(with_categories=true) %}
-        <p>{{ mensagem }}</p>
-    {% endfor %}
     <div class="overflow-x-auto p-4">
     <table class="table">
         <thead>
@@ -36,9 +31,13 @@
                     <a href="{{ url_for('admin.admin_editar_usuario', id=usuario.id) }}" class="btn btn-primary shadow-none text-white bg-[#5FB434] border-[#5FB434]">
                         Editar
                     </a>
-
-                    <a href="{{ url_for('admin.admin_excluir_usuario', id=usuario.id) }}" class="btn btn-error shadow-none">Excluir</a>
+                    <form action="{{ url_for('admin.admin_excluir_usuario', id=usuario.id) }}"
+                          method="POST"
+                          onsubmit="return confirm('Tem certeza que deseja excluir este usuário?')"
+                          class="btn btn-error shadow-none">
+                        <button type="submit">Excluir</button>
                     </form>
+                    
                 </td>
             </tr>
             {% else %}
@@ -52,5 +51,11 @@
     <div class="w-[100%] flex justify-center">
     <button type="submit" class="btn my-[15px] bg-[#5FB434] text-white px-[180px]"><a href="{{ url_for('admin.admin_novo_usuario') }}">Cadastrar usuário</a></button>
     </div>
-</body>
-</html>
+{% endblock %}
+{% block styles %}
+    <style>
+        #item5{
+            background-color: #FEF1AD;
+        }
+    </style>
+{% endblock %}

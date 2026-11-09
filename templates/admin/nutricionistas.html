@@ -1,29 +1,23 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerenciar nutricionistas | NutriJoy</title>
-</head>
-<body>
-    <h1>Gerenciar nutricionistas</h1>
+{% extends 'base.html' %}
+{% block content %}
 
-    <a href="{{ url_for('nutritionist.admin_novo_nutricionista') }}">
-        Cadastrar nutricionista
-    </a>
-
-    {% for categoria, mensagem in get_flashed_messages(with_categories=true) %}
-        <p>{{ mensagem }}</p>
-    {% endfor %}
-
-    <table>
+    {% set mensagens = get_flashed_messages(with_categories=true) %} 
+        {% if mensagens %}     
+            {% for categoria, msg in mensagens %}
+                <div class="alert alert-{{categoria}}" role="alert">
+                    {{ msg }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    <h1 class="text-3xl font-semibold p-4">Gerenciar nutricionistas</h1>
+    <div class="overflow-x-auto p-4">
+    <table class="table">
         <thead>
             <tr>
                 <th>CRN</th>
                 <th>Nome</th>
                 <th>Email</th>
                 <th>Especialização</th>
-                <th>Ações</th>
             </tr>
         </thead>
         <tbody>
@@ -33,18 +27,14 @@
                 <td>{{ nutricionista.name }}</td>
                 <td>{{ nutricionista.email }}</td>
                 <td>{{ nutricionista.specialization }}</td>
-                <td>
-                    <a href="{{ url_for('nutritionist.admin_editar_nutricionista', crn=nutricionista.crn) }}">
+                <td class="flex gap-3 justify-end">
+                    <a href="{{ url_for('nutritionist.admin_editar_nutricionista', crn=nutricionista.crn) }}" class="btn btn-primary shadow-none text-white bg-[#5FB434] border-[#5FB434]">
                         Editar
                     </a>
 
-                    <form
-                        action="{{ url_for('nutritionist.admin_excluir_nutricionista', crn=nutricionista.crn) }}"
-                        method="POST"
-                        onsubmit="return confirm('Tem certeza que deseja excluir este nutricionista?')"
-                    >
-                        <button type="submit">Excluir</button>
-                    </form>
+                    <a href="{{ url_for('nutritionist.admin_excluir_nutricionista', crn=nutricionista.crn) }}" class="btn btn-error shadow-none">
+                        Excluir
+                    </a>
                 </td>
             </tr>
             {% else %}
@@ -54,5 +44,19 @@
             {% endfor %}
         </tbody>
     </table>
-</body>
-</html>
+    </div>
+    <div class="w-[100%] flex justify-center">
+    <button type="submit" class="btn my-[15px] bg-[#5FB434] text-white px-[180px]">
+        <a href="{{ url_for('nutritionist.admin_novo_nutricionista') }}">
+        Cadastrar nutricionista
+        </a>
+    </button>
+ </div>
+{% endblock %}
+{% block styles %}
+    <style>
+        #item6{
+            background-color: #FEF1AD;
+        }
+    </style>
+{% endblock %}

@@ -9,6 +9,7 @@ from flask import Blueprint
 from app import lm
 import hashlib
 from flask import flash
+import os
 
 
 @lm.user_loader
@@ -118,7 +119,7 @@ def update_user(id_user):
     restrictions = request.form.getlist('restricao') 
 
     if not name and not email and not restrictions:
-        flash("Não é possível realizar a atualização!", "error")
+        flash("Nenhuma alteração foi realizada!", "warning")
         return redirect("/gerenciarperfil")
 
     if name:
@@ -265,7 +266,7 @@ def admin_excluir_usuario(id):
     db.session.commit()
 
     flash('Usuário excluído com sucesso!', 'success')
-    return redirect(url_for('admin_usuarios'))
+    return redirect(url_for('admin.admin_usuarios'))
 
 # Lista administrativa
 @bp_admin.route('/nutricionistas')
@@ -355,18 +356,38 @@ def admin_editar_nutricionista(crn):
     nutricionista = Nutritionist.query.get_or_404(crn)
 
     if request.method == 'POST':
-        nutricionista.name = request.form.get('name', '').strip()
-        nutricionista.email = request.form.get('email', '').strip()
-        nutricionista.specialization = request.form.get('specialization', '').strip()
-        nutricionista.experience_years = int(
-            request.form.get('experience_years', 0)
-        )
-        nutricionista.city = request.form.get('city', '').strip()
-        nutricionista.state = request.form.get('state', '').strip()
-        nutricionista.university = request.form.get('university', '').strip()
-        nutricionista.description = request.form.get('description', '').strip()
-
         file = request.files.get('profile_photo')
+        novos_dados = {
+            'name': request.form.get('name', '').strip(),
+            'email': request.form.get('email', '').strip(),
+            'specialization': request.form.get('specialization', '').strip(),
+            'experience_years': int(request.form.get('experience_years', 0)),
+            'city': request.form.get('city', '').strip(),
+            'state': request.form.get('state', '').strip(),
+            'university': request.form.get('university', '').strip(),
+            'description': request.form.get('description', '').strip()
+        }
+        sem_alteracoes = (
+            nutricionista.name == novos_dados['name']
+            and nutricionista.email == novos_dados['email']
+            and (nutricionista.specialization or '') == novos_dados['specialization']
+            and nutricionista.experience_years == novos_dados['experience_years']
+            and nutricionista.city == novos_dados['city']
+            and nutricionista.state == novos_dados['state']
+            and nutricionista.university == novos_dados['university']
+            and (nutricionista.description or '') == novos_dados['description']
+            and not (file and file.filename))
+        if sem_alteracoes:
+            flash("Nenhuma alteração foi realizada!", "warning")
+            return redirect(url_for('admin.admin_nutricionistas'))
+        nutricionista.name = novos_dados['name']
+        nutricionista.email = novos_dados['email']
+        nutricionista.specialization = novos_dados['specialization']
+        nutricionista.experience_years = novos_dados['experience_years']
+        nutricionista.city = novos_dados['city']
+        nutricionista.state = novos_dados['state']
+        nutricionista.university = novos_dados['university']
+        nutricionista.description = novos_dados['description']
 
         if file and file.filename:
             filename = secure_filename(str(crn) + '_' + file.filename)
