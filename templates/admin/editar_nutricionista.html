@@ -9,40 +9,42 @@
                 </div>
             {% endfor %}
         {% endif %}
-    <a href="{{ url_for('admin.admin_nutricionistas') }}" class="p-4">
+    <div class="pt-4 pl-4">
+    <a href="{{ url_for('admin.admin_nutricionistas') }}">
         <label class="btn btn-square btn-ghost bg-[#FEFAE6]">
                 <!-- Sidebar toggle icon -->
                 <i class="fa-solid fa-angles-left"></i>
         </label>
     </a>
+    </div>
     <h1 class="text-3xl font-semibold p-4">Editar nutricionista</h1>
     <form method="POST" enctype="multipart/form-data" action="{{ url_for('admin.admin_editar_nutricionista', crn=nutricionista.crn) }}" class="w-full max-w-lg mx-auto flex flex-col">
         <label for="name" class="text-black text-[18px] mb-[5px] mt-[50px]">Nome</label>
-        <input type="text" id="name" name="name" value="{{ nutricionista.name }}" class="input input-bordered w-full">
+        <input type="text" id="name" name="name" placeholder="{{ nutricionista.name }}" class="text-gray-600 input input-bordered w-full">
         
         <label for="crn" class="text-black text-[18px] mb-[5px] mt-[20px]">CRN</label>
-        <input type="text" id="crn" value="{{ nutricionista.crn }}" disabled class="input input-bordered w-full">
+        <input type="text" id="crn" placeholder="{{ nutricionista.crn }}" disabled class="text-gray-600 input input-bordered w-full">
 
         <label for="email" class="text-black text-[18px] mb-[5px] mt-[20px]">Email</label>
-        <input type="email" id="email" name="email" value="{{ nutricionista.email }}" class="input input-bordered w-full">
+        <input type="email" id="email" name="email" placeholder="{{ nutricionista.email }}" class="text-gray-600 input input-bordered w-full">
 
         <label for="specialization" class="text-black text-[18px] mb-[5px] mt-[20px]">Especialização</label>
-        <input type="text" id="specialization" name="specialization" value="{{ nutricionista.specialization or '' }}"  class="input input-bordered w-full">
+        <input type="text" id="specialization" name="specialization" placeholder="{{ nutricionista.specialization or '' }}"  class="text-gray-600 input input-bordered w-full">
 
         <label for="experience_years" class="text-black text-[18px] mb-[5px] mt-[20px]">Anos de experiência</label>
-        <input type="number" id="experience_years" name="experience_years" min="0" value="{{ nutricionista.experience_years }}" class="input input-bordered w-full">
+        <input type="number" id="experience_years" name="experience_years" min="0" placeholder="{{ nutricionista.experience_years }}" class="text-gray-600 input input-bordered w-full">
 
         <label for="city" class="text-black text-[18px] mb-[5px] mt-[20px]">Cidade</label>
-        <input type="text" id="city" name="city" value="{{ nutricionista.city }}" class="input input-bordered w-full">
+        <input type="text" id="city" name="city" placeholder="{{ nutricionista.city }}" class="text-gray-600 input input-bordered w-full">
 
         <label for="state" class="text-black text-[18px] mb-[5px] mt-[20px]">Estado</label>
-        <input type="text" id="state" name="state" value="{{ nutricionista.state }}" class="input input-bordered w-full">
+        <input type="text" id="state" name="state" placeholder="{{ nutricionista.state }}" class=" text-gray-600 input input-bordered w-full">
 
         <label for="university" class="text-black text-[18px] mb-[5px] mt-[20px]">Universidade</label>
-        <input type="text" id="university" name="university" value="{{ nutricionista.university }}" class="input input-bordered w-full">
+        <input type="text" id="university" name="university" placeholder="{{ nutricionista.university }}" class="text-gray-600 input input-bordered w-full">
 
         <label for="description" class="text-black text-[18px] mb-[5px] mt-[20px]">Descrição</label>
-        <textarea id="description" name="description" class="input input-bordered w-full h-[80px]">{{ nutricionista.description }}</textarea>
+        <textarea id="description" name="description" placeholder="{{ nutricionista.description }}" class="input input-bordered w-full h-[80px] text-gray-600"></textarea>
 
         <div>
                     <h2 class="text-black text-[18px] mb-[5px] mt-[20px]">Alterar foto de perfil</h2>

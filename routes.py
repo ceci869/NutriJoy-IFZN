@@ -152,8 +152,9 @@ def cardapiosemanal():
 @app.route('/gerenciarperfil', methods=['GET', 'POST'])
 @login_required
 def gerenciarperfil():
+    allrestrictions = Restriction.query.all()
     opcao = 'Nenhum selecionado'
-    return render_template('gerenciarperfil.html', opcao=opcao)
+    return render_template('gerenciarperfil.html', opcao=opcao, allrestrictions=allrestrictions)
 
 
 @app.route('/perfilnutricionista/<int:nutritionist_crn>')

@@ -32,9 +32,12 @@
                         Editar
                     </a>
 
-                    <a href="{{ url_for('nutritionist.admin_excluir_nutricionista', crn=nutricionista.crn) }}" class="btn btn-error shadow-none">
-                        Excluir
-                    </a>
+                    <form action="{{ url_for('nutritionist.admin_excluir_nutricionista', crn=nutricionista.crn) }}"
+                          method="POST"
+                          onsubmit="return confirm('Tem certeza que deseja excluir este nutricionista?')"
+                          class="btn btn-error shadow-none">
+                        <button type="submit">Excluir</button>
+                    </form>
                 </td>
             </tr>
             {% else %}
