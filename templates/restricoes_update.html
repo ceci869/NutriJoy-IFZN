@@ -9,7 +9,7 @@
     <h1 class="text-3xl font-semibold p-4">Atualizar restrição</h1>
     <form action="{{ url_for('restriction.update_restriction', id_restriction=restriction.id) }}" method="post" class="w-full max-w-lg mx-auto flex flex-col">
         <label for="name" class="text-black text-[18px] mb-[5px] mt-[50px]">Digite o novo nome:</label>
-        <input type="text" name="name" class="input input-bordered w-full">
+        <input type="text" name="name" class="input input-bordered w-full" placeholder="{{ restriction.name }}">
 
         <button type="submit" class="btn mt-[15px] bg-[#5FB434] text-white">Salvar alteração</button>
     </form>
