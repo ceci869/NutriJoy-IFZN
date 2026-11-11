@@ -1,44 +1,521 @@
+
 {% extends "base.html" %}
 
 {% block content %}
-    <div>
-    {% for recipe in recipes %}
-        <p>{{ recipe['recipe_name'] }}</p>
 
-        <form action="{{ url_for('salvar_receita_cardapio') }}" method="post">
+<div class="w-full max-w-[1450px] mx-auto px-8 py-8 pb-28">
 
-            <input type="hidden" name="day" value="{{ day }}">
-            <input type="hidden" name="meal_type" value="{{ meal_type }}">
-            <input type="hidden" name="recipe_id" value="{{ recipe['recipe_id'] }}">
-            <input type="hidden" name="recipe_name" value="{{ recipe['recipe_name'] }}">
+    <div class="flex items-start gap-5 mb-10">
+        <a href="{{ url_for('cardapiosemanal') }}" class="text-2xl text-base-content mt-1 hover:text-success">
+            <i class="fa-solid fa-arrow-left"></i>
+        </a>
 
-            <button type="submit" class="btn btn-primary">
-                Adicionar
+        <div>
+            <h1 class="text-2xl font-bold text-base-content">
+                Selecionar receitas para o {{ meal_type }}
+            </h1>
+            <p class="text-base text-base-content/60 mt-1">
+                Escolha uma ou mais receitas para adicionar à sua semana.
+            </p>
+        </div>
+    </div>
+
+    <form method="GET" action="{{ url_for('escolhareceitas') }}" class="flex items-center gap-3 mb-5">
+        <input type="hidden" name="day" value="{{ day }}">
+        <input type="hidden" name="meal_type" value="{{ meal_type }}">
+
+        <div class="flex items-center w-full h-12 px-4 gap-3 bg-base-200 rounded-xl">
+            <i class="fa-solid fa-magnifying-glass text-lg text-base-content/50"></i>
+            <input type="search" name="busca" class="grow bg-transparent outline-none border-none text-sm"
+                placeholder="Buscar receitas" value="{{ termo_busca }}">
+            <button type="submit" class="text-base-content/50 hover:text-[#488B26] transition-colors"
+                aria-label="Buscar">
+                <i class="fa-solid fa-arrow-right text-lg"></i>
             </button>
+        </div>
+    </form>
 
-        </form>
-    {% endfor %}
+    <!-- Filtros -->
+    <div class="flex flex-wrap items-center gap-2 mb-5" id="filtros-receitas">
+
+        <button type="button" data-filtro="todas"
+            class="filtro-btn px-5 py-2 rounded-full text-sm bg-[#FFF0A8] text-[#252525] border border-[#FFF0A8]">
+            Todas
+        </button>
+
+        <button type="button" data-filtro="rapidas"
+            class="filtro-btn px-5 py-2 rounded-full text-sm bg-white text-[#555555] border border-[#D6D6D6]">
+            Rápidas
+        </button>
+
+        <button type="button" data-filtro="vegetarianas"
+            class="filtro-btn px-5 py-2 rounded-full text-sm bg-white text-[#555555] border border-[#D6D6D6]">
+            Vegetarianas
+        </button>
+
+        <button type="button" data-filtro="veganas"
+            class="filtro-btn px-5 py-2 rounded-full text-sm bg-white text-[#555555] border border-[#D6D6D6]">
+            Veganas
+        </button>
+
+        <button type="button" data-filtro="sem-lactose"
+            class="filtro-btn px-5 py-2 rounded-full text-sm bg-white text-[#555555] border border-[#D6D6D6]">
+            Sem lactose
+        </button>
+
     </div>
-    <br>
-    <div>
-        {% if current_page > 0 %}
-            <a href="{{ url_for('escolhareceitas', page=current_page - 1, busca=termo_busca) }}">Anterior</a>
-        {% endif %}
 
-        <span> Página {{current_page + 1}} </span>
+    <form action="{{ url_for('salvar_receita_cardapio') }}" method="POST" id="form-receitas">
 
-        {% if recipes|length > 0 %}
-            <a href="{{ url_for('escolhareceitas', page=current_page + 1, busca=termo_busca) }}">Próximo</a>
-        {% endif %}
+        <input type="hidden" name="day" value="{{ day }}">
+        <input type="hidden" name="meal_type" value="{{ meal_type }}">
+
+        <div id="grid-receitas" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+
+            {% for recipe in recipes %}
+
+            <div class="card bg-base-100 border border-base-300 rounded-xl overflow-hidden transition-all hover:shadow-md has-[:checked]:border-2 has-[:checked]:border-[#F0A000] has-[:checked]:bg-[#FFFBE9] receita-card"
+                data-tempo="{{ recipe.prep_time_min or '' }}"
+                data-vegetariana="{{ 'true' if recipe.get('vegetarian') else 'false' }}"
+                data-vegana="{{ 'true' if recipe.get('vegan') else 'false' }}"
+                data-sem-lactose="{{ 'true' if recipe.get('lactose_free') else 'false' }}">
+
+                <figure class="relative h-44 w-full bg-base-200">
+
+                    {% if recipe.recipe_image %}
+                    <img src="{{ recipe.recipe_image }}" alt="{{ recipe.recipe_name }}"
+                        class="w-full h-full object-cover" loading="lazy">
+                    {% else %}
+                    <div class="flex flex-col items-center justify-center gap-2 text-base-content/40">
+                        <i class="fa-solid fa-utensils text-3xl"></i>
+                        <span class="text-sm">Imagem indisponível</span>
+                    </div>
+                    {% endif %}
+
+                    <input type="checkbox" name="recipe_id" value="{{ recipe.recipe_id }}"
+                        data-recipe-name="{{ recipe.recipe_name }}"
+                        class="checkbox checkbox-success absolute top-2 right-2 z-10 bg-white border-white checked:bg-[#488B26] checked:border-[#488B26]">
+
+                </figure>
+
+                <div class="card-body p-3 gap-2">
+                    <h2 class="card-title text-base font-semibold">
+                        {{ recipe.recipe_name }}
+                    </h2>
+
+                    <div class="flex items-center gap-2 text-sm text-base-content/50">
+                        <i class="fa-regular fa-clock"></i>
+                        {% if recipe.prep_time_min %}
+                        {{ recipe.prep_time_min }} min
+                        {% else %}
+                        Tempo não informado
+                        {% endif %}
+                    </div>
+
+                    <button type="button" onclick="abrirDetalhes('{{ recipe.recipe_id }}')"
+                        class="btn btn-outline btn-sm w-full rounded-full border-[#488B26] text-[#488B26] hover:bg-[#488B26] hover:text-white mt-2">
+                        <i class="fa-regular fa-eye"></i>
+                        Ver detalhes
+                    </button>
+                </div>
+
+            </div>
+
+            {% else %}
+
+            <div class="col-span-full text-center py-16 text-base-content/50">
+                <i class="fa-solid fa-utensils text-4xl mb-3"></i>
+                <p>Nenhuma receita encontrada.</p>
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        <p id="nenhuma-receita-filtro" class="hidden text-center py-10 text-base-content/50">
+            Nenhuma receita corresponde a esse filtro.
+        </p>
+
+        <div class="flex justify-center items-center gap-6 mt-10 mb-6">
+
+            {% if current_page > 0 %}
+            <a href="{{ url_for(
+                    'escolhareceitas',
+                    page=current_page - 1,
+                    busca=termo_busca,
+                    day=day,
+                    meal_type=meal_type
+                ) }}" class="btn btn-outline btn-sm rounded-full">
+                <i class="fa-solid fa-chevron-left"></i>
+                Anterior
+            </a>
+            {% endif %}
+
+            <span class="text-sm text-base-content/60">
+                Página {{ current_page + 1 }}
+            </span>
+
+            {% if recipes|length > 0 %}
+            <a href="{{ url_for(
+                    'escolhareceitas',
+                    page=current_page + 1,
+                    busca=termo_busca,
+                    day=day,
+                    meal_type=meal_type
+                ) }}" class="btn btn-outline btn-sm rounded-full">
+                Próximo
+                <i class="fa-solid fa-chevron-right"></i>
+            </a>
+            {% endif %}
+
+        </div>
+
+        <div id="barra-selecao"
+            class="fixed bottom-0 left-[310px] w-[calc(100%-310px)] bg-base-100 border-t border-base-300 px-8 py-4 z-50 hidden">
+
+            <div class="max-w-[1450px] mx-auto flex items-center justify-between">
+
+                <div class="flex items-center gap-3">
+                    <div class="bg-[#488B26] text-white rounded-full w-7 h-7 flex items-center justify-center">
+                        <i class="fa-solid fa-check text-sm"></i>
+                    </div>
+
+                    <span class="text-sm font-medium">
+                        <span id="quantidade-selecionadas">0</span>
+                        receitas selecionadas
+                    </span>
+                </div>
+
+                <button type="submit"
+                    class="btn rounded-full bg-[#488B26] hover:bg-[#36701b] text-white border-none px-8">
+                    <i class="fa-solid fa-plus"></i>
+                    Adicionar ao cardápio
+                </button>
+
+            </div>
+        </div>
+
+    </form>
+
+</div>
+
+<dialog id="modal-detalhes" class="modal">
+    <div class="modal-box max-w-5xl bg-[#FDFCF9] p-0">
+
+        <div class="flex justify-between items-center px-6 py-4 border-b border-[#E8E3DB]">
+            <h2 class="text-xl font-bold text-[#252D3B]">
+                Detalhes da receita
+            </h2>
+
+            <button type="button" onclick="document.getElementById('modal-detalhes').close()"
+                class="btn btn-sm btn-circle btn-ghost">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div id="detalhes-carregando" class="py-16 flex flex-col items-center gap-3">
+            <span class="loading loading-spinner loading-lg text-[#488B26]"></span>
+            <p class="text-base-content/60">Carregando receita...</p>
+        </div>
+
+        <div id="detalhes-conteudo" class="hidden">
+            <div class="flex flex-col gap-10 p-8">
+
+                <div class="bg-white border border-[#E8E3DB] rounded-2xl shadow-lg p-8 flex flex-col md:flex-row gap-8">
+                    <div id="container-imagem" class="hidden w-full md:w-[240px] h-[225px] flex-shrink-0">
+                        <img id="detalhe-imagem" alt="" class="w-full h-full object-cover rounded-xl">
+                    </div>
+
+                    <div class="flex flex-col flex-grow">
+                        <h1 id="detalhe-nome" class="text-[28px] font-bold text-[#252D3B] mb-2"></h1>
+
+                        <div class="flex flex-wrap gap-3 mb-6 text-[#777777]">
+                            <span id="detalhe-tempo-container" class="hidden bg-[#F5F2EB] rounded-md px-2 py-1 text-sm">
+                                <i class="fa-regular fa-clock"></i>
+                                <span id="detalhe-tempo"></span>
+                            </span>
+
+                            <span id="detalhe-porcoes-container"
+                                class="hidden bg-[#F5F2EB] rounded-md px-2 py-1 text-sm">
+                                <i class="fa-solid fa-bowl-food"></i>
+                                <span id="detalhe-porcoes"></span>
+                            </span>
+                        </div>
+
+                        <p id="detalhe-descricao" class="text-[#596579] text-[16px] leading-6 text-justify"></p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                    <div class="bg-white border border-[#E8E3DB] rounded-2xl shadow-lg p-7 min-h-[400px]">
+                        <h2 class="text-[23px] font-semibold text-[#252D3B] mb-7">
+                            <i class="fa-solid fa-cart-shopping text-[#F0583E] mr-2"></i>
+                            Ingredientes
+                        </h2>
+                        <div id="detalhe-ingredientes" class="flex flex-col gap-5"></div>
+                    </div>
+
+                    <div class="bg-white border border-[#E8E3DB] rounded-2xl shadow-lg p-7 min-h-[400px]">
+                        <h2 class="text-[23px] font-semibold text-[#252D3B] mb-7">
+                            <i class="fa-solid fa-cloud text-[#488B26] mr-2"></i>
+                            Modo de preparo
+                        </h2>
+                        <div id="detalhe-preparo-lista" class="flex flex-col gap-5"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="detalhes-erro" class="hidden p-8 text-center text-error">
+            Não foi possível carregar os detalhes desta receita.
+        </div>
     </div>
+</dialog>
 
+<script>
+    const formReceitas = document.getElementById('form-receitas');
+    const checkboxes = document.querySelectorAll('input[name="recipe_id"]');
+    const barraSelecao = document.getElementById('barra-selecao');
+    const quantidade = document.getElementById('quantidade-selecionadas');
+
+    function atualizarSelecao() {
+        const selecionadas = document.querySelectorAll(
+            'input[name="recipe_id"]:checked'
+        );
+
+        quantidade.textContent = selecionadas.length;
+
+        if (selecionadas.length > 0) {
+            barraSelecao.classList.remove('hidden');
+        } else {
+            barraSelecao.classList.add('hidden');
+        }
+    }
+
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', atualizarSelecao);
+    });
+
+    formReceitas.addEventListener('submit', function (event) {
+        const selecionadas = document.querySelectorAll(
+            'input[name="recipe_id"]:checked'
+        );
+
+        if (selecionadas.length === 0) {
+            event.preventDefault();
+            return;
+        }
+
+        formReceitas.querySelectorAll('.nome-receita-hidden').forEach(input => {
+            input.remove();
+        });
+
+        selecionadas.forEach(checkbox => {
+            const input = document.createElement('input');
+
+            input.type = 'hidden';
+            input.name = 'recipe_name';
+            input.value = checkbox.dataset.recipeName;
+            input.classList.add('nome-receita-hidden');
+
+            formReceitas.appendChild(input);
+        });
+    });
+
+    // Filtros
+    const botoesFiltro = document.querySelectorAll('.filtro-btn');
+    const cardsReceitas = document.querySelectorAll('.receita-card');
+    const mensagemFiltro = document.getElementById('nenhuma-receita-filtro');
+
+    botoesFiltro.forEach(botao => {
+        botao.addEventListener('click', () => {
+
+            const filtro = botao.dataset.filtro;
+            let quantidadeVisivel = 0;
+
+            botoesFiltro.forEach(item => {
+                item.classList.remove(
+                    'bg-[#FFF0A8]',
+                    'border-[#FFF0A8]',
+                    'text-[#252525]'
+                );
+
+                item.classList.add(
+                    'bg-white',
+                    'border-[#D6D6D6]',
+                    'text-[#555555]'
+                );
+            });
+
+            botao.classList.remove(
+                'bg-white',
+                'border-[#D6D6D6]',
+                'text-[#555555]'
+            );
+
+            botao.classList.add(
+                'bg-[#FFF0A8]',
+                'border-[#FFF0A8]',
+                'text-[#252525]'
+            );
+
+            cardsReceitas.forEach(card => {
+
+                const tempo = Number(card.dataset.tempo);
+                const vegetariana = card.dataset.vegetariana === 'true';
+                const vegana = card.dataset.vegana === 'true';
+                const semLactose = card.dataset.semLactose === 'true';
+
+                let mostrar = true;
+
+                if (filtro === 'rapidas') {
+                    mostrar = tempo > 0 && tempo <= 30;
+                } else if (filtro === 'vegetarianas') {
+                    mostrar = vegetariana;
+                } else if (filtro === 'veganas') {
+                    mostrar = vegana;
+                } else if (filtro === 'sem-lactose') {
+                    mostrar = semLactose;
+                }
+
+                card.classList.toggle('hidden', !mostrar);
+
+                if (mostrar) {
+                    quantidadeVisivel++;
+                }
+            });
+
+            mensagemFiltro.classList.toggle('hidden', quantidadeVisivel > 0);
+        });
+    });
+
+    async function abrirDetalhes(recipeId) {
+        const modal = document.getElementById('modal-detalhes');
+        const carregando = document.getElementById('detalhes-carregando');
+        const conteudo = document.getElementById('detalhes-conteudo');
+        const erro = document.getElementById('detalhes-erro');
+
+        modal.showModal();
+
+        carregando.classList.remove('hidden');
+        conteudo.classList.add('hidden');
+        erro.classList.add('hidden');
+
+        try {
+            const response = await fetch(`/receita/${recipeId}/detalhes-json`);
+
+            if (!response.ok) {
+                throw new Error('Erro ao buscar receita');
+            }
+
+            const recipe = await response.json();
+
+            document.getElementById('detalhe-nome').textContent =
+                recipe.recipe_name || '';
+
+            document.getElementById('detalhe-descricao').textContent =
+                recipe.recipe_description || '';
+
+            const imagem = document.getElementById('detalhe-imagem');
+            const containerImagem = document.getElementById('container-imagem');
+
+            if (recipe.recipe_image) {
+                imagem.src = recipe.recipe_image;
+                imagem.alt = recipe.recipe_name || 'Imagem da receita';
+                containerImagem.classList.remove('hidden');
+            } else {
+                imagem.removeAttribute('src');
+                containerImagem.classList.add('hidden');
+            }
+
+            const tempoContainer = document.getElementById('detalhe-tempo-container');
+            const tempo = document.getElementById('detalhe-tempo');
+
+            const tempoPreparo =
+                recipe.preparation_time_min || recipe.cooking_time_min;
+
+            if (tempoPreparo) {
+                tempo.textContent = `${tempoPreparo} min`;
+                tempoContainer.classList.remove('hidden');
+            } else {
+                tempoContainer.classList.add('hidden');
+            }
+
+            const porcoesContainer = document.getElementById('detalhe-porcoes-container');
+            const porcoes = document.getElementById('detalhe-porcoes');
+
+            if (recipe.servings) {
+                const quantidade = Number(recipe.servings);
+                porcoes.textContent =
+                    `${recipe.servings} ${quantidade === 1 ? 'porção' : 'porções'}`;
+                porcoesContainer.classList.remove('hidden');
+            } else {
+                porcoesContainer.classList.add('hidden');
+            }
+
+            const ingredientes = document.getElementById('detalhe-ingredientes');
+            ingredientes.replaceChildren();
+
+            if (recipe.ingredients && recipe.ingredients.length > 0) {
+                recipe.ingredients.forEach(ingredient => {
+                    const item = document.createElement('div');
+                    item.className = 'flex items-start gap-4 text-[#596579] text-[16px]';
+
+                    const texto = document.createElement('span');
+                    texto.textContent =
+                        ingredient.description ||
+                        [ingredient.units, ingredient.quantity, ingredient.name]
+                            .filter(Boolean).join(' ') ||
+                        ingredient.food_name ||
+                        '';
+
+                    item.appendChild(texto);
+                    ingredientes.appendChild(item);
+                });
+            } else {
+                const mensagem = document.createElement('p');
+                mensagem.className = 'text-[#999999]';
+                mensagem.textContent = 'Ingredientes não disponíveis.';
+                ingredientes.appendChild(mensagem);
+            }
+
+            const preparo = document.getElementById('detalhe-preparo-lista');
+            preparo.replaceChildren();
+
+            if (recipe.directions && recipe.directions.length > 0) {
+                recipe.directions.forEach((direction, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'flex items-start gap-3';
+
+                    const numero = document.createElement('span');
+                    numero.className =
+                        'flex-shrink-0 w-8 h-8 rounded-full bg-[#FEF1AD] text-[#252D3B] font-semibold flex items-center justify-center';
+                    numero.textContent = direction.number || index + 1;
+
+                    const descricao = document.createElement('p');
+                    descricao.className =
+                        'text-[#596579] text-[16px] leading-5 text-justify';
+                    descricao.textContent = direction.description || '';
+
+                    item.append(numero, descricao);
+                    preparo.appendChild(item);
+                });
+            } else {
+                const mensagem = document.createElement('p');
+                mensagem.className = 'text-[#999999]';
+                mensagem.textContent = 'Modo de preparo não disponível.';
+                preparo.appendChild(mensagem);
+            }
+
+            carregando.classList.add('hidden');
+            conteudo.classList.remove('hidden');
+
+        } catch (error) {
+            console.error(error);
+            carregando.classList.add('hidden');
+            erro.classList.remove('hidden');
+        }
+    }
+</script>
 
 {% endblock %}
-
-{% block styles %}
-    <style>
-        #item3{
-            background-color: #FEF1AD;
-        }
-    </style>
-    {% endblock %}

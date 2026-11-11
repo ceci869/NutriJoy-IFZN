@@ -23,6 +23,23 @@ db.init_app(app)
 migrate = Migrate(app, db)
 
 import routes
+def extrair_imagem_receita(recipe):
+    images = recipe.get('recipe_image') or recipe.get('recipe_images')
 
+    if isinstance(images, dict):
+        images = (
+            images.get('recipe_image')
+            or images.get('image_url')
+            or images.get('url')
+        )
+
+    if isinstance(images, list):
+        images = images[0] if images else None
+
+    if isinstance(images, dict):
+        images = images.get('image_url') or images.get('url')
+
+    return images if isinstance(images, str) else None
+    
 if __name__ == "__main__":
     app.start(debug=True)

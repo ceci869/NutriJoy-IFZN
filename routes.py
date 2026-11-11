@@ -6,6 +6,7 @@ from werkzeug.utils import secure_filename
 from time import sleep
 import json
 from fatsecret_service import obter_receitas, obter_todas_receitas, obter_detalhes_receitas
+from flask import render_template, url_for, redirect, request, flash, jsonify
 
 from models.User import User
 from models.Daily_Menu import DailyMenu
@@ -76,47 +77,57 @@ def homepage():
     return render_template('homepage.html', nutritionists=nutritionists, recipes=recipes)
 
 
+
 @app.route('/catalogodereceitas')
 @login_required
 def catalogodereceitas():
     recipes = obter_receitas()
 
-    #Recomendadas
     for recipe in recipes:
         recipe['recommended'] = True
-        recipe['prep_time_min'] = '0'
+        recipe['prep_time_min'] = ''
 
-        r = recipe.get('recipe_id') 
+        recipe_id = recipe.get('recipe_id')
 
-        details = obter_detalhes_receitas(r)
-        if not details:
-            return []
+        details = obter_detalhes_receitas(recipe_id)
 
-        if isinstance(details, dict):
-            details = [details]
+        if isinstance(details, list):
+            details = details[0] if details else {}
 
-        for detail in details:
-            if detail.get('rating'):
-                if detail.get('rating') < 4:
+        if isinstance(details, dict) and 'recipe' in details:
+            details = details['recipe']
+
+        if not isinstance(details, dict):
+            details = {}
+
+        # Avaliação
+        rating = details.get('rating') or recipe.get('rating')
+
+        if rating:
+            try:
+                if float(rating) < 4:
                     recipe['recommended'] = False
-                    break
+            except (ValueError, TypeError):
+                pass
 
-        if not recipe['recommended']:
-            break
-
-        # Prep time
-        for detail in details:
-            recipe['prep_time_min'] = detail.get('preparation_time_min')
-            recipe['prep_time_min'] = detail.get('preparation_time_min', '')
+        # Tempo de preparo
+        recipe['prep_time_min'] = (
+            details.get('preparation_time_min')
+            or recipe.get('preparation_time_min')
+            or details.get('cooking_time_min')
+            or recipe.get('cooking_time_min')
+            or ''
+        )
 
         # Veganas e vegetarianas
-        recipe['vegan'] = True        
+        recipe['vegan'] = True
         recipe['vegetarian'] = True
-                
-        ingredients = recipe.get('recipe_ingredients', [])        
-        
+
+        ingredients = details.get('ingredients', recipe.get('recipe_ingredients', []))
+
         if isinstance(ingredients, dict):
             ingredients = ingredients.get('ingredient', [])
+
         if isinstance(ingredients, dict):
             ingredients = [ingredients]
 
@@ -124,21 +135,11 @@ def catalogodereceitas():
             ingredient_name = item.get('food_name', '') if isinstance(item, dict) else str(item)
             name_lower = ingredient_name.lower()
 
-            if recipe['vegan']:
-                for non_vegan in NON_VEGAN_INGREDIENTS:
-                    if non_vegan in name_lower:
-                        recipe['vegan'] = False
-                        break 
-            
-            if recipe['vegetarian']:
-                for non_vegetarian in NON_VEGETARIAN_INGREDIENTS:
-                    if non_vegetarian in name_lower:
-                        recipe['vegetarian'] = False
-                        break
+            if any(non_vegan in name_lower for non_vegan in NON_VEGAN_INGREDIENTS):
+                recipe['vegan'] = False
 
-            if not recipe['vegetarian'] and not recipe['vegan']:
-                break     
-        
+            if any(non_vegetarian in name_lower for non_vegetarian in NON_VEGETARIAN_INGREDIENTS):
+                recipe['vegetarian'] = False
 
     return render_template('catalogo_de_receitas.html', recipes=recipes)
 
@@ -165,6 +166,26 @@ def cardapiosemanal():
 
     return render_template('cardapiosemanal.html', menu_dict=menu_dict, saved_recipes=saved_recipes)
 
+def extrair_imagem_receita(recipe):
+    images = recipe.get('recipe_image') or recipe.get('recipe_images')
+
+    if isinstance(images, dict):
+        images = (
+            images.get('recipe_image')
+            or images.get('image_url')
+            or images.get('url')
+        )
+
+    if isinstance(images, list):
+        images = images[0] if images else None
+
+    if isinstance(images, dict):
+        images = images.get('image_url') or images.get('url')
+
+    return images if isinstance(images, str) else None
+    
+
+
 @app.route('/escolhareceitas')
 @login_required
 def escolhareceitas():
@@ -172,12 +193,168 @@ def escolhareceitas():
     meal_type = request.args.get('meal_type')
 
     page_number = int(request.args.get('page', 0))
-
     termo = request.args.get('busca', '')
 
-    recipes = obter_todas_receitas(page_number, termo)
+    recipes = obter_todas_receitas(page_number, termo) or []
 
-    return render_template('escolha_receitas.html', recipes=recipes, current_page=page_number, termo_busca=termo, day=day, meal_type=meal_type)
+    # Ingredientes que indicam presença de lactose
+    ingredientes_com_lactose = [
+        'milk', 'leite', 'cheese', 'queijo',
+        'butter', 'manteiga', 'cream', 'creme de leite',
+        'yogurt', 'iogurte', 'whey', 'soro de leite',
+        'casein', 'caseína', 'lactose',
+        'milk powder', 'leite em pó',
+        'condensed milk', 'leite condensado',
+        'evaporated milk', 'buttermilk',
+        'nata', 'requeijão'
+    ]
+
+    # Leites vegetais que não devem ser classificados como lactose
+    leites_vegetais = [
+        'leite de coco',
+        'leite de soja',
+        'leite de amêndoas',
+        'leite de aveia',
+        'leite de arroz',
+        'leite vegetal',
+        'coconut milk',
+        'soy milk',
+        'almond milk',
+        'oat milk',
+        'rice milk'
+    ]
+
+    for recipe in recipes:
+
+        # Imagem da receita
+        recipe['recipe_image'] = extrair_imagem_receita(recipe)
+
+        # Tempo de preparo
+        recipe['prep_time_min'] = (
+            recipe.get('preparation_time_min')
+            or recipe.get('cooking_time_min')
+            or ''
+        )
+
+        try:
+            # Busca os detalhes da receita
+            details = obter_detalhes_receitas(recipe.get('recipe_id'))
+
+            if isinstance(details, list):
+                details = details[0] if details else {}
+
+            if isinstance(details, dict) and 'recipe' in details:
+                details = details['recipe']
+
+            if not isinstance(details, dict):
+                details = {}
+
+            # Completa imagem e tempo com os detalhes
+            if not recipe['recipe_image']:
+                recipe['recipe_image'] = extrair_imagem_receita(details)
+
+            if not recipe['prep_time_min']:
+                recipe['prep_time_min'] = (
+                    details.get('preparation_time_min')
+                    or details.get('cooking_time_min')
+                    or ''
+                )
+
+            # Obtém os ingredientes
+            ingredientes = (
+                details.get('recipe_ingredients')
+                or details.get('ingredients')
+                or recipe.get('recipe_ingredients')
+                or recipe.get('ingredients')
+                or []
+            )
+
+            if isinstance(ingredientes, dict):
+                ingredientes = ingredientes.get('ingredient', [ingredientes])
+
+            if isinstance(ingredientes, dict):
+                ingredientes = [ingredientes]
+
+            nomes_ingredientes = []
+
+            for ingrediente in ingredientes:
+                if isinstance(ingrediente, dict):
+                    nome = (
+                        ingrediente.get('food_name')
+                        or ingrediente.get('ingredient_description')
+                        or ingrediente.get('name')
+                        or ingrediente.get('description')
+                        or ''
+                    )
+                else:
+                    nome = str(ingrediente)
+
+                if nome:
+                    nomes_ingredientes.append(nome.lower())
+
+            # Só classifica quando existem ingredientes disponíveis
+            ingredientes_disponiveis = len(nomes_ingredientes) > 0
+
+            # Verifica se é vegetariana
+            possui_carne = any(
+                item.lower() in nome
+                for nome in nomes_ingredientes
+                for item in NON_VEGETARIAN_INGREDIENTS
+            )
+
+            recipe['vegetarian'] = (
+                ingredientes_disponiveis and not possui_carne
+            )
+
+            # Verifica se é vegana
+            possui_ingrediente_nao_vegano = any(
+                item.lower() in nome
+                for nome in nomes_ingredientes
+                for item in NON_VEGAN_INGREDIENTS
+            )
+
+            recipe['vegan'] = (
+                ingredientes_disponiveis
+                and not possui_ingrediente_nao_vegano
+                and recipe['vegetarian']
+            )
+
+            # Verifica se é sem lactose
+            possui_lactose = False
+
+            for nome in nomes_ingredientes:
+
+                # Ignora leites de origem vegetal
+                if any(leite in nome for leite in leites_vegetais):
+                    continue
+
+                if any(
+                    ingrediente in nome
+                    for ingrediente in ingredientes_com_lactose
+                ):
+                    possui_lactose = True
+                    break
+
+            recipe['lactose_free'] = (
+                ingredientes_disponiveis and not possui_lactose
+            )
+
+        except Exception as e:
+            print(f"Erro ao buscar detalhes da receita: {e}")
+
+            recipe['vegetarian'] = False
+            recipe['vegan'] = False
+            recipe['lactose_free'] = False
+
+    return render_template(
+        'escolha_receitas.html',
+        recipes=recipes,
+        current_page=page_number,
+        termo_busca=termo,
+        day=day,
+        meal_type=meal_type
+    )
+
 
 @app.route('/salvarreceitacardapio', methods=['POST'])
 @login_required
@@ -185,26 +362,33 @@ def salvar_receita_cardapio():
     user_id = current_user.id
     day = request.form.get('day')
     meal_type = request.form.get('meal_type')
-    recipe_id = request.form.get('recipe_id')
-    recipe_name = request.form.get('recipe_name')
 
-    print(f"\n[DEBUG SAVING] Tentando salvar -> Dia: '{day}' | Refeicao: '{meal_type}' | Receita: '{recipe_name}'")
+    recipe_ids = request.form.getlist('recipe_id')
+    recipe_names = request.form.getlist('recipe_name')
+
+    if not recipe_ids:
+        flash('Selecione pelo menos uma receita.', 'warning')
+        return redirect(url_for('cardapiosemanal'))
 
     try:
-        new_item = DailyMenu(
-            day=day,
-            types=meal_type,
-            user_id=user_id,
-            recipe_id=recipe_id,
-            recipe_name=recipe_name
-        )
-        print("[DEBUG SAVING] Salvo com sucesso no banco de dados!")
+        for recipe_id, recipe_name in zip(recipe_ids, recipe_names):
+            new_item = DailyMenu(
+                day=day,
+                types=meal_type,
+                user_id=user_id,
+                recipe_id=recipe_id,
+                recipe_name=recipe_name
+            )
 
-        db.session.add(new_item)
+            db.session.add(new_item)
+
         db.session.commit()
+        flash('Receitas adicionadas ao cardápio!', 'success')
+
     except Exception as e:
-        print(f"[DEBUG SAVING] ERRO AO SALVAR NO BANCO: {e}")
         db.session.rollback()
+        print(f"Erro ao salvar receitas: {e}")
+        flash('Não foi possível adicionar as receitas.', 'error')
 
     return redirect(url_for('cardapiosemanal'))
 
@@ -288,3 +472,76 @@ def detalhes_receita(recipe_id):
         ingredients=ingredients,
         directions=directions
     )
+
+@app.route('/receita/<int:recipe_id>/detalhes-json')
+@login_required
+def detalhes_receita_json(recipe_id):
+    details = obter_detalhes_receitas(recipe_id)
+
+    if not details:
+        return jsonify({'erro': 'Não foi possível carregar os detalhes da receita.'}), 404
+
+    if isinstance(details, list):
+        details = details[0] if details else {}
+
+    if isinstance(details, dict) and 'recipe' in details:
+        details = details['recipe']
+
+    if not isinstance(details, dict):
+        return jsonify({'erro': 'Formato de receita inválido.'}), 404
+
+    ingredients = details.get('ingredients', {})
+
+    if isinstance(ingredients, dict):
+        ingredients = ingredients.get('ingredient', [])
+
+    if isinstance(ingredients, dict):
+        ingredients = [ingredients]
+
+    directions = details.get('directions', {})
+
+    if isinstance(directions, dict):
+        directions = directions.get('direction', [])
+
+    if isinstance(directions, dict):
+        directions = [directions]
+
+    nutrition = details.get('nutrition', {})
+
+    if not isinstance(nutrition, dict):
+        nutrition = {}
+
+    return jsonify({
+        'recipe_id': details.get('recipe_id'),
+        'recipe_name': details.get('recipe_name', ''),
+        'recipe_description': details.get('recipe_description', ''),
+        'recipe_image': extrair_imagem_receita(details),
+        'preparation_time_min': details.get('preparation_time_min', ''),
+        'cooking_time_min': details.get('cooking_time_min', ''),
+        'servings': details.get('number_of_servings') or details.get('servings', ''),
+        'nutrition': {
+            'calories': nutrition.get('calories', ''),
+            'carbohydrate': nutrition.get('carbohydrate', ''),
+            'protein': nutrition.get('protein', ''),
+            'fat': nutrition.get('fat', ''),
+            'fiber': nutrition.get('fiber', ''),
+            'sugar': nutrition.get('sugar', '')
+        },
+        'ingredients': [
+            {
+                'name': item.get('food_name', ''),
+                'quantity': item.get('measurement_description', ''),
+                'units': item.get('number_of_units', '')
+            }
+            for item in ingredients
+            if isinstance(item, dict)
+        ],
+        'directions': [
+            {
+                'number': item.get('direction_number', ''),
+                'description': item.get('direction_description', '')
+            }
+            for item in directions
+            if isinstance(item, dict)
+        ]
+    })
