@@ -9,6 +9,7 @@ from flask import Blueprint
 from app import lm
 import hashlib
 from flask import flash
+import os
 
 
 @lm.user_loader
@@ -110,26 +111,53 @@ def logout():
 @bp_user.route('/<int:id_user>/update', methods=['POST'])
 @login_required
 def update_user(id_user):
+    allrestrictions = Restriction.query.all()
     user = User.query.get_or_404(id_user)
     
     name = request.form['name'].strip()
     email = request.form['email'].strip()
-    # password = request.form['password'].strip()
-    restrictions = request.form.getlist('restricao') 
+    cep = request.form.get('cep', '').strip()
+    age = request.form.get('age', '').strip()
+    restrictions_ids = request.form.getlist('restricoes')
 
-    if not name and not email and not restrictions:
-        flash("Não é possível realizar a atualização!", "error")
-        return redirect("/gerenciarperfil")
-
-    if name:
+    if not name and not email and not cep and not age and not restrictions_ids:
+        flash("Nenhuma alteração foi realizada!", "warning")
+        return render_template('gerenciarperfil.html', allrestrictions=allrestrictions)
+    alterado = False
+    if name and name != user.name:
         user.name = name
+        alterado = True
 
-    if email:
+    if email and email != user.email:
         user.email = email
+        alterado = True
+
+    if cep and cep != user.cep:
+        user.cep = cep
+        alterado = True
+
+    if age and str(age) != str(user.age):
+        user.age = age
+        alterado = True
+
+    selected_restrictions = Restriction.query.filter(
+        Restriction.id.in_(restrictions_ids)
+    ).all()
+
+    restrictions_atuais = {r.id for r in user.restrictions}
+    restrictions_novas = {r.id for r in selected_restrictions}
+
+    if restrictions_atuais != restrictions_novas:
+        user.restrictions = selected_restrictions
+        alterado = True
+
+    if not alterado:
+        flash("Nenhuma alteração foi realizada!", "warning")
+        return render_template('gerenciarperfil.html', allrestrictions=allrestrictions)
 
     db.session.commit()
     flash("Usuário atualizado com sucesso!", "success")
-    return redirect("/gerenciarperfil")
+    return render_template('gerenciarperfil.html', allrestrictions=allrestrictions)
 
 
 # =-=-= EXCLUIR USUÁRIO =-=-=
@@ -138,9 +166,9 @@ def update_user(id_user):
 def delete_user(id_user):
     user = User.query.get_or_404(id_user)
 
-    if user.id == int(current_user.get_id()):
-        flash('Você não pode excluir sua própria conta enquanto estiver logado.', 'warning')
-        return redirect(url_for('homepage'))
+    if current_user.role == "admin":
+        flash('Você não pode excluir sua conta de administrador.', 'warning')
+        return redirect(url_for('gerenciarperfil'))
 
     db.session.delete(user)
     db.session.commit()
@@ -164,6 +192,7 @@ def admin_usuarios():
 @bp_admin.route('/usuarios/novo', methods=['GET', 'POST'])
 @login_required
 def admin_novo_usuario():
+    allrestrictions = Restriction.query.all()
     if current_user.role != "admin":
         flash("Acesso não permitido", "error")
         return redirect('/homepage')
@@ -171,34 +200,47 @@ def admin_novo_usuario():
         name = request.form.get('name', '').strip()
         email = request.form.get('email', '').strip()
         password = request.form.get('password', '').strip()
+        cep = request.form.get('cep', '').strip()
+        age = request.form.get('age', '').strip()
+        restrictions_ids = request.form.getlist('restricoes')
 
         if not name or not email or not password:
             flash('Preencha todos os campos.', 'warning')
-            return redirect(url_for('admin_novo_usuario'))
+            return redirect(url_for('admin.admin_novo_usuario'), allrestrictions=allrestrictions)
 
         if User.query.filter_by(email=email).first():
             flash('Esse email já está cadastrado.', 'warning')
-            return redirect(url_for('admin_novo_usuario'))
+            return redirect(url_for('admin.admin_novo_usuario', allrestrictions=allrestrictions))
 
         usuario = User(
             name=name,
             email=email,
-            password=hash(password)
+            password=hash(password),
+            cep=cep,
+            age=age,
         )
         usuario.role = 'usuario'
+
+        if restrictions_ids:
+            selected_restrictions = Restriction.query.filter(
+                Restriction.id.in_(restrictions_ids)
+            ).all()
+        
+            usuario.restrictions.extend(selected_restrictions)
 
         db.session.add(usuario)
         db.session.commit()
 
         flash('Usuário cadastrado com sucesso!', 'success')
-        return redirect(url_for('admin_usuarios'))
+        return redirect(url_for('admin.admin_usuarios'))
 
-    return render_template('admin/novo_usuario.html')
+    return render_template('admin/novo_usuario.html', allrestrictions=allrestrictions)
 
 
 @bp_admin.route('/usuarios/<int:id>/editar', methods=['GET', 'POST'])
 @login_required
 def admin_editar_usuario(id):
+    allrestrictions = Restriction.query.all()
     if current_user.role != "admin":
         flash("Acesso não permitido", "error")
         return redirect('/homepage')
@@ -208,28 +250,53 @@ def admin_editar_usuario(id):
         return redirect(url_for('admin_usuarios'))
 
     if request.method == 'POST':
-        name = request.form.get('name', '').strip()
-        email = request.form.get('email', '').strip()
+        name = request.form['name'].strip()
+        email = request.form['email'].strip()
+        cep = request.form.get('cep', '').strip()
+        age = request.form.get('age', '').strip()
+        restrictions_ids = request.form.getlist('restricoes')
 
-        if not name or not email:
-            flash('Nome e email são obrigatórios.', 'warning')
-            return redirect(url_for('admin_editar_usuario', id=id))
-
-        outro_usuario = User.query.filter_by(email=email).first()
-
-        if outro_usuario and outro_usuario.id != usuario.id:
-            flash('Esse email já está cadastrado.', 'warning')
-            return redirect(url_for('admin_editar_usuario', id=id))
-
-        usuario.name = name
-        usuario.email = email
+        if not name and not email and not cep and not age and not restrictions_ids:
+                flash("Nenhuma alteração foi realizada!", "warning")
+                return render_template('admin/editar_usuario.html', usuario=usuario, allrestrictions=allrestrictions)
+        alterado = False
+        if name and name != usuario.name:
+            usuario.name = name
+            alterado = True
+        
+        if email and email != usuario.email:
+            usuario.email = email
+            alterado = True
+        
+        if cep and cep != usuario.cep:
+            usuario.cep = cep
+            alterado = True
+        
+        if age and str(age) != str(usuario.age):
+            usuario.age = age
+            alterado = True
+        
+        selected_restrictions = Restriction.query.filter(
+            Restriction.id.in_(restrictions_ids)
+        ).all()
+        
+        restrictions_atuais = {r.id for r in usuario.restrictions}
+        restrictions_novas = {r.id for r in selected_restrictions}
+        
+        if restrictions_atuais != restrictions_novas:
+            usuario.restrictions = selected_restrictions
+            alterado = True
+        
+        if not alterado:
+            flash("Nenhuma alteração foi realizada!", "warning")
+            return render_template('admin/editar_usuario.html', usuario=usuario, allrestrictions=allrestrictions)
 
         db.session.commit()
 
         flash('Usuário atualizado com sucesso!', 'success')
-        return redirect(url_for('admin_usuarios'))
+        return render_template('admin/editar_usuario.html', usuario=usuario, allrestrictions=allrestrictions)
 
-    return render_template('admin/editar_usuario.html', usuario=usuario)
+    return render_template('admin/editar_usuario.html', usuario=usuario, allrestrictions=allrestrictions)
 
 
 @bp_admin.route('/usuarios/<int:id>/excluir', methods=['POST'])
@@ -248,7 +315,7 @@ def admin_excluir_usuario(id):
     db.session.commit()
 
     flash('Usuário excluído com sucesso!', 'success')
-    return redirect(url_for('admin_usuarios'))
+    return redirect(url_for('admin.admin_usuarios'))
 
 # Lista administrativa
 @bp_admin.route('/nutricionistas')
@@ -338,18 +405,50 @@ def admin_editar_nutricionista(crn):
     nutricionista = Nutritionist.query.get_or_404(crn)
 
     if request.method == 'POST':
-        nutricionista.name = request.form.get('name', '').strip()
-        nutricionista.email = request.form.get('email', '').strip()
-        nutricionista.specialization = request.form.get('specialization', '').strip()
-        nutricionista.experience_years = int(
-            request.form.get('experience_years', 0)
-        )
-        nutricionista.city = request.form.get('city', '').strip()
-        nutricionista.state = request.form.get('state', '').strip()
-        nutricionista.university = request.form.get('university', '').strip()
-        nutricionista.description = request.form.get('description', '').strip()
-
         file = request.files.get('profile_photo')
+        name = request.form['name'].strip()
+        email = request.form['email'].strip()
+        specialization = request.form.get('specialization', '').strip()
+        experience_years = request.form.get('experience_years', '').strip()
+        city = request.form.get('city', '').strip()
+        state = request.form.get('state', '').strip()
+        university = request.form.get('university', '').strip()
+        description = request.form.get('description', '').strip()
+        if not name and not email and not specialization and not experience_years and not city and not state and not university and not description and not (file and file.filename):
+            flash("Nenhuma alteração foi realizada!", "warning")
+            return render_template('admin/editar_nutricionista.html', nutricionista=nutricionista)
+        alterado = False
+        if name and name != nutricionista.name:
+            nutricionista.name = name
+            alterado = True
+                
+        if email and email != nutricionista.email:
+            nutricionista.email = email
+            alterado = True
+                
+        if specialization and specialization != nutricionista.cep:
+            nutricionista.specialization = specialization
+            alterado = True
+                
+        if experience_years and str(experience_years) != str(nutricionista.experience_years):
+            nutricionista.experience_years = experience_years
+            alterado = True
+
+        if city and city != nutricionista.city:
+            nutricionista.city = city
+            alterado = True
+
+        if state and state != nutricionista.state:
+            nutricionista.state = state
+            alterado = True
+
+        if university and university != nutricionista.university:
+            nutricionista.university = university
+            alterado = True
+
+        if description and description != nutricionista.description:
+            nutricionista.description = description
+            alterado = True
 
         if file and file.filename:
             filename = secure_filename(str(crn) + '_' + file.filename)
@@ -359,16 +458,18 @@ def admin_editar_nutricionista(crn):
             )
             file.save(caminho_completo)
             nutricionista.profile_photo = caminho_completo
+            alterado = True
 
+        if not alterado:
+            flash("Nenhuma alteração foi realizada!", "warning")
+            return render_template('admin/editar_nutricionista.html', nutricionista=nutricionista)
+        
         db.session.commit()
 
         flash('Nutricionista atualizado com sucesso!', 'success')
-        return redirect(url_for('nutritionist.admin_nutricionistas'))
+        return render_template('admin/editar_nutricionista.html', nutricionista=nutricionista)
 
-    return render_template(
-        'admin/editar_nutricionista.html',
-        nutricionista=nutricionista
-    )
+    return render_template('admin/editar_nutricionista.html', nutricionista=nutricionista)
 
 
 # Exclusão administrativa

@@ -1,46 +1,43 @@
-
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerenciar usuários | NutriJoy</title>
-</head>
-<body>
-    <h1>Gerenciar usuários</h1>
-
-    <a href="{{ url_for('admin.admin_novo_usuario') }}">Cadastrar usuário</a>
-
-    {% for categoria, mensagem in get_flashed_messages(with_categories=true) %}
-        <p>{{ mensagem }}</p>
-    {% endfor %}
-
-    <table>
+{% extends 'base.html' %}
+{% block content %}
+    {% set mensagens = get_flashed_messages(with_categories=true) %} 
+        {% if mensagens %}     
+            {% for categoria, msg in mensagens %}
+                <div class="alert alert-{{categoria}}" role="alert">
+                    {{ msg }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    <h1 class="text-3xl font-semibold p-4">Gerenciar usuários</h1>
+    <div class="overflow-x-auto p-4">
+    <table class="table">
         <thead>
             <tr>
+                <th>ID</th>
                 <th>Nome</th>
                 <th>Email</th>
                 <th>Tipo de conta</th>
-                <th>Ações</th>
             </tr>
         </thead>
 
         <tbody>
             {% for usuario in usuarios %}
             <tr>
+                <th>{{ usuario.id }}</th>
                 <td>{{ usuario.name }}</td>
                 <td>{{ usuario.email }}</td>
                 <td>{{ usuario.role }}</td>
-                <td>
-                    <a href="{{ url_for('admin.admin_editar_usuario', id=usuario.id) }}">
+                <td class="flex gap-3 justify-end">
+                    <a href="{{ url_for('admin.admin_editar_usuario', id=usuario.id) }}" class="btn btn-primary shadow-none text-white bg-[#5FB434] border-[#5FB434]">
                         Editar
                     </a>
-
                     <form action="{{ url_for('admin.admin_excluir_usuario', id=usuario.id) }}"
                           method="POST"
-                          onsubmit="return confirm('Tem certeza que deseja excluir este usuário?')">
+                          onsubmit="return confirm('Tem certeza que deseja excluir este usuário?')"
+                          class="btn btn-error shadow-none">
                         <button type="submit">Excluir</button>
                     </form>
+                    
                 </td>
             </tr>
             {% else %}
@@ -50,5 +47,15 @@
             {% endfor %}
         </tbody>
     </table>
-</body>
-</html>
+    </div>
+    <div class="w-[100%] flex justify-center">
+    <button type="submit" class="btn my-[15px] bg-[#5FB434] text-white px-[180px]"><a href="{{ url_for('admin.admin_novo_usuario') }}">Cadastrar usuário</a></button>
+    </div>
+{% endblock %}
+{% block styles %}
+    <style>
+        #item5{
+            background-color: #FEF1AD;
+        }
+    </style>
+{% endblock %}

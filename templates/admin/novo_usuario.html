@@ -1,30 +1,88 @@
+{% extends 'base.html' %}
+{% block content %}
 
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Cadastrar usuário | NutriJoy</title>
-</head>
-<body>
-    <h1>Cadastrar usuário</h1>
+    {% set mensagens = get_flashed_messages(with_categories=true) %} 
+        {% if mensagens %}     
+            {% for categoria, msg in mensagens %}
+                <div class="alert alert-{{categoria}}" role="alert">
+                    {{ msg }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    <a href="{{ url_for('admin.admin_usuarios') }}" class="p-4">
+        <label class="btn btn-square btn-ghost bg-[#FEFAE6]">
+                <!-- Sidebar toggle icon -->
+                <i class="fa-solid fa-angles-left"></i>
+        </label>
+    </a>
+    <h1 class="text-3xl font-semibold p-4">Cadastrar usuário</h1>
+    <form method="post" action="{{ url_for('admin.admin_novo_usuario') }}" class="w-full max-w-lg mx-auto flex flex-col">
+        <label for="name" class="text-black text-[18px] mb-[5px] mt-[50px]">Nome</label>
+        <input type="text" id="name" name="name" required class="input input-bordered w-full">
 
-    {% for categoria, mensagem in get_flashed_messages(with_categories=true) %}
-        <p>{{ mensagem }}</p>
-    {% endfor %}
+        <label for="email" class="text-black text-[18px] mb-[5px] mt-[20px]">Email</label>
+        <input type="email" id="email" name="email" required class="input input-bordered w-full">
 
-    <form method="POST">
-        <label for="name">Nome</label>
-        <input type="text" id="name" name="name" required>
+        <label for="password" class="text-black text-[18px] mb-[5px] mt-[20px]">Senha</label>
+        <input type="password" id="password" name="password" required class="input input-bordered w-full"> 
 
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" required>
+        <label for="cep" class="text-black text-[18px] mb-[5px] mt-[20px]">CEP</label>
+        <input type="text" id="cep" name="cep" required class="input input-bordered w-full">
 
-        <label for="password">Senha</label>
-        <input type="password" id="password" name="password" required>
+        <label for="age" class="text-black text-[18px] mb-[5px] mt-[20px]">Idade</label>
+        <input type="number" id="age" name="age" required class="input input-bordered w-full">
 
-        <button type="submit">Cadastrar</button>
+        <div>
+                    <label class="label" for="restricoes">
+                        <span class="label-text text-black text-[18px] mt-[20px]">Restrições alimentares</span>
+                    </label> <br>
+                    <div class="dropdown dropdown-bottom w-full">
+                    <div tabindex="0" role="button"
+                         class="flex items-center border border-gray-200 rounded-md px-3 h-[44px] gap-3 w-full cursor-pointer">
+
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             width="18" height="18" viewBox="0 0 24 24"
+                             fill="none" stroke="#7C8495" stroke-width="1.5"
+                             stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 21s-8-4.5-8-11a4 4 0 0 1 8-1 4 4 0 0 1 8 1c0 6.5-8 11-8 11Z"/>
+                            <path d="M8 12h8"/>
+                        </svg>
+
+                        <span class="text-sm text-gray-400 flex-1">
+                            Ver restrições
+                        </span>
+
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             width="17" height="17" viewBox="0 0 24 24"
+                             fill="none" stroke="#7C8495" stroke-width="1.5"
+                             stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m16 4 4 4L8 20l-4 1 1-4Z"/>
+                            <path d="m14 6 4 4"/>
+                        </svg>
+                    </div>
+
+                    <ul tabindex="-1"
+                        class="dropdown-content menu bg-white border border-gray-200 rounded-md z-10 w-full p-2 shadow-sm">
+                        {% for restriction in allrestrictions %}
+                        <li>
+                            <label class="flex items-center gap-3 text-sm">
+                                <input name="restrictions" type="checkbox" value="{{ restriction.id }}">
+                                {{ restriction.name }}
+                            </label>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                </div>
+
+        <button type="submit" class="btn mt-[15px] bg-[#5FB434] text-white">Cadastrar</button>
     </form>
 
-    <a href="{{ url_for('admin.admin_usuarios') }}">Voltar</a>
-</body>
-</html>
+{% endblock %}
+{% block styles %}
+    <style>
+        #item5{
+            background-color: #FEF1AD;
+        }
+    </style>
+{% endblock %}

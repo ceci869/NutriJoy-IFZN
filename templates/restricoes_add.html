@@ -1,17 +1,23 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro de Restrições</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block content %}
+    <a href="{{ url_for('restriction.get_restrictions') }}" class="p-4">
+        <label class="btn btn-square btn-ghost bg-[#FEFAE6]">
+                <!-- Sidebar toggle icon -->
+                <i class="fa-solid fa-angles-left"></i>
+        </label>
+    </a>
+    <h1 class="text-3xl font-semibold p-4">Cadastrar restrição</h1>
+    <form action="{{ url_for('restriction.add_restriction') }}" method="post" class="w-full max-w-lg mx-auto flex flex-col">
+        <label for="name" class="text-black text-[18px] mb-[5px] mt-[50px]">Digite o nome da restrição:</label>
+        <input type="text" name="name" class="input input-bordered w-full">
 
-    <form action="{{ url_for('restriction.add_restriction') }}" method="post">
-        <label for="name">Restrição</label>
-        <input type="text" name="name">
-
-        <button type="submit">Cadastrar restrição</button>
+        <button type="submit" class="btn mt-[15px] bg-[#5FB434] text-white">Cadastrar restrição</button>
     </form>
-</body>
-</html>
+{% endblock %}
+{% block styles %}
+    <style>
+        #item7{
+            background-color: #FEF1AD;
+        }
+    </style>
+{% endblock %}
