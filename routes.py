@@ -1,4 +1,5 @@
 import os
+from dotenv import load_dotenv
 from utils import app, admin_required, db, NON_VEGAN_INGREDIENTS, NON_VEGETARIAN_INGREDIENTS
 from flask import render_template, url_for, redirect, request, flash
 from flask_login import login_required, current_user
@@ -7,6 +8,7 @@ from time import sleep
 import json
 from fatsecret_service import obter_receitas, obter_todas_receitas, obter_detalhes_receitas
 from flask import render_template, url_for, redirect, request, flash, jsonify
+from groq import Groq
 
 from models.User import User
 from models.Daily_Menu import DailyMenu
@@ -23,6 +25,12 @@ app.register_blueprint(bp_dailyMenu, url_prefix='/dailyMenu')
 app.register_blueprint(bp_nutritionist, url_prefix='/nutritionist')
 app.register_blueprint(bp_restriction, url_prefix='/restriction')
 
+load_dotenv()
+
+GROQ_API_KEY = os.getenv('GROQ_API_KEY')
+
+ai_content = 'You are a helpful chatbot that only speaks in Portuguese (Brazil). Only answer questions related to: nutrition, nutrition in childhood and nutrition in adolescence. If you are asked about other things answer "Desculpe, mas não forneço esse tipo de informação". Be objective in your answers.'
+client = Groq(api_key=GROQ_API_KEY)
 
 @app.route('/')
 def index():
@@ -165,6 +173,31 @@ def cardapiosemanal():
     print(f"[DEBUG RENDER] Dicionário gerado: {menu_dict}\n")
 
     return render_template('cardapiosemanal.html', menu_dict=menu_dict, saved_recipes=saved_recipes)
+
+# Chatbot da página do cardápio semanl
+@app.route('/chatbot_nutrijoy', methods=['POST'])
+def chatbot_nutrijoy():
+    user_input = request.json.get('message')
+    if not user_input:
+        return jsonify({'error': 'Mensagem vazia'}), 400
+
+    try:
+        stream = client.chat.completions.create(
+                model='openai/gpt-oss-120b', 
+                messages=[
+                    {'role': 'system', 'content': ai_content},
+                    {'role': 'user', 'content': user_input}
+                ],
+                temperature=0.5,
+                max_completion_tokens=1000,
+                stream=False
+        )
+
+        chatbot_reply = stream.choices[0].message.content
+        return jsonify({'reply': chatbot_reply})
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500   
 
 def extrair_imagem_receita(recipe):
     images = recipe.get('recipe_image') or recipe.get('recipe_images')

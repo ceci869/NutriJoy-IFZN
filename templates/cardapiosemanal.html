@@ -232,6 +232,64 @@
 
 </div>
 
+<!-- Script de Integração Frontend/Backend -->
+<script>
+    const chatForm = document.getElementById('chat-form');
+    const userInput = document.getElementById('user-input');
+    const chatBox = document.getElementById('chat-box');
+    const sendBtn = document.getElementById('send-btn');
+
+    function appendMessage(text, sender) {
+        const chatDiv = document.createElement('div');
+        chatDiv.className = `chat ${sender === 'user' ? 'chat-end' : 'chat-start'}`;
+        
+        const bubbleDiv = document.createElement('div');
+        // Usuário fica azul (primary), Bot fica cinza claro
+        bubbleDiv.className = `chat-bubble shadow-sm ${sender === 'user' ? 'bg-primary text-white' : 'bg-gray-100 text-gray-800'}`;
+        bubbleDiv.textContent = text;
+        
+        chatDiv.appendChild(bubbleDiv);
+        chatBox.appendChild(chatDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    chatForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const message = userInput.value.trim();
+        if (!message) return;
+
+        // Adiciona msg do usuário na tela
+        appendMessage(message, 'user');
+        userInput.value = '';
+        
+        // Estado de carregamento
+        sendBtn.disabled = true;
+        sendBtn.textContent = '...';
+
+        try {
+            // Envia para o backend Flask
+            const response = await fetch('/chatbot', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message })
+            });
+            
+            const data = await response.json();
+            
+            if (data.reply) {
+                appendMessage(data.reply, 'bot');
+            } else {
+                appendMessage("Erro: Não foi possível obter resposta.", 'bot');
+            }
+        } catch (err) {
+            appendMessage("Erro na conexão com o servidor.", 'bot');
+        } finally {
+            sendBtn.disabled = false;
+            sendBtn.textContent = 'Enviar';
+        }
+    });
+</script>
+
 {% endblock %}
 
 {% block styles %}
