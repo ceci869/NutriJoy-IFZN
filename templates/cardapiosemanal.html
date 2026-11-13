@@ -138,7 +138,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
         <!-- Lista de compras -->
-        <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-5">
+        <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-5 h-[240px]">
 
             <h2 class="text-base font-semibold text-black mb-5">
                 <i class="fa-solid fa-cart-shopping text-[#488B26] mr-2"></i>
@@ -212,19 +212,31 @@
                 Sugestão da IA
             </h2>
 
-            <div class="flex-1 flex items-center justify-center py-2">
-                <p class="text-sm text-gray-600 text-center leading-relaxed max-w-md">
-                    A banana e a maçã tiveram queda no preço este mês.
-                    Considere adicioná-las ao cardápio para reduzir custos.
-                </p>
-            </div>
+            <section>
+            <div class="h-[270px] flex flex-col">
+                <div class="p-4 flex flex-col h-full">
+                    
+                    <!-- Área de Mensagens -->
+                    <div id="chat-box" class="flex-grow overflow-y-auto flex flex-col gap-2 px-2 pb-4">
+                        <!-- Mensagem inicial do Bot -->
+                        <div class="chat chat-start">
+                            <div class="chat-bubble bg-gray-100 text-gray-800">
+                                Olá! Sou o assistente de IA. Como posso te ajudar hoje?
+                            </div>
+                        </div>
+                    </div>
 
-            <div class="flex justify-end mt-6">
-                <button type="button"
-                        class="px-5 py-2 rounded-md bg-[#F0583E] text-white text-xs font-medium hover:bg-[#D94A32] transition-colors">
-                    Ver mais sugestões
-                </button>
+                    <!-- Input Area -->
+                    <form id="chat-form" class="mt-4 flex gap-2 max-w-[100%]">
+                        <input type="text" id="user-input" placeholder="Digite sua mensagem..." 
+                               class="input input-bordered input-primary w-full border-[#F0583E]" required />
+                        <button type="submit" id="send-btn" class="btn btn-primary text-white bg-[#F0583E] border-[#F0583E]">
+                            Enviar
+                        </button>
+                    </form>
+                </div>
             </div>
+        </section>
 
         </div>
 
@@ -244,8 +256,7 @@
         chatDiv.className = `chat ${sender === 'user' ? 'chat-end' : 'chat-start'}`;
         
         const bubbleDiv = document.createElement('div');
-        // Usuário fica azul (primary), Bot fica cinza claro
-        bubbleDiv.className = `chat-bubble shadow-sm ${sender === 'user' ? 'bg-primary text-white' : 'bg-gray-100 text-gray-800'}`;
+        bubbleDiv.className = `chat-bubble shadow-sm ${sender === 'user' ? 'bg-[#F0583E] text-white' : 'bg-gray-100 text-gray-800'}`;
         bubbleDiv.textContent = text;
         
         chatDiv.appendChild(bubbleDiv);
@@ -268,7 +279,7 @@
 
         try {
             // Envia para o backend Flask
-            const response = await fetch('/chatbot', {
+            const response = await fetch('/chatbot_nutrijoy', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message })

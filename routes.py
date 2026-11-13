@@ -189,7 +189,7 @@ def chatbot_nutrijoy():
                     {'role': 'user', 'content': user_input}
                 ],
                 temperature=0.5,
-                max_completion_tokens=1000,
+                max_completion_tokens=2048,
                 stream=False
         )
 
