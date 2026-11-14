@@ -57,39 +57,77 @@ def paginaerro():
 @login_required
 def homepage():
     nutritionists = get_nutritionists()
-
     recipes = obter_receitas()
 
     for recipe in recipes:
         recipe['recommended'] = True
-        recipe['prep_time_min'] = '0'
+        recipe['prep_time_min'] = ''
 
-        r = recipe.get('recipe_id') 
+        recipe_id = recipe.get('recipe_id')
+        details = obter_detalhes_receitas(recipe_id)
 
-        details = obter_detalhes_receitas(r)
-        if not details:
-            return []
+        if isinstance(details, list):
+            details = details[0] if details else {}
 
-        if isinstance(details, dict):
-            details = [details]
+        if isinstance(details, dict) and 'recipe' in details:
+            details = details['recipe']
 
+        if not isinstance(details, dict):
+            details = {}
 
-        for detail in details:
-            if detail.get('rating'):
-                if detail.get('rating') < 4:
+        rating = details.get('rating')
+
+        if rating:
+            try:
+                if float(rating) < 4:
                     recipe['recommended'] = False
-                    break
+            except (ValueError, TypeError):
+                pass
 
-        if not recipe['recommended']:
-            break
+        recipe['prep_time_min'] = details.get(
+            'preparation_time_min', ''
+        )
 
-        for detail in details:
-            recipe['prep_time_min'] = detail.get('preparation_time_min')
-            recipe['prep_time_min'] = detail.get('preparation_time_min', '')
+    # Buscar receitas salvas no cardápio semanal
+    saved_recipes = DailyMenu.query.filter_by(
+        user_id=current_user.id
+    ).all()
 
-    return render_template('homepage.html', nutritionists=nutritionists, recipes=recipes)
+    menu_dict = {}
+    imagens_cache = {}
 
+    for item in saved_recipes:
+        if item.day not in menu_dict:
+            menu_dict[item.day] = {}
 
+        if item.types not in menu_dict[item.day]:
+            menu_dict[item.day][item.types] = []
+
+        # Buscar imagem da receita
+        if item.recipe_id not in imagens_cache:
+            details = obter_detalhes_receitas(item.recipe_id)
+
+            if isinstance(details, list):
+                details = details[0] if details else {}
+
+            if isinstance(details, dict) and 'recipe' in details:
+                details = details['recipe']
+
+            if not isinstance(details, dict):
+                details = {}
+
+            imagens_cache[item.recipe_id] = extrair_imagem_receita(details)
+
+        item.recipe_image = imagens_cache[item.recipe_id]
+
+        menu_dict[item.day][item.types].append(item)
+
+    return render_template(
+        'homepage.html',
+        nutritionists=nutritionists,
+        recipes=recipes,
+        menu_dict=menu_dict
+    )
 
 @app.route('/catalogodereceitas')
 @login_required

@@ -1,132 +1,184 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NutriJoy</title>
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://kit.fontawesome.com/dbda3eb66e.js" crossorigin="anonymous"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,100..900;1,100..900&family=Hind:wght@300;400;500;600;700&family=Intel+One+Mono:ital,wght@0,300..700;1,300..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Sora:wght@100..800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <script src="{{ url_for('static', filename='scripts.js') }}"></script>
-    {% block styles %}
-    {% endblock %}
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+
+    {% block styles %}{% endblock %}
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .menu-link {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            width: 100%;
+            min-height: 48px;
+            padding: 0 14px;
+            border-radius: 10px;
+            color: #55534A;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: background .2s, color .2s;
+        }
+
+        .menu-link i {
+            width: 22px;
+            text-align: center;
+            font-size: 17px;
+            color: #777263;
+            transition: color .2s;
+        }
+
+        .menu-link:hover {
+            background: #FEF1AD;
+            color: #286B25;
+        }
+
+        .menu-link:hover i {
+            color: #488B26;
+        }
+
+        .logout-link,
+        .logout-link i {
+            color: #B94B3C;
+        }
+
+        .logout-link:hover {
+            background: #FCE8E4;
+            color: #A52F24;
+        }
+
+        .logout-link:hover i {
+            color: #A52F24;
+        }
+
+        .sidebar-divider {
+            height: 1px;
+            margin: 12px 8px;
+            background: #E9E3CE;
+        }
+    </style>
 </head>
-<body class="font-[Inter]">
-    <div class="drawer lg:drawer-open">
-    <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
-    <div class="drawer-content">
-        <!-- Navbar -->
-        <nav class="p-4 navbar w-full bg-[#FEFAE6] flex justify-between">
-            <label for="my-drawer-4" aria-label="open sidebar" class="btn btn-square btn-ghost">
-                <!-- Sidebar toggle icon -->
-                <i class="fa-solid fa-angles-right"></i>
+
+<body class="bg-white text-[#292820]">
+
+<div class="drawer lg:drawer-open">
+    <input id="my-drawer-4" type="checkbox" class="drawer-toggle">
+
+    <div class="drawer-content min-h-screen">
+
+        <nav class="navbar flex min-h-[76px] w-full items-center border-b border-[#EEE9D9] bg-[#FEFAE6] px-4 sm:px-6">
+
+            <label for="my-drawer-4" aria-label="Abrir menu" class="btn btn-square btn-ghost rounded-xl text-[#488B26] hover:bg-[#FEF1AD] lg:hidden">
+                <i class="fa-solid fa-bars text-lg"></i>
             </label>
-            <img src="{{ url_for('static', filename='img/logo-nutrijoy.png') }}" alt="Logo do NutriJoy">
+
+            <a href="{{ url_for('homepage') }}" aria-label="Página inicial" class="ml-auto">
+                <img src="{{ url_for('static', filename='img/logo.svg') }}" alt="NutriJoy" class="h-11 w-auto object-contain">
+            </a>
+
         </nav>
-        <!-- Page content here -->
-        <main class="p-4">
+
+        <main class="min-h-[calc(100vh-76px)] p-4 sm:p-6">
             {% block content %}
                 <h2>Catálogo de Receitas</h2>
             {% endblock %}
         </main>
+
     </div>
 
-    <div class="drawer-side is-drawer-close:overflow-visible">
-        <label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
-        <div class="flex p-4 min-h-full flex-col items-start bg-[#FEFAE6] is-drawer-close:w-14 is-drawer-open:w-64">
-        <!-- Sidebar content here -->
-        <ul class="menu w-full grow gap-[5px]">
-            <!-- List item -->
-            <li>
-            <button id="item1" class="is-drawer-close:tooltip is-drawer-close:tooltip-right py-[12px] hover:bg-[#FEF1AD]" data-tip="Homepage">
-                <!-- Home icon -->
-                <a href="{{ url_for('homepage') }}" class="flex justify-baseline items-center">
-                    <img src="{{ url_for('static', filename='img/home.svg') }}" alt="ìcone de casa" class="w-[30px]">
-                    <span class="is-drawer-close:hidden ml-[10px] font-semibold text-[16px]">Página inicial</span>
-                </a>
-            </button>
-            </li>
+    <div class="drawer-side z-40 is-drawer-close:overflow-visible">
+        <label for="my-drawer-4" aria-label="Fechar menu" class="drawer-overlay"></label>
 
-            <!-- List item -->
-            <li>
-            <button id="item2" class="is-drawer-close:tooltip is-drawer-close:tooltip-right py-[12px] hover:bg-[#FEF1AD]" data-tip="Receitas">
-                <!-- Recipes icon -->
-                <a href="{{ url_for('catalogodereceitas') }}" class="flex justify-baseline items-center">
-                    <img src="{{ url_for('static', filename='img/cookie.svg') }}" alt="ìcone de cookie" class="w-[30px]">
-                    <span class="is-drawer-close:hidden ml-[10px] font-semibold text-[16px]">Receitas</span>
-                </a>
-            </button>
-            </li>
+        <aside class="flex min-h-full w-64 flex-col border-r border-[#EEE9D9] bg-[#FEFAE6] p-3 pt-5 transition-all duration-300 is-drawer-close:w-20">
 
-            <!-- List item -->
-            <li>
-            <button id="item3" class="is-drawer-close:tooltip is-drawer-close:tooltip-right py-[14px] hover:bg-[#FEF1AD]" data-tip="Cardápio semanal">
-                <!-- Recipes icon -->
-                <a href="{{ url_for('cardapiosemanal') }}" class="flex justify-baseline items-center">
-                    <img src="{{ url_for('static', filename='img/lista.svg') }}" alt="ìcone de lista" class="w-[30px]">
-                    <span class="is-drawer-close:hidden ml-[10px] font-semibold text-[16px]">Cardápio semanal</span>
-                </a>
-            </button>
-            </li>
+            <ul class="menu w-full grow gap-1 p-0">
 
-            <!-- List item -->
-            <li>
-            <button id="item4" class="is-drawer-close:tooltip is-drawer-close:tooltip-right py-[12px] hover:bg-[#FEF1AD]" data-tip="Perfil">
-                <!-- Settings icon -->
-                <a href="{{ url_for('gerenciarperfil') }}" class="flex justify-baseline items-center">
-                    <img src="{{ url_for('static', filename='img/perfil.svg') }}" alt="ìcone de perfil" class="w-[30px]">
-                    <span class="is-drawer-close:hidden ml-[10px] font-semibold text-[16px]">Perfil</span>
-                </a>
-            </button>
-            </li>
+                <li>
+                    <a href="{{ url_for('homepage') }}" class="menu-link is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Página inicial">
+                        <i class="fa-solid fa-house"></i>
+                        <span class="is-drawer-close:hidden">Página inicial</span>
+                    </a>
+                </li>
 
-            {% if current_user.role == 'admin' %}
-            <li>
-            <button id="item5" class="is-drawer-close:tooltip is-drawer-close:tooltip-right py-[12px] hover:bg-[#FEF1AD]" data-tip="Perfil">
-                <!-- Settings icon -->
-                <a href="{{ url_for('admin.admin_usuarios') }}" class="flex justify-baseline items-center">
-                    <img src="{{ url_for('static', filename='img/usuarios.svg') }}" alt="ìcone de perfil" class="w-[30px]">
-                    <span class="is-drawer-close:hidden ml-[10px] font-semibold text-[16px]">Usuários</span>
-                </a>
-            </button>
-            </li>
-            <li>
-            <button id="item6" class="is-drawer-close:tooltip is-drawer-close:tooltip-right py-[12px] hover:bg-[#FEF1AD]" data-tip="Perfil">
-                <!-- Settings icon -->
-                <a href="{{ url_for('admin.admin_nutricionistas') }}" class="flex justify-baseline items-center">
-                    <img src="{{ url_for('static', filename='img/nutricionistas.svg') }}" alt="ìcone de perfil" class="w-[30px]">
-                    <span class="is-drawer-close:hidden ml-[10px] font-semibold text-[16px]">Nutricionistas</span>
-                </a>
-            </button>
-            </li>
-            <li>
-            <button id="item7" class="is-drawer-close:tooltip is-drawer-close:tooltip-right py-[12px] hover:bg-[#FEF1AD]" data-tip="Perfil">
-                <!-- Settings icon -->
-                <a href="{{ url_for('restriction.get_restrictions') }}" class="flex justify-baseline items-center">
-                    <img src="{{ url_for('static', filename='img/restricoes.svg') }}" alt="ìcone de perfil" class="w-[30px]">
-                    <span class="is-drawer-close:hidden ml-[10px] font-semibold text-[16px]">Restrições</span>
-                </a>
-            </button>
-            </li>
-            {% endif %}
+                <li>
+                    <a href="{{ url_for('catalogodereceitas') }}" class="menu-link is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Receitas">
+                        <i class="fa-solid fa-utensils"></i>
+                        <span class="is-drawer-close:hidden">Receitas</span>
+                    </a>
+                </li>
 
-            <!-- List item -->
-            <li class="hover:bg-[#FEF1AD] rounded-[6px] py-[6px]">
-            <form action="{{ url_for('user.logout') }}" method="POST" class="hover:bg-[#FEF1AD]">
-                <button id="item8" class="is-drawer-close:tooltip is-drawer-close:tooltip-right cursor-pointer flex justify-baseline items-center hover:bg-[#FEF1AD]" data-tip="Logout">
-        
-                    <img src="{{ url_for('static', filename='img/sair.svg') }}" alt="ìcone de sair" class="w-[30px]">
-                    <span class="is-drawer-close:hidden ml-[10px] font-semibold text-[16px]">Sair</span>
+                <li>
+                    <a href="{{ url_for('cardapiosemanal') }}" class="menu-link is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Cardápio semanal">
+                        <i class="fa-solid fa-calendar-days"></i>
+                        <span class="is-drawer-close:hidden">Cardápio semanal</span>
+                    </a>
+                </li>
 
-                </button>
-            </form>
-            </li>
-        </ul>
-        </div>
+                <li>
+                    <a href="{{ url_for('gerenciarperfil') }}" class="menu-link is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Perfil">
+                        <i class="fa-solid fa-user"></i>
+                        <span class="is-drawer-close:hidden">Perfil</span>
+                    </a>
+                </li>
+
+                {% if current_user.role == 'admin' %}
+                <div class="sidebar-divider"></div>
+
+                <li>
+                    <a href="{{ url_for('admin.admin_usuarios') }}" class="menu-link is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Usuários">
+                        <i class="fa-solid fa-users"></i>
+                        <span class="is-drawer-close:hidden">Usuários</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ url_for('admin.admin_nutricionistas') }}" class="menu-link is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Nutricionistas">
+                        <i class="fa-solid fa-user-doctor"></i>
+                        <span class="is-drawer-close:hidden">Nutricionistas</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ url_for('restriction.get_restrictions') }}" class="menu-link is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Restrições">
+                        <i class="fa-solid fa-ban"></i>
+                        <span class="is-drawer-close:hidden">Restrições</span>
+                    </a>
+                </li>
+                {% endif %}
+
+                <div class="sidebar-divider"></div>
+
+                <li>
+                    <form action="{{ url_for('user.logout') }}" method="POST">
+                        <button type="submit" class="menu-link logout-link is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Sair">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                            <span class="is-drawer-close:hidden">Sair</span>
+                        </button>
+                    </form>
+                </li>
+
+            </ul>
+
+        </aside>
     </div>
-    </div>
+</div>
+
 </body>
 </html>

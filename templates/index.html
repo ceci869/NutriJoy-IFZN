@@ -1,245 +1,139 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NutriJoy</title>
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://kit.fontawesome.com/dbda3eb66e.js" crossorigin="anonymous"></script>
 </head>
-<body>
-    <header>
-        <!-- navbar -->
-        <div class="navbar bg-[#FEF6D3] px-12 py-4">
-            <div class="flex-1">
-                <img src="{{ url_for('static', filename='img/logo-nutrijoy.png') }}" alt="Logo do NutriJoy">
-            </div>
-            <div class="flex-none">
-                <ul class="menu menu-horizontal px-1 text-xl flex gap-x-4">
-                    <li><a href="{{ url_for('user.verificalogin') }}" class="border-solid border-2 rounded-lg py-[3px] bg-white text-[#F0583E] text-[20px] border-[#F0583E66] transition-colors duration-150 hover:bg-[#F0583E] hover:text-white">Entrar</a></li>
-                    <li><a href="{{ url_for('user.add_user') }}" class="border-solid border-2 rounded-lg py-[3px] bg-[#F0583E] text-white text-[20px] transition-colors duration-150 hover:bg-[#D94C35]">Cadastrar</a></li>
-                </ul>
-            </div>
-        </div>
-    </header>
-    {% set mensagens = get_flashed_messages(with_categories=true) %} 
-    {% if mensagens %}     
-    {% for category, msg in mensagens %}
-    <div role="alert" class="alert alert-{{category}}">
-    {{ msg }}
+<body class="bg-white">
+
+<header class="navbar bg-[#FEF6D3] px-4 py-4 sm:px-8 lg:px-12">
+    <div class="flex-1">
+        <img src="{{ url_for('static', filename='img/logo.svg') }}" alt="NutriJoy">
     </div>
-    {% endfor %}
-    {% endif %}
-    <main>
-        <!-- Hero -->
-        <div class="bg-white mx-40 my-18 flex gap-[60px] flex-row justify-between">
-            <div>
-                <h1 class="text-5xl font-semibold mb-[10px]">Sobre o projeto</h1>
-                <p class="text-[24px] pt-6 text-black leading-relaxed">
-                O NutriJoy é uma plataforma pensada para o público juvenil, criada para incentivar uma alimentação mais saudável de forma simples e prática.
-                </p>
-                <p class="text-[24px] text-black leading-relaxed">
-                A plataforma ajuda jovens a terem autonomia na cozinha, encontrando receitas fáceis de preparar, recomendações e opções para montar suas próprias refeições, tornando o cuidado com a alimentação mais acessível no dia a dia.
-                </p>
-            </div>
-            <img src="{{ url_for('static', filename='img/crianca-nutricao.png') }}" class="rounded-lg shadow-2xl"/>
+    <ul class="menu menu-horizontal flex gap-3 px-1">
+        <li><a href="{{ url_for('user.verificalogin') }}" class="rounded-lg border-2 border-[#F0583E66] bg-white text-[#F0583E] hover:bg-[#F0583E] hover:text-white">Entrar</a></li>
+        <li><a href="{{ url_for('user.add_user') }}" class="rounded-lg border-2 border-[#F0583E] bg-[#F0583E] text-white hover:bg-[#D94C35]">Cadastrar</a></li>
+    </ul>
+</header>
+
+{% for category, msg in get_flashed_messages(with_categories=true) %}
+<div role="alert" class="alert alert-{{ category }}">{{ msg }}</div>
+{% endfor %}
+
+<main class="min-h-screen bg-white px-4 py-8 sm:px-6 lg:px-8">
+<div class="mx-auto max-w-7xl py-4 sm:py-8">
+
+    <section class="mb-16 flex flex-col items-center gap-8 lg:flex-row lg:gap-14">
+        <div class="flex-1">
+            <h1 class="mb-3 text-3xl font-semibold sm:text-4xl lg:text-5xl">Sobre o projeto</h1>
+            <p class="pt-4 text-base leading-relaxed sm:text-lg lg:text-xl">O NutriJoy é uma plataforma pensada para o público juvenil, criada para incentivar uma alimentação mais saudável de forma simples e prática.</p>
+            <p class="mt-3 text-base leading-relaxed sm:text-lg lg:text-xl">A plataforma ajuda jovens a terem autonomia na cozinha, encontrando receitas fáceis de preparar, recomendações e opções para montar suas próprias refeições, tornando o cuidado com a alimentação mais acessível no dia a dia.</p>
         </div>
+        <img src="{{ url_for('static', filename='img/crianca-nutricao.png') }}" alt="Alimentação saudável" class="w-full max-w-xl rounded-lg object-cover">
+    </section>
 
-        <!-- Cadastro de nutricionistas -->
-        <section class="mx-12 my-10 rounded-[20px] bg-[#FEF6D3] px-8 py-12 text-center">
-            <h2 class="text-4xl font-semibold text-[#154625]">É nutricionista?</h2>
-            <p class="mx-auto mt-4 max-w-2xl text-xl text-black">
-                Faça parte do NutriJoy e ajude jovens a construírem uma relação mais saudável com a alimentação.
-            </p>
-            <a href="{{ url_for('formulario_nutricionista') }}"
-               class="btn mt-6 border-[#F0583E] bg-[#F0583E] text-lg text-white hover:bg-[#d94c35]">
-                Inscreva-se como nutricionista
-            </a>
-        </section>
+    <section class="mb-16 rounded-2xl bg-[#FEF6D3] px-5 py-10 text-center sm:px-8">
+        <h2 class="text-3xl font-semibold text-[#154625] sm:text-4xl">É nutricionista?</h2>
+        <p class="mx-auto mt-4 max-w-2xl sm:text-lg">Faça parte do NutriJoy e ajude jovens a construírem uma relação mais saudável com a alimentação.</p>
+        <a href="{{ url_for('formulario_nutricionista') }}" class="btn mt-6 border-[#F0583E] bg-[#F0583E] text-lg text-white hover:bg-[#d94c35]">Inscreva-se como nutricionista</a>
+    </section>
 
-        <!-- Nutricionistas -->
-        <h2 class="text-[24px] font-semibold mb-4 mt-10 ml-4">
-            Nutricionistas em destaque
-        </h2>
-
-        <div class="flex items-center ml-4">
-
-            <div id="nutri_carrossel" class="flex gap-[24px] carousel w-full flex-1">
-
+    <section class="mb-16">
+        <h2 class="mb-5 text-2xl font-semibold">Nutricionistas em destaque</h2>
+        <div class="flex items-center gap-3">
+            <div id="nutri_carrossel" class="carousel flex w-full flex-1 gap-5 overflow-x-auto">
                 {% for nutritionist in nutritionists %}
-
-                <div class="flex flex-col carousel-item bg-white card border border-[#0000001A] rounded-xl shadow-sm hover:shadow-md transition mb-[5px] p-3 w-[300px] min-h-[130px]">
-
-                    <div class="flex gap-4 h-full flex-grow items-center">
-
+                <div class="card carousel-item min-h-[130px] w-[280px] shrink-0 rounded-xl border border-[#0000001A] bg-white p-3 shadow-sm sm:w-[300px]">
+                    <div class="flex h-full items-center gap-4">
                         <div class="avatar placeholder">
-                            <div class="rounded-full w-[88px] h-[88px]">
-                                <img src="/{{ nutritionist.profile_photo.replace('\\', '/') }}"
-                                     alt="Imagem de perfil"
-                                     class="object-cover">
+                            <div class="h-[88px] w-[88px] rounded-full">
+                                <img src="/{{ nutritionist.profile_photo.replace('\\', '/') }}" alt="Perfil de {{ nutritionist.name }}" class="object-cover">
                             </div>
                         </div>
-
                         <div class="flex flex-col justify-between self-stretch">
-
                             <div>
-                                <h3 class="font-medium text-[16px]">
-                                    {{ nutritionist.name }}
-                                </h3>
-
-                                <p class="text-sm text-[#AEAEAE]">
-                                    CRN {{ nutritionist.crn }}
-                                </p>
+                                <h3 class="font-medium">{{ nutritionist.name }}</h3>
+                                <p class="text-sm text-[#AEAEAE]">CRN {{ nutritionist.crn }}</p>
                             </div>
-
-                            <a href="{{ url_for('perfilnutricionista', nutritionist_crn=nutritionist.crn) }}"
-                               class="text-[14px] font-semibold text-[#154625] hover:underline mt-2 w-fit">
-                                Ver perfil
-                            </a>
-
+                            <a href="{{ url_for('perfilnutricionista', nutritionist_crn=nutritionist.crn) }}" class="mt-2 w-fit text-sm font-semibold text-[#154625] hover:underline">Ver perfil</a>
                         </div>
-
                     </div>
-
                 </div>
-
                 {% endfor %}
-
             </div>
 
-            <div class="ml-[15px] flex gap-2">
-                <button onclick="rolarCarrossel('nutri_carrossel', -1)"
-                    class="w-[40px] h-[40px] bg-[#FDF8E2] rounded-full flex items-center justify-center text-[18px] hover:bg-[#FEF1AD] transition">
+            <div class="flex shrink-0 gap-2">
+                <button onclick="rolarCarrossel('nutri_carrossel', -1)" class="flex h-10 w-10 items-center justify-center rounded-full bg-[#FDF8E2] hover:bg-[#FEF1AD]">
                     <i class="fa-solid fa-angle-left"></i>
                 </button>
-
-                <button onclick="rolarCarrossel('nutri_carrossel', 1)"
-                    class="w-[40px] h-[40px] bg-[#FDF8E2] rounded-full flex items-center justify-center text-[18px] hover:bg-[#FEF1AD] transition">
+                <button onclick="rolarCarrossel('nutri_carrossel', 1)" class="flex h-10 w-10 items-center justify-center rounded-full bg-[#FDF8E2] hover:bg-[#FEF1AD]">
                     <i class="fa-solid fa-angle-right"></i>
                 </button>
             </div>
-
         </div>
+    </section>
 
-        <!-- Integrantes -->
-        <section class="flex flex-col mx-12 my-10">
-        <h1 class="text-5xl font-semibold mb-[50px] text-center">Integrantes e orientadoras</h1>
-            <div class="flex flex-col">
-            <div class="flex gap-[100px] justify-center">
-            <div class="border border-[#00000040] rounded-[20px] py-[22px]">
-            <div class="mx-[38px]">
-            <img class="mt-[5px] mx-auto" src="{{ url_for('static', filename='img/cecilia.png') }}" alt="Foto de Cecília Aine">
-            </div>
-            <p class="text-center text-[24px] mt-[5px] font-semibold">Cecília Aine</p>
-            <div class="bg-[#CBFDBC63] px-[24px] py-[12px] rounded-[15px] mt-[15px] mx-[38px]">
-            <p class="text-[#154625] text-[15px] font-medium text-center">Desenvolvedora</p>
-            </div>
-            </div>
-            <div class="border border-[#00000040] rounded-[20px] py-[22px]">
-            <div class="mx-[38px]">
-            <img class="mt-[5px] mx-auto" src="{{ url_for('static', filename='img/lucas.png') }}" alt="Foto de Lucas Cheng">
-            </div>
-            <p class="text-center text-[24px] mt-[5px] font-semibold">Lucas Cheng</p>
-            <div class="bg-[#FEF1AD59] px-[24px] py-[12px] rounded-[15px] mt-[15px] mx-[38px]">
-            <p class="text-[#8F7800] text-[15px] font-medium text-center">Pesquisador</p>
-            </div>
-            </div>
-            <div class="border border-[#00000040] rounded-[20px] py-[22px]">
-            <div class="mx-[38px]">
-            <img class="mt-[5px] mx-auto" src="{{ url_for('static', filename='img/luisa.png') }}" alt="Foto de Maria Luísa">
-            </div>
-            <p class="text-center text-[24px] mt-[5px] font-semibold">Maria Luísa</p>
-            <div class="bg-[#CBFDBC63] px-[24px] py-[12px] rounded-[15px] mt-[15px] mx-[38px]">
-            <p class="text-[#154625] text-[15px] font-medium text-center">Desenvolvedora</p>
-            </div>
-            </div>
-            <div class="border border-[#00000040] rounded-[20px] py-[22px]">
-            <div class="mx-[38px]">
-            <img class="mt-[5px] mx-auto" src="{{ url_for('static', filename='img/kerrinna.png') }}" alt="Foto de Thaylanne Kérrinna">
-            </div>
-            <p class="text-center text-[24px] mt-[5px] font-semibold">Thaylanne Kérrinna</p>
-            <div class="bg-[#F0583E2B] px-[24px] py-[12px] rounded-[15px] mt-[15px] mx-[38px]">
-            <p class="text-[#7D291A] text-[15px] font-medium text-center">Designer</p>
-            </div>
-            </div>
-            </div>
-            <div class="flex gap-[100px] justify-center mt-[40px]">
-            <div class="border border-[#00000040] rounded-[20px] py-[22px]">
-            <div class="mx-[38px]">
-            <img class="mt-[5px] mx-auto" src="{{ url_for('static', filename='img/alba.png') }}" alt="Foto de Alba Sandrya">
-            </div>
-            <p class="text-center text-[24px] mt-[5px] font-semibold">Alba Sandrya</p>
-            <div class="bg-[#8C8C8C57] px-[24px] py-[12px] rounded-[15px] mt-[15px] mx-[38px]">
-            <p class="text-[#000000] text-[15px] font-medium text-center">Orientadora</p>
-            </div>
-            </div>
-            <div class="border border-[#00000040] rounded-[20px] py-[22px]">
-            <div class="mx-[38px]">
-            <img class="mt-[5px] mx-auto" src="{{ url_for('static', filename='img/mayara.png') }}" alt="Foto de Mayara Maia">
-            </div>
-            <p class="text-center text-[24px] mt-[5px] font-semibold">Mayara Maia</p>
-            <div class="bg-[#8C8C8C57] px-[24px] py-[12px] rounded-[15px] mt-[15px] mx-[38px]">
-            <p class="text-[#000000] text-[15px] font-medium text-center">Orientadora</p>
-            </div>
-            </div>
-            </div>
-            </div>
-        </section>
+    <section class="mb-16">
+        <h2 class="mb-10 text-center text-3xl font-semibold sm:text-4xl">Integrantes e orientadoras</h2>
 
-        <!-- Tecnologias -->
-        <section class="my-18 mx-40">
-            <h1 class="text-5xl font-semibold mb-[50px]">Tecnologias</h1>
-            <div class="grid grid-cols-4 gap-[100px] mx-[60px]">
-            <div class="shadow-md shadow-[#5D5C5C] rounded-[20px] p-[22px]">
-            <p class="text-center text-[28px] font-medium">HTML 5</p>
-            <div>
-            <img class="mt-[5px] mx-auto" src="{{ url_for('static', filename='img/html.png') }}" alt="Ícone do HTML">
-            </div>
-            </div>
-            <div class="shadow-md shadow-[#5D5C5C] rounded-[20px] p-[22px]">
-            <p class="text-center text-[28px] font-medium">CSS 3</p>
-            <div>
-            <img class="mt-[5px] mx-auto" src="{{ url_for('static', filename='img/css.png') }}" alt="Ícone do CSS">
-            </div>
-            </div>
-            <div class="shadow-md shadow-[#5D5C5C] rounded-[20px] p-[22px]">
-            <p class="text-center text-[28px] font-medium">Python 3</p>
-            <div>
-            <img class="mt-[5px] mx-auto" src="{{ url_for('static', filename='img/python.png') }}" alt="Ícone do Python">
-            </div>
-            </div>
-            <div class="shadow-md shadow-[#5D5C5C] rounded-[20px] p-[22px]">
-            <p class="text-center text-[28px] font-medium">Flask</p>
-            <div>
-            <img class="mt-[5px] mx-auto" src="{{ url_for('static', filename='img/flask.webp') }}" alt="Ícone do Figma">
-            </div>
-            </div>
-            </div>
-            
-        </section>
+        {% set integrantes = [
+            ('cecilia.png', 'Cecília Aine', 'Desenvolvedora', 'fa-code', 'bg-[#CBFDBC63]', 'text-[#154625]'),
+            ('lucas.png', 'Lucas Cheng', 'Pesquisador', 'fa-flask', 'bg-[#FEF1AD80]', 'text-[#8F7800]'),
+            ('luisa.png', 'Maria Luísa', 'Desenvolvedora', 'fa-code', 'bg-[#CBFDBC63]', 'text-[#154625]'),
+            ('kerrinna.png', 'Thaylanne Kérrinna', 'Designer', 'fa-palette', 'bg-[#F0583E2B]', 'text-[#7D291A]'),
+            ('alba.png', 'Alba Sandrya', 'Orientadora', 'fa-graduation-cap', 'bg-[#EDE3FF]', 'text-[#7042A0]'),
+            ('mayara.png', 'Mayara Maia', 'Orientadora', 'fa-graduation-cap', 'bg-[#EDE3FF]', 'text-[#7042A0]')
+        ] %}
 
-    </main>
+        <div class="flex flex-wrap justify-center gap-6 lg:gap-10">
+            {% for foto, nome, cargo, icone, fundo, cor in integrantes %}
+            <div class="w-full max-w-[230px] rounded-2xl border border-[#00000020] bg-white px-5 py-6">
+                <img src="{{ url_for('static', filename='img/' ~ foto) }}" alt="Foto de {{ nome }}" class="mx-auto max-h-36 w-auto object-contain">
+                <p class="mt-3 text-center text-xl font-semibold">{{ nome }}</p>
+                <div class="mt-4 flex items-center justify-center gap-2 rounded-xl px-4 py-3 {{ fundo }}">
+                    <i class="fa-solid {{ icone }} {{ cor }}"></i>
+                    <p class="text-center text-[15px] font-semibold {{ cor }}">{{ cargo }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
 
+    <section>
+        <h2 class="mb-10 text-center text-3xl font-semibold sm:text-4xl lg:text-left">Tecnologias</h2>
+        <div class="grid grid-cols-2 gap-5 sm:grid-cols-4 lg:gap-8">
+            {% for nome, imagem in [
+                ('HTML 5', 'html.png'),
+                ('CSS 3', 'css.png'),
+                ('Python 3', 'python.png'),
+                ('Flask', 'flask.webp')
+            ] %}
+            <div class="rounded-2xl border border-[#00000015] p-4 shadow-sm sm:p-5">
+                <p class="text-center text-lg font-medium sm:text-xl">{{ nome }}</p>
+                <img src="{{ url_for('static', filename='img/' ~ imagem) }}" alt="{{ nome }}" class="mx-auto mt-1 max-h-36 w-auto object-contain">
+            </div>
+            {% endfor %}
+        </div>
+    </section>
 
-    <footer class="footer sm:footer-horizontal bg-[#488B26] text-neutral-content items-center justify-between px-12 py-6">
-        <img src="{{ url_for('static', filename='img/logo-nutrijoy-2.png') }}" alt="Logo do NutriJoy" class="w-[70%]">
+</div>
+</main>
 
-        <nav class="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
-            <a>
-            <i class="fa-brands fa-instagram fa-xl" style="color: rgb(255, 255, 255);"></i>
-            </a>
-            <a>
-            <i class="fa-brands fa-github fa-xl" style="color: rgb(255, 255, 255);"></i>
-            </a>
-            <a>
-            <i class="fa-brands fa-whatsapp fa-xl" style="color: rgb(255, 255, 255);"></i>
-            </a>
-        </nav>
+<footer class="footer items-center justify-between bg-[#488B26] px-6 py-6 text-neutral-content sm:footer-horizontal sm:px-12">
+    <img src="{{ url_for('static', filename='img/logo.svg') }}" alt="NutriJoy" class="w-[70%] sm:w-auto">
+    <nav class="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
+        <a><i class="fa-brands fa-instagram fa-xl"></i></a>
+        <a><i class="fa-brands fa-github fa-xl"></i></a>
+        <a><i class="fa-brands fa-whatsapp fa-xl"></i></a>
+    </nav>
+    <p class="text-[18px] text-white">©2026 NutriJoy. All rights reserved.</p>
+</footer>
 
-        <p class="text-[18px] text-white">©2026 NutriJoy. All rights reserved.</p>
-    </footer>
-
-    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+<script src="{{ url_for('static', filename='scripts.js') }}"></script>
 </body>
 </html>
