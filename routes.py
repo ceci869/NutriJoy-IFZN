@@ -40,7 +40,12 @@ def index():
         'Maria Luísa',
         'Thaylanne Kérrinna'
     ]
-    return render_template('index.html', lista_colaboradores=lista_colaboradores)
+    nutritionists = get_nutritionists()
+    return render_template(
+        'index.html',
+        lista_colaboradores=lista_colaboradores,
+        nutritionists=nutritionists
+    )
 
 
 @app.route('/paginaerro')

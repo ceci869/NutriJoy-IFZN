@@ -17,8 +17,8 @@
             </div>
             <div class="flex-none">
                 <ul class="menu menu-horizontal px-1 text-xl flex gap-x-4">
-                    <li><a href="{{ url_for('user.verificalogin') }}" class="border-solid border-2 rounded-lg py-[3px] bg-white text-[#F0583E] text-[20px] border-[#F0583E66]">Entrar</a></li>
-                    <li><a href="{{ url_for('user.add_user') }}" class="border-solid border-2 rounded-lg py-[3px] bg-[#F0583E] text-white text-[20px]">Cadastrar</a></li>
+                    <li><a href="{{ url_for('user.verificalogin') }}" class="border-solid border-2 rounded-lg py-[3px] bg-white text-[#F0583E] text-[20px] border-[#F0583E66] transition-colors duration-150 hover:bg-[#F0583E] hover:text-white">Entrar</a></li>
+                    <li><a href="{{ url_for('user.add_user') }}" class="border-solid border-2 rounded-lg py-[3px] bg-[#F0583E] text-white text-[20px] transition-colors duration-150 hover:bg-[#D94C35]">Cadastrar</a></li>
                 </ul>
             </div>
         </div>
@@ -44,6 +44,82 @@
                 </p>
             </div>
             <img src="{{ url_for('static', filename='img/crianca-nutricao.png') }}" class="rounded-lg shadow-2xl"/>
+        </div>
+
+        <!-- Cadastro de nutricionistas -->
+        <section class="mx-12 my-10 rounded-[20px] bg-[#FEF6D3] px-8 py-12 text-center">
+            <h2 class="text-4xl font-semibold text-[#154625]">É nutricionista?</h2>
+            <p class="mx-auto mt-4 max-w-2xl text-xl text-black">
+                Faça parte do NutriJoy e ajude jovens a construírem uma relação mais saudável com a alimentação.
+            </p>
+            <a href="{{ url_for('formulario_nutricionista') }}"
+               class="btn mt-6 border-[#F0583E] bg-[#F0583E] text-lg text-white hover:bg-[#d94c35]">
+                Inscreva-se como nutricionista
+            </a>
+        </section>
+
+        <!-- Nutricionistas -->
+        <h2 class="text-[24px] font-semibold mb-4 mt-10 ml-4">
+            Nutricionistas em destaque
+        </h2>
+
+        <div class="flex items-center ml-4">
+
+            <div id="nutri_carrossel" class="flex gap-[24px] carousel w-full flex-1">
+
+                {% for nutritionist in nutritionists %}
+
+                <div class="flex flex-col carousel-item bg-white card border border-[#0000001A] rounded-xl shadow-sm hover:shadow-md transition mb-[5px] p-3 w-[300px] min-h-[130px]">
+
+                    <div class="flex gap-4 h-full flex-grow items-center">
+
+                        <div class="avatar placeholder">
+                            <div class="rounded-full w-[88px] h-[88px]">
+                                <img src="/{{ nutritionist.profile_photo.replace('\\', '/') }}"
+                                     alt="Imagem de perfil"
+                                     class="object-cover">
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col justify-between self-stretch">
+
+                            <div>
+                                <h3 class="font-medium text-[16px]">
+                                    {{ nutritionist.name }}
+                                </h3>
+
+                                <p class="text-sm text-[#AEAEAE]">
+                                    CRN {{ nutritionist.crn }}
+                                </p>
+                            </div>
+
+                            <a href="{{ url_for('perfilnutricionista', nutritionist_crn=nutritionist.crn) }}"
+                               class="text-[14px] font-semibold text-[#154625] hover:underline mt-2 w-fit">
+                                Ver perfil
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+            <div class="ml-[15px] flex gap-2">
+                <button onclick="rolarCarrossel('nutri_carrossel', -1)"
+                    class="w-[40px] h-[40px] bg-[#FDF8E2] rounded-full flex items-center justify-center text-[18px] hover:bg-[#FEF1AD] transition">
+                    <i class="fa-solid fa-angle-left"></i>
+                </button>
+
+                <button onclick="rolarCarrossel('nutri_carrossel', 1)"
+                    class="w-[40px] h-[40px] bg-[#FDF8E2] rounded-full flex items-center justify-center text-[18px] hover:bg-[#FEF1AD] transition">
+                    <i class="fa-solid fa-angle-right"></i>
+                </button>
+            </div>
+
         </div>
 
         <!-- Integrantes -->
@@ -134,9 +210,9 @@
             </div>
             </div>
             <div class="shadow-md shadow-[#5D5C5C] rounded-[20px] p-[22px]">
-            <p class="text-center text-[28px] font-medium">Figma</p>
+            <p class="text-center text-[28px] font-medium">Flask</p>
             <div>
-            <img class="mt-[5px] mx-auto" src="{{ url_for('static', filename='img/figma.png') }}" alt="Ícone do Figma">
+            <img class="mt-[5px] mx-auto" src="{{ url_for('static', filename='img/flask.webp') }}" alt="Ícone do Figma">
             </div>
             </div>
             </div>
@@ -164,5 +240,6 @@
         <p class="text-[18px] text-white">©2026 NutriJoy. All rights reserved.</p>
     </footer>
 
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
 </body>
 </html>
