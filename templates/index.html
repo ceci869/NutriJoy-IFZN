@@ -52,7 +52,7 @@
                     <div class="flex h-full items-center gap-4">
                         <div class="avatar placeholder">
                             <div class="h-[88px] w-[88px] rounded-full">
-                                <img src="/{{ nutritionist.profile_photo.replace('\\', '/') }}" alt="Perfil de {{ nutritionist.name }}" class="object-cover">
+                                <img src="/{{ nutritionist.profile_photo.replace('\\', '/') }}" alt="Perfil de {{ nutritionist.name }}" class="object-cover" loading="lazy" decoding="async">
                             </div>
                         </div>
                         <div class="flex flex-col justify-between self-stretch">
@@ -143,6 +143,6 @@
     <p class="text-[18px] text-white">©2026 NutriJoy. All rights reserved.</p>
 </footer>
 
-<script src="{{ url_for('static', filename='scripts.js') }}"></script>
+
 </body>
 </html>

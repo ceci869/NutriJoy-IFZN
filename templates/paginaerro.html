@@ -21,8 +21,7 @@
 
     <div class="flex justify-center py-20 px-4">
 
-        <form action="{{url_for('verificalogin')}}" method="post" class="w-full max-w-lg">
-
+        <div class="w-full max-w-lg">
             <h1 class="text-4xl font-semibold mb-2">
                 E-mail ou senha incorretos
             </h1>
@@ -31,11 +30,11 @@
                 Tente novamente
             </p>
 
-            <button class="btn w-full mt-12 bg-[#8C8C8C] border-[#8C8C8C] text-white hover:bg-[#7A7A7A]">
-                <a href="{{ url_for('login') }}" class="w-[100%]">Ir para página de login</a>
-            </button>
-
-        </form>
+            <a href="{{ url_for('user.verificalogin') }}"
+               class="btn w-full mt-12 bg-[#8C8C8C] border-[#8C8C8C] text-white hover:bg-[#7A7A7A]">
+                Ir para página de login
+            </a>
+        </div>
 
     </div>
 

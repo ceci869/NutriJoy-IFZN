@@ -6,7 +6,12 @@ from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
 from time import sleep
 import json
-from fatsecret_service import obter_receitas, obter_todas_receitas, obter_detalhes_receitas
+from fatsecret_service import (
+    obter_receitas,
+    obter_todas_receitas,
+    obter_detalhes_receitas,
+    obter_detalhes_receitas_em_lote,
+)
 from flask import render_template, url_for, redirect, request, flash, jsonify
 from groq import Groq
 
@@ -58,13 +63,16 @@ def paginaerro():
 def homepage():
     nutritionists = get_nutritionists()
     recipes = obter_receitas()
+    details_by_recipe_id = obter_detalhes_receitas_em_lote(
+        recipe.get('recipe_id') for recipe in recipes
+    )
 
     for recipe in recipes:
         recipe['recommended'] = True
         recipe['prep_time_min'] = ''
 
         recipe_id = recipe.get('recipe_id')
-        details = obter_detalhes_receitas(recipe_id)
+        details = details_by_recipe_id.get(str(recipe_id))
 
         if isinstance(details, list):
             details = details[0] if details else {}
@@ -92,6 +100,9 @@ def homepage():
     saved_recipes = DailyMenu.query.filter_by(
         user_id=current_user.id
     ).all()
+    menu_details_by_recipe_id = obter_detalhes_receitas_em_lote(
+        item.recipe_id for item in saved_recipes
+    )
 
     menu_dict = {}
     imagens_cache = {}
@@ -105,7 +116,7 @@ def homepage():
 
         # Buscar imagem da receita
         if item.recipe_id not in imagens_cache:
-            details = obter_detalhes_receitas(item.recipe_id)
+            details = menu_details_by_recipe_id.get(str(item.recipe_id))
 
             if isinstance(details, list):
                 details = details[0] if details else {}
@@ -133,6 +144,9 @@ def homepage():
 @login_required
 def catalogodereceitas():
     recipes = obter_receitas()
+    details_by_recipe_id = obter_detalhes_receitas_em_lote(
+        recipe.get('recipe_id') for recipe in recipes
+    )
 
     for recipe in recipes:
         recipe['recommended'] = True
@@ -140,7 +154,7 @@ def catalogodereceitas():
 
         recipe_id = recipe.get('recipe_id')
 
-        details = obter_detalhes_receitas(recipe_id)
+        details = details_by_recipe_id.get(str(recipe_id))
 
         if isinstance(details, list):
             details = details[0] if details else {}
@@ -201,9 +215,6 @@ def cardapiosemanal():
     user_id = current_user.id
     saved_recipes = DailyMenu.query.filter_by(user_id=user_id).all()
 
-    print(f"\n[DEBUG RENDER] Total de receitas encontradas para o user {user_id}: {len(saved_recipes)}")
-
-
     menu_dict = {}
     for item in saved_recipes:
         if item.day not in menu_dict:
@@ -212,8 +223,6 @@ def cardapiosemanal():
             menu_dict[item.day][item.types] = []
 
         menu_dict[item.day][item.types].append(item)
-
-    print(f"[DEBUG RENDER] Dicionário gerado: {menu_dict}\n")
 
     return render_template('cardapiosemanal.html', menu_dict=menu_dict, saved_recipes=saved_recipes)
 
@@ -272,6 +281,9 @@ def escolhareceitas():
     termo = request.args.get('busca', '')
 
     recipes = obter_todas_receitas(page_number, termo) or []
+    details_by_recipe_id = obter_detalhes_receitas_em_lote(
+        recipe.get('recipe_id') for recipe in recipes
+    )
 
     # Ingredientes que indicam presença de lactose
     ingredientes_com_lactose = [
@@ -314,7 +326,8 @@ def escolhareceitas():
 
         try:
             # Busca os detalhes da receita
-            details = obter_detalhes_receitas(recipe.get('recipe_id'))
+            recipe_id = recipe.get('recipe_id')
+            details = details_by_recipe_id.get(str(recipe_id))
 
             if isinstance(details, list):
                 details = details[0] if details else {}

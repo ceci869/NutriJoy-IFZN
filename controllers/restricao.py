@@ -27,7 +27,6 @@ def get_restrictions():
     restrictions = Restriction.query.all()
     len_restrictions = len(restrictions)
 
-    print(restrictions)
     return render_template('restricoes_get.html', restrictions=restrictions, len_restrictions=len_restrictions)
 
 

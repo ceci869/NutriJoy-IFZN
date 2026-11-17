@@ -21,14 +21,14 @@ def add_daily_menu():
 
 @bp_dailyMenu.route('/daily_menus')
 def get_daily_menus():
-    daily_menus = Daily_Menu.query.all()
+    daily_menus = DailyMenu.query.all()
 
     return str(daily_menus)
 
 
 @bp_dailyMenu.route('/<int:id_dailyMenu>/update', methods=['POST'])
 def update_daily_menu(id_dailyMenu):
-    daily_menu = Daily_Menu.query.get_or_404(id_dailyMenu)
+    daily_menu = DailyMenu.query.get_or_404(id_dailyMenu)
 
     daily_menu.id_user = request.form['id_user']
     daily_menu.day = request.form['day']
@@ -40,7 +40,7 @@ def update_daily_menu(id_dailyMenu):
 
 @bp_dailyMenu.route('/<int:id_dailyMenu>/delete', methods=['POST'])
 def delete_daily_menu(id_dailyMenu):
-    daily_menu = Daily_Menu.query.get_or_404(id_dailyMenu)
+    daily_menu = DailyMenu.query.get_or_404(id_dailyMenu)
 
     db.session.delete(daily_menu)
     db.session.commit()

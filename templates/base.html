@@ -11,9 +11,7 @@
     <script src="https://kit.fontawesome.com/dbda3eb66e.js" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+    <script src="{{ url_for('static', filename='scripts.js') }}" defer></script>
 
     {% block styles %}{% endblock %}
 
@@ -51,6 +49,15 @@
         }
 
         .menu-link:hover i {
+            color: #488B26;
+        }
+
+        .menu-link.active {
+            background: #FEF1AD;
+            color: #286B25;
+        }
+
+        .menu-link.active i {
             color: #488B26;
         }
 
@@ -111,28 +118,28 @@
             <ul class="menu w-full grow gap-1 p-0">
 
                 <li>
-                    <a href="{{ url_for('homepage') }}" class="menu-link is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Página inicial">
+                    <a href="{{ url_for('homepage') }}" class="menu-link{% if request.endpoint == 'homepage' %} active{% endif %} is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Página inicial"{% if request.endpoint == 'homepage' %} aria-current="page"{% endif %}>
                         <i class="fa-solid fa-house"></i>
                         <span class="is-drawer-close:hidden">Página inicial</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="{{ url_for('catalogodereceitas') }}" class="menu-link is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Receitas">
+                    <a href="{{ url_for('catalogodereceitas') }}" class="menu-link{% if request.endpoint in ['catalogodereceitas', 'detalhes_receita'] %} active{% endif %} is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Receitas"{% if request.endpoint in ['catalogodereceitas', 'detalhes_receita'] %} aria-current="page"{% endif %}>
                         <i class="fa-solid fa-utensils"></i>
                         <span class="is-drawer-close:hidden">Receitas</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="{{ url_for('cardapiosemanal') }}" class="menu-link is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Cardápio semanal">
+                    <a href="{{ url_for('cardapiosemanal') }}" class="menu-link{% if request.endpoint in ['cardapiosemanal', 'escolhareceitas'] %} active{% endif %} is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Cardápio semanal"{% if request.endpoint in ['cardapiosemanal', 'escolhareceitas'] %} aria-current="page"{% endif %}>
                         <i class="fa-solid fa-calendar-days"></i>
                         <span class="is-drawer-close:hidden">Cardápio semanal</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="{{ url_for('gerenciarperfil') }}" class="menu-link is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Perfil">
+                    <a href="{{ url_for('gerenciarperfil') }}" class="menu-link{% if request.endpoint in ['gerenciarperfil', 'perfilnutricionista'] %} active{% endif %} is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Perfil"{% if request.endpoint in ['gerenciarperfil', 'perfilnutricionista'] %} aria-current="page"{% endif %}>
                         <i class="fa-solid fa-user"></i>
                         <span class="is-drawer-close:hidden">Perfil</span>
                     </a>
@@ -142,21 +149,21 @@
                 <div class="sidebar-divider"></div>
 
                 <li>
-                    <a href="{{ url_for('admin.admin_usuarios') }}" class="menu-link is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Usuários">
+                    <a href="{{ url_for('admin.admin_usuarios') }}" class="menu-link{% if request.endpoint.startswith('admin.admin_') and 'usuario' in request.endpoint %} active{% endif %} is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Usuários"{% if request.endpoint.startswith('admin.admin_') and 'usuario' in request.endpoint %} aria-current="page"{% endif %}>
                         <i class="fa-solid fa-users"></i>
                         <span class="is-drawer-close:hidden">Usuários</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="{{ url_for('admin.admin_nutricionistas') }}" class="menu-link is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Nutricionistas">
+                    <a href="{{ url_for('admin.admin_nutricionistas') }}" class="menu-link{% if request.endpoint.startswith(('admin.admin_', 'nutritionist.admin_')) and 'nutricionista' in request.endpoint %} active{% endif %} is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Nutricionistas"{% if request.endpoint.startswith(('admin.admin_', 'nutritionist.admin_')) and 'nutricionista' in request.endpoint %} aria-current="page"{% endif %}>
                         <i class="fa-solid fa-user-doctor"></i>
                         <span class="is-drawer-close:hidden">Nutricionistas</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="{{ url_for('restriction.get_restrictions') }}" class="menu-link is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Restrições">
+                    <a href="{{ url_for('restriction.get_restrictions') }}" class="menu-link{% if request.endpoint.startswith('restriction.') %} active{% endif %} is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Restrições"{% if request.endpoint.startswith('restriction.') %} aria-current="page"{% endif %}>
                         <i class="fa-solid fa-ban"></i>
                         <span class="is-drawer-close:hidden">Restrições</span>
                     </a>
