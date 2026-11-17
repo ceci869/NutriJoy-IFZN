@@ -497,6 +497,15 @@ def perfilnutricionista(nutritionist_crn):
     )
 
 
+@app.route('/perfilnutricionista/publico/<int:nutritionist_crn>')
+def perfilnutricionista_publico(nutritionist_crn):
+    nutritionist = Nutritionist.query.get_or_404(nutritionist_crn)
+    return render_template(
+        'perfilnutricionista_publico.html',
+        nutritionist=nutritionist
+    )
+
+
 @app.route('/formularionutricionista')
 def formulario_nutricionista():
     return render_template('formulario_nutricionista.html')

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ nutritionist.name }} - NutriJoy</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="min-h-screen bg-white text-[#292820]">
+    <header class="navbar bg-[#FEF6D3] px-4 py-4 sm:px-8 lg:px-12">
+        <div class="flex-1">
+            <a href="{{ url_for('index') }}" aria-label="Página inicial do NutriJoy">
+                <img src="{{ url_for('static', filename='img/logo.svg') }}" alt="NutriJoy" class="w-[110px] sm:w-[130px]">
+            </a>
+        </div>
+        <ul class="menu menu-horizontal flex gap-3 px-1">
+            <li><a href="{{ url_for('user.verificalogin') }}" class="rounded-lg border-2 border-[#F0583E66] bg-white text-[#F0583E] hover:bg-[#F0583E] hover:text-white">Entrar</a></li>
+            <li><a href="{{ url_for('user.add_user') }}" class="rounded-lg border-2 border-[#F0583E] bg-[#F0583E] text-white hover:bg-[#D94C35]">Cadastrar</a></li>
+        </ul>
+    </header>
+
+    <main class="mx-auto w-full max-w-5xl px-4 py-10 sm:px-8">
+        <section>
+            <div class="flex flex-col-reverse items-center justify-between gap-6 sm:flex-row">
+                <div class="text-center sm:text-left">
+                    <h1 class="mb-4 text-3xl font-semibold sm:text-4xl">{{ nutritionist.name }}</h1>
+                    <p class="text-gray-600">CRN {{ nutritionist.crn }}</p>
+                    <p class="text-gray-600">{{ nutritionist.city }}, {{ nutritionist.state }} | {{ nutritionist.university }}</p>
+                </div>
+                <div class="avatar placeholder">
+                    <div class="w-40 rounded-full sm:w-50">
+                        <img src="/{{ nutritionist.profile_photo.replace('\\', '/') }}" alt="Foto de {{ nutritionist.name }}">
+                    </div>
+                </div>
+            </div>
+
+            <p class="my-10 text-gray-600">{{ nutritionist.description }}</p>
+
+            <div class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                {% if nutritionist.specialization %}
+                <div class="flex items-start gap-6 rounded-[20px] p-6 shadow-md shadow-[#5D5C5C]">
+                    <img class="mt-1 w-[45px]" src="{{ url_for('static', filename='img/especialidade.svg') }}" alt="Ícone de especialidade">
+                    <div>
+                        <p>Especialista em</p>
+                        <p class="text-2xl font-medium text-[#154625] sm:text-3xl">{{ nutritionist.specialization }}</p>
+                    </div>
+                </div>
+                {% endif %}
+                <div class="flex items-start gap-6 rounded-[20px] p-6 shadow-md shadow-[#5D5C5C]">
+                    <img class="w-[45px]" src="{{ url_for('static', filename='img/experiencia.svg') }}" alt="Ícone de anos de experiência">
+                    <div>
+                        <p class="text-5xl font-medium leading-none text-[#F0583E]">{{ nutritionist.experience_years }}</p>
+                        <p class="mt-2">Anos de experiência</p>
+                    </div>
+                </div>
+            </div>
+
+            <a href="{{ url_for('user.verificalogin') }}" class="btn w-full border-[#8C8C8C] bg-[#5FB434] text-white hover:bg-[#34800D]">Entre para enviar mensagem</a>
+        </section>
+    </main>
+</body>
+</html>

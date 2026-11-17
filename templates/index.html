@@ -13,7 +13,7 @@
 
 <header class="navbar bg-[#FEF6D3] px-4 py-4 sm:px-8 lg:px-12">
     <div class="flex-1">
-        <img src="{{ url_for('static', filename='img/logo.svg') }}" alt="NutriJoy">
+        <img src="{{ url_for('static', filename='img/logo.svg') }}" alt="NutriJoy" class="w-[110px] sm:w-[130px]">
     </div>
     <ul class="menu menu-horizontal flex gap-3 px-1">
         <li><a href="{{ url_for('user.verificalogin') }}" class="rounded-lg border-2 border-[#F0583E66] bg-white text-[#F0583E] hover:bg-[#F0583E] hover:text-white">Entrar</a></li>
@@ -44,7 +44,7 @@
     </section>
 
     <section class="mb-16">
-        <h2 class="mb-5 text-2xl font-semibold">Nutricionistas em destaque</h2>
+        <h2 class="mb-5 text-3xl font-semibold sm:text-4xl">Nutricionistas em destaque</h2>
         <div class="flex items-center gap-3">
             <div id="nutri_carrossel" class="carousel flex w-full flex-1 gap-5 overflow-x-auto">
                 {% for nutritionist in nutritionists %}
@@ -60,7 +60,7 @@
                                 <h3 class="font-medium">{{ nutritionist.name }}</h3>
                                 <p class="text-sm text-[#AEAEAE]">CRN {{ nutritionist.crn }}</p>
                             </div>
-                            <a href="{{ url_for('perfilnutricionista', nutritionist_crn=nutritionist.crn) }}" class="mt-2 w-fit text-sm font-semibold text-[#154625] hover:underline">Ver perfil</a>
+                            <a href="{{ url_for('perfilnutricionista_publico', nutritionist_crn=nutritionist.crn) }}" class="mt-2 w-fit text-sm font-semibold text-[#154625] hover:underline">Ver perfil</a>
                         </div>
                     </div>
                 </div>
@@ -106,16 +106,25 @@
 
     <section>
         <h2 class="mb-10 text-center text-3xl font-semibold sm:text-4xl lg:text-left">Tecnologias</h2>
-        <div class="grid grid-cols-2 gap-5 sm:grid-cols-4 lg:gap-8">
+        <div class="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-5 lg:gap-8">
             {% for nome, imagem in [
                 ('HTML 5', 'html.png'),
                 ('CSS 3', 'css.png'),
                 ('Python 3', 'python.png'),
-                ('Flask', 'flask.webp')
+                ('Flask', 'flask.webp'),
+                ('FatSecret', 'square.jpeg')
             ] %}
             <div class="rounded-2xl border border-[#00000015] p-4 shadow-sm sm:p-5">
                 <p class="text-center text-lg font-medium sm:text-xl">{{ nome }}</p>
                 <img src="{{ url_for('static', filename='img/' ~ imagem) }}" alt="{{ nome }}" class="mx-auto mt-1 max-h-36 w-auto object-contain">
+                {% if nome == 'FatSecret' %}
+                <p class="mt-2 text-center text-xs text-gray-600">
+                    Logo:
+                    <a href="https://commons.wikimedia.org/wiki/Special:Redirect/page/82172827" target="_blank" rel="noopener noreferrer" class="underline">Hotondo22</a>
+                    — Own work,
+                    <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer" class="underline">CC BY-SA 4.0</a>
+                </p>
+                {% endif %}
             </div>
             {% endfor %}
         </div>
