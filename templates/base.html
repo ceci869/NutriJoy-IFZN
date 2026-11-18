@@ -173,10 +173,10 @@
                 <div class="sidebar-divider"></div>
 
                 <li>
-                    <form action="{{ url_for('user.logout') }}" method="POST">
-                        <button type="submit" class="menu-link logout-link is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Sair">
-                            <i class="fa-solid fa-right-from-bracket"></i>
-                            <span class="is-drawer-close:hidden">Sair</span>
+                    <form action="{{ url_for('user.logout') }}" method="POST" class="w-[100%]">
+                        <button type="submit" class="p-2 cursor-pointer w-50 text-left is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Sair">
+                            <i class="fa-solid fa-right-from-bracket text-red-500"></i>
+                            <span class="is-drawer-close:hidden text-red-500">Sair</span>
                         </button>
                     </form>
                 </li>
